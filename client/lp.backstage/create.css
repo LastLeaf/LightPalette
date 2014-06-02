@@ -1,0 +1,24 @@
+/* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
+
+.create_title {
+    width: 350px;
+    margin: 50px auto 30px;
+    font-size: 2em;
+    color: #666;
+    text-shadow: 0 0 2px #666;
+}
+.create_list {
+    width: 250px;
+    margin: 30px auto 50px;
+}
+.create_list input {
+    display: block;
+    width: 100%;
+    font-size: 1.25em;
+    margin: 20px;
+    border: 1px solid #888;
+    border-radius: 10em;
+    line-height: 2em;
+    text-shadow: 0 0 1px #666;
+    outline: none;
+}

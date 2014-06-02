@@ -1,0 +1,97 @@
+<tmpl id="index">
+
+	{{#if search}}
+		<div class="post_filter post_filter_search">
+			`Search Result for {{keyword}}`
+		</div>
+	{{/if}}
+	{{#if category}}
+		<div class="post_filter post_filter_category">
+			`Posts in Category {{keyword}}`
+		</div>
+	{{/if}}
+	{{#if tag}}
+		<div class="post_filter post_filter_tag">
+			`Posts with Tag {{keyword}}`
+		</div>
+	{{/if}}
+	{{#if series}}
+		<div class="post_filter post_filter_series">
+			`Post in Series {{keyword}}`
+		</div>
+	{{/if}}
+	{{#if author}}
+		<div class="post_filter post_filter_author">
+			`Posts by {{keyword}}`
+		</div>
+	{{/if}}
+	{{#if date}}
+		<div class="post_filter post_filter_date">
+			`Posts in {{keyword}}`
+		</div>
+	{{/if}}
+
+	<div class="post_list">
+
+		<div class="post_item">
+			<h2 class="post_title"><a href="#">`The Post's Title`</a></h2>
+			<div class="post_author"><a href="#">`The Post's Author`</a></div>
+			<div class="post_time">`Jan 1, 2014`</div>
+			<ul class="post_categories">
+				<li><a href="#">`Category 1`</a></li>
+				<li><a href="#">`Category 2`</a></li>
+			</ul>
+			<ul class="post_tags">
+				<li><a href="#">`Tag 1`</a></li>
+				<li><a href="#">`Tag 2`</a></li>
+				<li><a href="#">`Tag 3`</a></li>
+			</ul>
+			<div class="post_series"></div>
+			<div class="post_abstract">
+				<p>The Abstract...</p>
+				<p>May contain several paragraghs.</p>
+				<p><img src="/~rc/logo.png"> ... and images.</p>
+			</div>
+		</div>
+
+		<div class="post_item">
+			<h2 class="post_title"><a href="#">`The Post's Title`</a></h2>
+			<div class="post_author"><a href="#">`The Post's Author`</a></div>
+			<div class="post_time">`Jan 1, 2014`</div>
+			<ul class="post_categories">
+				<li><a href="#">`Category 2`</a></li>
+			</ul>
+			<ul class="post_tags"></ul>
+			<div class="post_series">
+				<div class="post_series_title">`The Series's Title`</div>
+			</div>
+			<div class="post_abstract">
+				<p>The Abstract...</p>
+				<p>May contain several paragraghs.</p>
+			</div>
+		</div>
+
+		<div class="post_item">
+			<h2 class="post_title"><a href="#">`The Post's Title`</a></h2>
+			<div class="post_author"><a href="#">`The Post's Author`</a></div>
+			<div class="post_time">`Jan 1, 2014`</div>
+			<ul class="post_categories"></ul>
+			<ul class="post_tags"></ul>
+			<div class="post_series"></div>
+			<div class="post_abstract">
+				<p>The Abstract...</p>
+				<p>May contain several paragraghs.</p>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="post_list_page">
+		<span class="post_list_prev">`older posts`</span>
+		<span class="post_list_next">`newer posts`</span>
+		`Page 1`
+	</div>
+
+</tmpl>
+
+<tmpl id="title">{{#if search}}`Search`{{/if}}{{#if category}}`Category`{{/if}}{{#if tag}}`Tag`{{/if}}{{#if series}}`Series`{{/if}}{{#if author}}`Author`{{/if}}{{#if date}}`Date`{{/if}} {{keyword}}</tmpl>

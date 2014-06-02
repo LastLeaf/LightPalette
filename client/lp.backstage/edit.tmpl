@@ -1,0 +1,39 @@
+<tmpl id="main">
+	<div class="edit">
+		<form action="post" method="set" class="editor">
+			<div class="editor_header">
+				<input type="button" class="editor_save" value="`Save`">
+				<div class="editor_title">
+					<input type="text" name="title" placeholder="`Title`">
+				</div>
+			</div>
+			<div class="sidebar">
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Status and Shortcut`</div>
+					`Publish Status` <select name="status">
+						<option value="draft">`draft`</option>
+						<option value="pending">`pending`</option>
+						<option value="published">`published`</option>
+					</select>
+					<input type="text" name="path" placeholder="A shortcut URL...">
+				</div>
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Series`</div>
+					<select name="series"></select>
+					<input type="button" class="button" value="`Create New Series`">
+				</div>
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Categories`</div>
+					<textarea name="category" rows="3"></textarea>
+				</div>
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Tags`</div>
+					<textarea name="tag" rows="5"></textarea>
+				</div>
+			</div>
+			<div class="editor_main">
+				<div class="driver"></div>
+			</div>
+		</form>
+	</div>
+</tmpl>

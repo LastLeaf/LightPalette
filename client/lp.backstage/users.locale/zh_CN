@@ -1,0 +1,13 @@
+[{},{
+	"Username": "用户名",
+	"Display Name": "显示名称",
+	"Type": "用户类型",
+	"admin": "管理员",
+	"editor": "编辑",
+	"writer": "作者",
+	"contributor": "投稿人",
+	"reader": "读者",
+	"Email": "电子邮件",
+	"URL": "网址",
+	"Password": "密码"
+}]

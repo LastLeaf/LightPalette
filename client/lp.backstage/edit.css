@@ -1,0 +1,66 @@
+/* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
+
+.editor_header {
+    height: 40px;
+    margin-bottom: 20px;
+}
+.editor_save {
+    float: right;
+    height: 40px;
+    width: 150px;
+    border: 0 none;
+    border-radius: 10em;
+    box-shadow: 0 0 3px #666;
+    background: #666;
+    color: #fff;
+    font-size: 1.2em;
+}
+.editor_save:disabled {
+    background: #bbb;
+    box-shadow: 0 0 3px #bbb;
+}
+
+.editor_title {
+    margin-right: 190px;
+}
+.editor_title input {
+    font-size: 20px;
+    line-height: 28px;
+    width: 100%;
+    border: 1px solid #888;
+    padding: 5px 10px;
+    box-shadow: 0 0 3px #888;
+}
+.sidebar {
+    float: right;
+    width: 280px;
+}
+.sidebar_item {
+    background: #fff;
+    margin-bottom: 20px;
+    color: #444;
+    padding: 5px;
+    font-size: 0.9em;
+    box-shadow: 0 0 3px #888;
+}
+.sidebar_title {
+    font-size: 1.1em;
+    padding: 5px;
+    border-bottom: 1px dashed #888;
+    margin: -5px -5px 5px -5px;
+    background: #eee;
+}
+.sidebar input {
+    width: 264px;
+    margin-top: 5px;
+}
+.sidebar .button {
+    width: auto;
+}
+.sidebar textarea {
+    width: 264px;
+}
+
+.editor_main {
+    padding-right: 300px;
+}

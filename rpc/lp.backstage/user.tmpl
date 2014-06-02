@@ -1,0 +1,20 @@
+<tmpl id="regEmail">
+	<p>`Thanks for registering on <i>{{siteTitle}}</i>. Your account details is listed below.`</p>
+	<p>`Username: {{username}}<br>Email: {{email}}`</p>
+	<p>`You can login with the password you set before. The home page is <a href="http://{{{host}}}/">http://{{host}}/</a> .`</p>
+	<p>Enjoy!</p>
+	<hr>
+	<p>`If it is not your operation, you can disable this account by click the link below.`</p>
+	<p><a href="http://{{{host}}}{{{disablePath}}}">http://{{host}}{{disablePath}}</a></p>
+	<hr>
+	<p>`This email is sent automatically. Please do not reply.`</p>
+</tmpl>
+
+<tmpl id="pwdEmail">
+	<p>`You password on <i>{{siteTitle}}</i> has been reset. Your account details is listed below.`</p>
+	<p>`Username: {{username}}<br>Email: {{email}}`<br>Password: {{password}}</p>
+	<p>`Please login with this password and set a new password. The home page is <a href="http://{{{host}}}/">http://{{host}}/</a> .`</p>
+	<p>Enjoy!</p>
+	<hr>
+	<p>`This email is sent automatically. Please do not reply.`</p>
+</tmpl>

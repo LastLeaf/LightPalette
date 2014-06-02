@@ -1,0 +1,93 @@
+<tmpl id="index">
+
+	<div class="post">
+		<h2 class="post_title"><a href="#">The Post's Title</a></h2>
+		<div class="post_author"><a href="#">The Post's Author</a></div>
+		<div class="post_time">`Jan 1, 2014`</div>
+		<ul class="post_categories">
+			<li><a href="#">Category 1</a></li>
+			<li><a href="#">Category 2</a></li>
+		</ul>
+		<ul class="post_tags">
+			<li><a href="#">Tag 1</a></li>
+			<li><a href="#">Tag 2</a></li>
+			<li><a href="#">Tag 3</a></li>
+		</ul>
+		<div class="post_series">
+			<div class="post_series_title">The Series's Title</div>
+			<ul class="post_series_posts">
+				<li><a href="#">Series Posts 1</a></li>
+				<li><a href="#">Series Posts 2</a></li>
+				<li class="post_series_current">Series Posts 3</li>
+				<li><a href="#">Series Posts 4</a></li>
+			</ul>
+		</div>
+		<div class="post_content">
+
+			<div class="driver_article">
+				<p>This is in p tag.</p>
+				<hr>
+				<p>Here's <a>a link</a>.</p>
+				<h1>This is h1.</h1>
+				<h2>This is h2.</h2>
+				<h3>This is h3.</h3>
+				<blockquote>This is blockquote.</blockquote>
+				<pre>This is in pre tag.</pre>
+				<pre><code>This is in code tag.</code></pre>
+				<p><img src="/~rc/logo.png"></p>
+				<p>There's a picture above.</p>
+			</div>
+
+		</div>
+		<div class="post_copyright">`The Post's Copyright Information`</div>
+	</div>
+
+	<div class="comments">
+		<div class="comments_hint">`Comments`</div>
+		<ol class="comment_tree">
+			<li>
+				<div class="comment_thumb"><img src="/~rc/logo.png"></div>
+				<div class="comment_author"><a href="#">The Comment's Author</a></div>
+				<div class="comment_time">`Jan 2, 2014`</div>
+				<div class="comment_content">The Comment's Content</div>
+				<ol class="comment_child">
+					<li>
+						<div class="comment_thumb"><img src="/~rc/logo.png"></div>
+						<div class="comment_author"><a href="#">The Comment's Author</a></div>
+						<div class="comment_time">`Jan 4, 2014`</div>
+						<div class="comment_content">The Comment's Content</div>
+					</li>
+				</ol>
+			</li>
+			<li>
+				<div class="comment_thumb"><img src=""></div>
+				<div class="comment_author"><a href="#">The Comment's Author</a></div>
+				<div class="comment_time">`Jan 3, 2014`</div>
+				<div class="comment_content">The Comment's Content</div>
+			</li>
+		</ol>
+	</div>
+
+	<div class="reply">
+		<div class="reply_hint">`Leave a Comment`</div>
+		<form>
+			<div>
+				<label for="reply_author">`Name`</label>
+				<input type="text" id="reply_author" name="reply_author">
+			</div>
+			<div>
+				<label for="reply_email">`Email`</label>
+				<input type="text" id="reply_email" name="reply_email">
+			</div>
+			<div>
+				<label for="reply_url">`Website`</label>
+				<input type="text" id="reply_url" name="reply_url">
+			</div>
+			<div>
+				<label for="reply_content">`Content`</label>
+				<textarea id="reply_content" name="reply_content"></textarea>
+			</div>
+		</form>
+	</div>
+
+</tmpl>

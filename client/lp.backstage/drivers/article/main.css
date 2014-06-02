@@ -1,0 +1,18 @@
+/* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
+
+.driver_abstract {
+	margin: 10px 12px 10px 0;
+}
+.driver_abstract_manual {
+	display: block;
+	border: 1px solid #888;
+	padding: 5px;
+	width: 100%;
+	display: none;
+	margin-top: 10px;
+}
+.driver_abstract_enable {
+    border: 1px solid #888;
+    font-size: 1em;
+    padding: 2px;
+}

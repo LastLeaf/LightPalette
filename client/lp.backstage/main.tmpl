@@ -1,0 +1,70 @@
+<tmpl id="main">
+	<div id="backstage">
+		<div id="header">
+			<div class="header_left">LightPalette</div>
+			<div class="header_right"></div>
+		</div>
+		<div id="tabbar">
+			<div class="tabs">
+				<div class="tab_sep"></div>
+				<a fw href="/lp.backstage/home"><div class="tab tab_home">`Dashboard`</div></a>
+				<div class="tab_sep"></div>
+			</div>
+		</div>
+		<div id="content_wrapper">
+			<div id="content"></div>
+		</div>
+		<div id="errors"></div>
+	</div>
+</tmpl>
+
+<tmpl id="userTabs">
+	<div class="tabs">
+		<div class="tab_sep"></div>
+		<a fw href="/lp.backstage/home"><div class="tab tab_home">`Dashboard`</div></a>
+		{{#if contrib}}
+			<div class="tab_sep"></div>
+			<a fw href="/lp.backstage/post"><div class="tab tab_post">`Writing`</div></a>
+			<a fw href="/lp.backstage/posts"><div class="tab tab_posts">`Posts`</div></a>
+		{{/if}}
+		{{#if write}}
+			<a fw href="/lp.backstage/comments"><div class="tab tab_comments">`Comments`</div></a>
+		{{/if}}
+		{{#if admin}}
+			<div class="tab_sep"></div>
+			<a fw href="/lp.backstage/users"><div class="tab tab_users">`Users`</div></a>
+			<a fw href="/lp.backstage/settings"><div class="tab tab_settings">`Settings`</div></a>
+		{{/if}}
+		<div class="tab_sep"></div>
+	</div>
+</tmpl>
+
+<tmpl id="userInfo">
+	`Hello {{displayName}}! You can <a fw href="/lp.backstage/home">modify your infomation</a>, or <a fw href="#" class="logout">logout</a>.`
+</tmpl>
+
+<tmpl id="busy">
+	<div id="backstage_busy"></div>
+</tmpl>
+
+<json id="error">{
+	"timeout": "`Timed out. Please check your network.`",
+	"system": "`Sorry, an internal server error occurred.`",
+	"noPermission": "`You are not authorized.`",
+	"notFound": "`Sorry, no related resource was found.`",
+	"registerNotAllow": "`Sorry, registration is not allowed currently.`",
+	"loggedIn": "`You have already logged in.`",
+	"idUsed": "`The username exists. Please choose another one.`",
+	"idNull": "`The username does not exist.`",
+	"idDisabled": "`This account is disabled.`",
+	"pwdNull": "`The password is required.`",
+	"idIllegal": "`The username should contain 4 to 32 letters, numbers, underlines, and hyphens.`",
+	"emailIllegal": "`The email address is illegal.`",
+	"displayNameIllegal": "`The display name is illegal.`",
+	"urlIllegal": "`The url address is illegal.`",
+	"descriptionIllegal": "`The description is too long.`",
+	"pwd": "`The password is wrong.`",
+	"emailNotMatch": "`The username and email address are not match.`",
+	"pwdEmail": "`Your new password has been sent. Please check your mailbox.`",
+	"mail": "`Failed sending mail.`"
+}</json>
