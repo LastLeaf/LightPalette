@@ -7,7 +7,6 @@ var User = fw.module('db_model').User;
 var mail = fw.module('mail');
 
 var tmpl = fw.tmpl('settings.tmpl');
-var _ = tmpl.i18n;
 
 // set blog settings
 exports.set = function(conn, res, args){
@@ -52,8 +51,8 @@ exports.testEmail = function(conn, res, args){
 		if(!r) return res.err('noPermission');
 		User.findOne({id: conn.session.userId}).select('displayName email').exec(function(err, r){
 			if(err || !r) return res.err('system');
-			mail(args, r.displayName, r.email, _(conn, 'WordPalette Email Test'), tmpl(conn).testEmail(), null, function(err){
-				if(err) res.err('mail', 'err.data||err.code');
+			mail(args, r.displayName, r.email, tmpl(conn).i18n('WordPalette Email Test'), tmpl(conn).testEmail(), null, function(err){
+				if(err) res.err('mail', err.data||err.code);
 				else res(r.email);
 			});
 		});

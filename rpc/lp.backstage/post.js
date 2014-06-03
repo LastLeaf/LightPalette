@@ -73,6 +73,27 @@ exports.set = function(conn, res, args){
 	});
 };
 
+// remove a post
+exports.remove = function(conn, res, args){
+	var args = formFilter(args, {
+		_id: '',
+	});
+	// validate
+	User.checkPermission(conn, ['contributor', 'editor'], function(contributor, editor){
+		// check permission
+		if(!contributor) return res.err('noPermission');
+		Post.findOne(args, function(err, r){
+			if(err) return res.err('system');
+			if(!editor && r.author !== conn.session.userId)
+				return res.err('noPermission');
+			Post.remove(args, function(err){
+				if(err) return res.err('system');
+				res();
+			});
+		});
+	});
+};
+
 // get a post for editing
 exports.get = function(conn, res, args){
 	args = formFilter(args, {
@@ -86,10 +107,89 @@ exports.get = function(conn, res, args){
 				return res.err('noPermission');
 			drivers[r.type].readFilter(r, function(err){
 				if(err) return res.err(err);
-				r.category = r.category.join('\r\n');
-				r.tag = r.tag.join('\r\n');
 				res(r);
 			});
 		});
 	});
+};
+
+// get a post for reading
+exports.read = function(conn, res, args){
+	args = formFilter(args, {
+		_id: '',
+		path: ''
+	});
+	if(args._id) delete args.path;
+	else delete args._id;
+	args.status = 'published';
+	Post.findOne(args).where('time').lte(Math.floor(new Date().getTime() / 1000)).exec(function(err, r){
+		if(err || !r) return res.err('notFound');
+		drivers[r.type].readFilter(r, function(err){
+			if(err) return res.err(err);
+			res(r);
+		});
+	});
+};
+
+// get post list
+exports.list = function(conn, res, args){
+	args = formFilter(args, {
+		search: '',
+		title: '',
+		series: '',
+		category: '',
+		tag: '',
+		author: '',
+		status: 'published',
+		from: 0,
+		count: 10
+	});
+	if(args.count > 20 || args.count < 1 || args.from < 0) return res.err('noPermission');
+	// add conditions
+	if(args.search) var query = Post.find({ $text: { $search: args.search } });
+	else var query = Post.find({});
+	if(args.title) query = query.where('title').equals(args.title);
+	if(args.series) query = query.where('series').equals(args.series);
+	if(args.category) query = query.where('series').equals(args.category);
+	if(args.tag) query = query.where('series').equals(args.tag);
+	if(args.author) query = query.where('series').equals(args.author);
+	// run query and return
+	var total = null;
+	var runQuery = function(){
+		query.select('_id path type title status author time category tag series abstract').sort('-date').skip(args.from).limit(args.count).exec(function(err, r){
+			if(err) return res.err('system');
+			res({
+				total: total,
+				rows: r
+			});
+		});
+	};
+	// permission to get other's draft
+	if(args.status !== 'published') {
+		User.checkPermission(conn, ['contributor', 'editor'], function(contributor, editor){
+			if(!contributor) return res.err('noPermission');
+			if(!editor && args.author !== conn.session.userId) return res.err('noPermission');
+			if(args.status !== 'all') {
+				var q = {status: args.status};
+				if(args.author) q.author = args.author;
+				Post.count(q, function(err, r){
+					if(err) return res.err('system');
+					total = r;
+					query = query.where('status').equals(args.status);
+					runQuery();
+				});
+			} else {
+				var q = {};
+				if(args.author) q.author = args.author;
+				Post.count(q, function(err, r){
+					if(err) return res.err('system');
+					total = r;
+					runQuery();
+				});
+			}
+		});
+	} else {
+		query = query.where('status').equals('published').where('time').lte(Math.floor(new Date().getTime() / 1000));
+		runQuery();
+	}
 };

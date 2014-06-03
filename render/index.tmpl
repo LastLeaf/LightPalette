@@ -1,3 +1,29 @@
-<tmpl id="index">
-	`LightPalette is in early development. Thanks for trying.`
+<tmpl id="list">
+	<div class="post_list">
+		{{#each rows}}<div class="post_item">
+			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}{{_id}}{{/if}}">{{title}}</a></h3>
+			<div class="post_author">{{author}}</div>
+			<ul class="post_categories">{{#each category}}<li>{{this}}</li>{{/each}}</ul>
+			<ul class="post_tags">{{#each tag}}<li>{{this}}</li>{{/each}}</ul>
+			<div class="post_abstract">{{{abstract}}}</div>
+		</div>{{/each}}
+	</div>
+	<div class="page">
+		{{#if pagePrev}}<div class="page_prev"><a fw href="/lp.{{type}}{{#if query}}/{{query}}{{/if}}/{{pagePrev}}">&lt;</a></div>{{/if}}
+		{{#if pageNext}}<div class="page_next"><a fw href="/lp.{{type}}{{#if query}}/{{query}}{{/if}}/{{pageNext}}">&gt;</a></div>{{/if}}
+	</div>
+</tmpl>
+
+<tmpl id="single">
+	<div class="post_single">
+		<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}{{_id}}{{/if}}">{{title}}</a></h3>
+		<div class="post_author">{{author}}</div>
+		<ul class="post_categories">{{#each category}}<li>{{this}}</li>{{/each}}</ul>
+		<ul class="post_tags">{{#each tag}}<li>{{this}}</li>{{/each}}</ul>
+		<div class="post_content">{{{content}}}</div>
+	</div>
+</tmpl>
+
+<tmpl id="notFound">
+	<div class="post_not_found"></div>
 </tmpl>

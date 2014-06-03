@@ -9,7 +9,7 @@ exports.writeFilter = function(args, cb){
 	if(args.driver.abstractType === 'manualText')
 		args.abstract = ent.encode(args.driver.abstract);
 	else
-		args.abstract = args.driver.abstract = xss(args.driver.abstract);
+		args.abstract = args.driver.abstract = xss(args.driver.abstract || '');
 	args.driver = {
 		abstractType: args.driver.abstractType,
 		abstract: args.driver.abstract

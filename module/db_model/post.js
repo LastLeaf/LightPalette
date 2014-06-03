@@ -9,11 +9,11 @@ var Schema = fw.db.Schema;
 var schemaObj = {
 	type: String,
 	path: { type: String, default: '' },
-	title: { type: String, default: '' },
+	title: { type: String, index: true, default: '' },
 	status: { type: String, default: 'draft', enum: [
 		'draft', 'pending', 'published'
 	] },
-	author: String,
+	author: { type: String, index: true },
 	time: { type: Number, index: true },
 	category: { type: [String], index: true, default: [] },
 	tag: { type: [String], index: true, default: [] },
@@ -23,6 +23,10 @@ var schemaObj = {
 	driver: Object
 };
 var schema = new Schema(schemaObj, {autoIndex: false});
+
+// full text search for mongodb >= 2.6.0
+schema.index({title: 'text'});
+schema.index({content: 'text'});
 
 // create model
 module.exports = function(model, cb){

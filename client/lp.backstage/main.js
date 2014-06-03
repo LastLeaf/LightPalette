@@ -13,16 +13,17 @@ fw.main(function(pg){
 	$('#content').html(tmpl.busy());
 	// define page switch method
 	var $tabbar = $backstage.find('#tabbar');
-	pg.on('childUnload', function(){
+	lp.backstage.showBusy = function(){
 		$('#content').html(tmpl.busy());
-	});
-	var showCurStyle = function(){
+	};
+	pg.on('childUnload', lp.backstage.showBusy);
+	lp.backstage.updateTabStyle = function(){
 		var path = fw.getPath().match(/^\/[^\/]+\/(\w+)/);
 		var tabId = path[1];
 		$tabbar.find('.tab_current').removeClass('tab_current');
 		$tabbar.find('.tab_'+tabId).addClass('tab_current');
 	};
-	pg.on('childLoadStart', showCurStyle);
+	pg.on('childLoadStart', lp.backstage.updateTabStyle);
 
 	// capture the height of page
 	$(window).resize(function(){
@@ -59,7 +60,7 @@ fw.main(function(pg){
 			var html = tmpl.userTabs();
 		}
 		$('#tabbar').html(html);
-		showCurStyle();
+		lp.backstage.updateTabStyle();
 		// show user bar
 		if(info.id)
 			$('.header_right').html(tmpl.userInfo(info))

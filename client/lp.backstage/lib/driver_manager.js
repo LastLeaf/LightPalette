@@ -18,6 +18,10 @@
 		});
 		return r;
 	};
+	lp.driverName = function(id){
+		if(drivers[id]) return drivers[id].name;
+		return '';
+	};
 	lp.driverEditor = function(id, div, data){
 		if(drivers[id] && drivers[id].editor)
 			return drivers[id].editor(div, data);

@@ -56,9 +56,9 @@ fw.main(function(pg){
 		pg.rpc('settings:testEmail', args, function(to){
 			$this.prop('disabled', false);
 			$form.find('.error').html(tmpl.sentEmail({to: to}));
-		}, function(err){
+		}, function(err, detail){
 			$this.prop('disabled', false);
-			lp.backstage.showError(err);
+			lp.backstage.showError(err, detail);
 		});
 	});
 });

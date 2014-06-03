@@ -8,7 +8,7 @@ var path = require('path');
 var drivers = {
 	parent: 'backstage',
 	lib: [],
-	main: [],
+	main: ['drivers'],
 	tmpl: [],
 	style: []
 };
@@ -47,10 +47,10 @@ module.exports = {
 	backstage: {
 		parent: 'global',
 		lib: [{
-			src: '/lib/jquery-1.11.1.js',
+			src: '/lib/jquery-1.11.1',
 			userAgent: 'MSIE (6|7|8)\.'
 		}, {
-			src: '/lib/jquery-2.1.1.js',
+			src: '/lib/jquery-2.1.1',
 			userAgent: '^.*(?!MSIE (6|7|8)\.)'
 		}, {
 			src: ['lib/table_builder', 'lib/driver_manager'],
@@ -71,7 +71,7 @@ module.exports = {
 		style: 'home.css',
 	},
 	'./posts': {
-		parent: 'backstage',
+		parent: 'drivers',
 		main: 'posts',
 		tmpl: 'posts',
 	},

@@ -4,21 +4,39 @@
 var fs = require('fs');
 
 // read and watch config file
-var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
-fs.watch('config.json', function(){
-	fw.restart();
-});
+if(fs.existsSync('config.js')) {
+	var config = require('./config.js')();
+	fs.watch('config.js', function(){
+		fw.restart();
+	});
+} else {
+	var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
+	fs.watch('config.json', function(){
+		fw.restart();
+	});
+}
+
+// check favicon.ico and logo.gif
+if(fs.existsSync('rc/favicon.ico'))
+	var favicon = 'favicon.ico';
+else
+	var favicon = 'default_favicon.ico';
+if(fs.existsSync('rc/loading.gif'))
+	var loadingLogo = 'loading.gif';
+else
+	var loadingLogo = 'default_loading.gif';
 
 // generate config
 module.exports = {
 	app: {
-		title: 'LightPalette',
+		title: config.title || 'LightPalette',
 		version: config.version || new Date().getTime(),
 		locale: ['zh_CN'],
 	},
 	client: {
-		loadingLogo: 'logo.gif',
-		loadingLogoBackground: '#ddd',
+		favicon: favicon,
+		loadingLogo: loadingLogo,
+		loadingLogoBackground: '#fff',
 	},
 	server: {
 		port: 1180,

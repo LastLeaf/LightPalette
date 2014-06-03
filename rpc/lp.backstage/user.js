@@ -13,7 +13,6 @@ var User = fw.module('db_model').User;
 var mail = fw.module('mail');
 
 var tmpl = fw.tmpl('user.tmpl');
-var _ = tmpl.i18n;
 
 // returns the user infomation object of current session
 exports.current = function(conn, res, args){
@@ -72,7 +71,7 @@ exports.register = function(conn, res, args){
 										email: args.email,
 										disablePath: r
 									});
-									mail(mailOptions, args.displayName, args.email, _(conn, 'Welcome to ') + siteTitle, content);
+									mail(mailOptions, args.displayName, args.email, tmpl(conn).i18n('Welcome to ') + siteTitle, content);
 								});
 							});
 						});
@@ -148,7 +147,7 @@ exports.recoverPassword = function(conn, res, args){
 								email: args.email,
 								password: pwd
 							});
-							mail(r, args.displayName, args.email, _(conn, 'Password Reset on ') + siteTitle, content);
+							mail(r, args.displayName, args.email, tmpl(conn).i18n('Password Reset on ') + siteTitle, content);
 						});
 					});
 				});

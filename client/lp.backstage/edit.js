@@ -12,7 +12,9 @@ fw.main(function(pg){
 		var $form = $content.find('.editor');
 		$form.find('[name]').each(function(){
 			var name = $(this).attr('name');
-			if(post[name]) this.value = post[name];
+			if(!post[name]) return;
+			if(typeof(post[name]) === 'string') this.value = post[name];
+			else if(post[name].constructor === Array) this.value = post[name].join('\r\n');
 		});
 		var editor = lp.driverEditor(post.type, $content.find('.driver')[0], post);
 

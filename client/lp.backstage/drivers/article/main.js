@@ -11,6 +11,7 @@ fw.main(function(pg){
 		editor: function(div, data){
 
 			// init editor in div
+			if(!data.driver) data.driver = {};
 			var tinymceId = 'tinymce-' + new Date().getTime();
 			var $div = $(div).html(tmpl.main({
 				tinymceId: tinymceId,

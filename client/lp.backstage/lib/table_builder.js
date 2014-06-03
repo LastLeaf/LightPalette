@@ -3,6 +3,7 @@
 
 lp.tableBuilder = function($div, options, colDefine, addDef){
 	var idCol = options.idCol || '_id';
+	var editMore = !!options.editMore;
 	var allowAdd = !!addDef;
 
 	// events
@@ -144,11 +145,13 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 				})
 				.appendTo($btns);
 		} else {
-			$('<input type="button" value="'+_('Save')+'">')
+			if(editMore) var t = _('Edit');
+			else var t = _('Save');
+			$('<input type="button" value="'+t+'">')
 				.click(function(){
 					if(loading) return;
 					disableInputs();
-					trigger('change', getValue());
+					trigger('change', getValue(), rowId);
 				})
 				.appendTo($btns);
 			$('<input type="button" value="'+_('Cancel')+'">')

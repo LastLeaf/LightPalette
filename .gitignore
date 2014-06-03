@@ -1,5 +1,8 @@
 /config.json
 /node_modules
 /cache
+/client/theme
 /static/lp.uploads
 /static/lp.avatar
+/rc/favicon.ico
+/rc/loading.gif
