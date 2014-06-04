@@ -41,7 +41,7 @@ exports.register = function(conn, res, args){
 		else args.type = 'admin';
 		// check allow-reg
 		Settings.get('user', function(err, r){
-			if(!err || !r || !r.allowReg) return res.err('registerNotAllow');
+			if(args.type !== 'admin' && (!err || !r || !r.allowReg)) return res.err('registerNotAllow');
 			// set deault args
 			args.displayName = args.id;
 			args.id = args.id.toLowerCase();

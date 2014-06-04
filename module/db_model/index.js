@@ -10,16 +10,12 @@ var models = [
 
 module.exports = function(next){
 	var model = {};
-	if(fw.db) {
-		var nextModel = function(){
-			if(!models.length) {
-				next(model);
-			} else {
-				require('./'+models.shift())(model, nextModel);
-			}
-		};
-		nextModel();
-	} else {
-		next(model);
-	}
+	var nextModel = function(){
+		if(!models.length) {
+			next(model);
+		} else {
+			require('./'+models.shift())(model, nextModel);
+		}
+	};
+	nextModel();
 };

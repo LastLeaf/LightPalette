@@ -1,13 +1,18 @@
 <tmpl id="list">
-	<div class="post_list">
-		{{#each rows}}<div class="post_item">
+	{{#if query}}<div class="query query-{{type}}">{{query}}</div>{{/if}}
+	<div id="post_list" class="post_list">{{#each rows}}
+		<div class="post_item">
 			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}{{_id}}{{/if}}">{{title}}</a></h3>
 			<div class="post_author">{{author}}</div>
-			<ul class="post_categories">{{#each category}}<li>{{this}}</li>{{/each}}</ul>
-			<ul class="post_tags">{{#each tag}}<li>{{this}}</li>{{/each}}</ul>
-			<div class="post_abstract">{{{abstract}}}</div>
-		</div>{{/each}}
-	</div>
+			<ul class="post_categories">{{#each category}}
+				<li><a fw href="/lp.category/{{this}}">{{this}}</a></li>
+			{{/each}}</ul>
+			<ul class="post_tags">{{#each tag}}
+				<li><a fw href="/lp.tag/{{this}}">{{this}}</a></li>
+			{{/each}}</ul>
+			<div class="post_content">{{{abstract}}}</div>
+		</div>
+	{{/each}}</div>
 	<div class="page">
 		{{#if pagePrev}}<div class="page_prev"><a fw href="/lp.{{type}}{{#if query}}/{{query}}{{/if}}/{{pagePrev}}">&lt;</a></div>{{/if}}
 		{{#if pageNext}}<div class="page_next"><a fw href="/lp.{{type}}{{#if query}}/{{query}}{{/if}}/{{pageNext}}">&gt;</a></div>{{/if}}
@@ -15,15 +20,20 @@
 </tmpl>
 
 <tmpl id="single">
-	<div class="post_single">
+	<div id="post_single" class="post_single">
 		<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}{{_id}}{{/if}}">{{title}}</a></h3>
 		<div class="post_author">{{author}}</div>
-		<ul class="post_categories">{{#each category}}<li>{{this}}</li>{{/each}}</ul>
-		<ul class="post_tags">{{#each tag}}<li>{{this}}</li>{{/each}}</ul>
+		<ul class="post_categories">{{#each category}}
+			<li><a fw href="/lp.category/{{this}}">{{this}}</a></li>
+		{{/each}}</ul>
+		<ul class="post_tags">{{#each tag}}
+			<li><a fw href="/lp.tag/{{this}}">{{this}}</a></li>
+		{{/each}}</ul>
 		<div class="post_content">{{{content}}}</div>
 	</div>
 </tmpl>
 
 <tmpl id="notFound">
-	<div class="post_not_found"></div>
+	{{#if query}}<div class="query query-{{type}}">{{query}}</div>{{/if}}
+	<div id="post_not_found" class="post_not_found"></div>
 </tmpl>

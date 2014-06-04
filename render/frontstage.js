@@ -10,6 +10,7 @@ module.exports = function(conn, args, childRes, next){
 	var content = tmpl(conn).main({
 		title: childRes.siteInfo.siteTitle,
 		subtitle: childRes.siteInfo.siteSubtitle,
+		copyright: childRes.siteInfo.siteCopyright,
 		content: childRes.content,
 	});
 	delete childRes.siteInfo;

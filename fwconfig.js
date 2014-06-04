@@ -30,8 +30,8 @@ else
 module.exports = {
 	app: {
 		title: config.title || 'LightPalette',
-		version: config.version || new Date().getTime(),
-		locale: ['zh_CN'],
+		version: config.version || String(new Date().getTime()),
+		locale: config.locale || [],
 	},
 	client: {
 		favicon: favicon,
@@ -39,7 +39,8 @@ module.exports = {
 		loadingLogoBackground: '#fff',
 	},
 	server: {
-		port: 1180,
+		ip: config.host || '',
+		port: config.port || 1180,
 	},
 	db: {
 		type: 'mongoose',

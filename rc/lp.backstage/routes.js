@@ -21,13 +21,13 @@ for(var i=dirs.length-1; i>=0; i--) {
 	for(var j=files.length-1; j>=0; j--) {
 		var file = files[j];
 		var ext = path.extname(file);
-		if(ext === '.js') {
+		if(ext === '.js' && file.slice(-7) !== '.min.js') {
 			if(file === 'main.js')
 				drivers.main.unshift('drivers/' + dir + '/' + file);
 			else
 				drivers.lib.unshift('drivers/' + dir + '/' + file);
 		}
-		if(ext === '.stylus' || ext === '.css') {
+		if(ext === '.stylus' || (ext === '.css' && file.slice(-8) !== '.min.css')) {
 			if(file === 'main.stylus' || file === 'main.css')
 				drivers.style.push('drivers/' + dir + '/' + file);
 			else
@@ -47,12 +47,6 @@ module.exports = {
 	backstage: {
 		parent: 'global',
 		lib: [{
-			src: '/lib/jquery-1.11.1',
-			userAgent: 'MSIE (6|7|8)\.'
-		}, {
-			src: '/lib/jquery-2.1.1',
-			userAgent: '^.*(?!MSIE (6|7|8)\.)'
-		}, {
 			src: ['lib/table_builder', 'lib/driver_manager'],
 			minify: 'libs'
 		}],

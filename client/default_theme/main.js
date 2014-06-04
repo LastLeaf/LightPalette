@@ -3,5 +3,6 @@
 
 lp.theme = function(pg){
 	//pg.on('wrapperLoaded', );
+	//pg.on('contentUnloaded', );
 	//pg.on('contentLoaded', );
 };

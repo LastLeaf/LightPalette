@@ -150,13 +150,13 @@ exports.list = function(conn, res, args){
 	else var query = Post.find({});
 	if(args.title) query = query.where('title').equals(args.title);
 	if(args.series) query = query.where('series').equals(args.series);
-	if(args.category) query = query.where('series').equals(args.category);
-	if(args.tag) query = query.where('series').equals(args.tag);
-	if(args.author) query = query.where('series').equals(args.author);
+	if(args.category) query = query.find({ category: args.category });
+	if(args.tag) query = query.find({ tag: args.tag });
+	if(args.author) query = query.where('author').equals(args.author);
 	// run query and return
 	var total = null;
 	var runQuery = function(){
-		query.select('_id path type title status author time category tag series abstract').sort('-date').skip(args.from).limit(args.count).exec(function(err, r){
+		query.select('_id path type title status author time category tag series abstract').sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
 			if(err) return res.err('system');
 			res({
 				total: total,
