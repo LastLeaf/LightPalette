@@ -62,12 +62,12 @@ fw.main(function(pg){
 		$('#tabbar').html(html);
 		lp.backstage.updateTabStyle();
 		// show user bar
-		if(info.id)
+		if(info._id)
 			$('.header_right').html(tmpl.userInfo(info))
 				.find('.logout').click(function(e){
 					e.preventDefault();
 					lp.logout(function(){
-						location.href = '/lp.backstage/home';
+						location.href = '/backstage/home';
 					});
 				});
 		// raise an event to notify child pages

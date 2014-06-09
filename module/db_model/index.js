@@ -4,6 +4,8 @@
 var models = [
 	'user.js',
 	'settings.js',
+	'series.js',
+	'category.js',
 	'post.js',
 	'comment.js'
 ];

@@ -18,7 +18,7 @@ fw.main(function(pg){
 	// login/out helper
 	lp.register = function(id, password, email, cb){
 		cb = cb || function(){};
-		pg.rpc('/lp.backstage/user:register', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password), email: email }, function(err){
+		pg.rpc('/backstage/user:register', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password), email: email }, function(err){
 			if(err) cb(err);
 			else {
 				cb();
@@ -29,7 +29,7 @@ fw.main(function(pg){
 	};
 	lp.login = function(id, password, cb){
 		cb = cb || function(){};
-		pg.rpc('/lp.backstage/user:login', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password) }, function(err){
+		pg.rpc('/backstage/user:login', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password) }, function(err){
 			if(err) cb(err);
 			else {
 				cb();
@@ -43,7 +43,7 @@ fw.main(function(pg){
 	};
 	lp.logout = function(cb){
 		cb = cb || function(){};
-		pg.rpc('/lp.backstage/user:logout', function(err){
+		pg.rpc('/backstage/user:logout', function(err){
 			if(err) cb(err);
 			else {
 				cb();

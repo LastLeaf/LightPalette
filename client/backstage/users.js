@@ -12,8 +12,8 @@ fw.main(function(pg){
 	var $table = $content.find('.table');
 
 	// build table
-	var table = lp.tableBuilder($table, {idCol: 'id'}, [
-		{ id: 'id', name: _('Username'), input: 'add' },
+	var table = lp.tableBuilder($table, {idCol: '_id'}, [
+		{ id: '_id', name: _('Username'), input: 'add' },
 		{ id: 'displayName', name: _('Display Name') },
 		{ id: 'type', name: _('Type'), input: {
 			admin: _('admin'),
@@ -47,11 +47,11 @@ fw.main(function(pg){
 	// table operations
 	table.add(function(data){
 		if(data.password)
-			data.password = CryptoJS.SHA256(data.id.toLowerCase() + '|' + data.password).toString();
+			data.password = CryptoJS.SHA256(data._id.toLowerCase() + '|' + data.password).toString();
 		pg.rpc('user:set', data, true, function(){
 			data.type = _(data.type);
 			data.password = '******';
-			table.addRow(data.id, data);
+			table.addRow(data._id, data);
 		}, function(err){
 			lp.backstage.showError(err);
 			table.enableAdd();
@@ -59,22 +59,22 @@ fw.main(function(pg){
 	});
 	table.change(function(data){
 		if(data.password)
-			data.password = CryptoJS.SHA256(data.id.toLowerCase() + '|' + data.password).toString();
+			data.password = CryptoJS.SHA256(data._id.toLowerCase() + '|' + data.password).toString();
 		pg.rpc('user:set', data, false, function(){
 			data.type = _(data.type);
 			data.password = '******';
-			table.setRow(data.id, data);
+			table.setRow(data._id, data);
 		}, function(err){
 			lp.backstage.showError(err);
-			table.enableModify(data.id);
+			table.enableModify(data._id);
 		});
 	});
-	table.remove(function(id){
-		pg.rpc('user:remove', {id: id}, function(){
-			table.removeRow(id);
+	table.remove(function(_id){
+		pg.rpc('user:remove', {_id: _id}, function(){
+			table.removeRow(_id);
 		}, function(err){
 			lp.backstage.showError(err);
-			table.enableModify(data.id);
+			table.enableModify(data._id);
 		});
 	});
 });

@@ -1,20 +1,15 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var COLLECTION_NAME = 'comment';
-var MODEL_NAME = 'Comment';
+var COLLECTION_NAME = 'category';
+var MODEL_NAME = 'Category';
 
 module.exports = function(model, cb){
 	// define schema
 	var Schema = fw.db.Schema;
 	var schemaObj = {
-		user: { type: String, ref: fw.config.db.prefix + 'user' },
-		displayName: String,
-		email: String,
-		url: String,
-		content: String,
-		response: { type: [Schema.Types.ObjectId], ref: fw.config.db.prefix + COLLECTION_NAME },
-		responseTo: { type: Schema.Types.ObjectId, ref: fw.config.db.prefix + COLLECTION_NAME },
+		_id: { type: String, index: { unique: true } },
+		title: String,
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 

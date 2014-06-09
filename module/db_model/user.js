@@ -13,47 +13,47 @@ var TYPEVAL = {
 	disabled: -1
 };
 
-// define schema
-var Schema = fw.db.Schema;
-var schemaObj = {
-	id: { type: String, index: true },
-	type: { type: String, index: true, enum: [
-		'disabled', 'reader', 'contributor', 'writer', 'editor', 'admin'
-	] },
-	displayName: String,
-	email: String,
-	url: { type: String, default: '' },
-	description: { type: String, default: '' },
-	password: String,
-	avatar: { type: String, default: '' }
-};
-var schema = new Schema(schemaObj, {autoIndex: false});
-
-// functions
-schema.statics.checkPermission = function(conn, type, res){
-	this.findOne({id: conn.session.userId}).select('type').exec(function(err, r){
-		if(typeof(type) !== 'object') {
-			if(err || !r)
-				res(false);
-			else
-				res(TYPEVAL[r.type] >= TYPEVAL[type]);
-		} else {
-			var a = [];
-			for(var i=0; i<type.length; i++)
-				if(err || !r)
-					a.push(false);
-				else
-					a.push(TYPEVAL[r.type] >= TYPEVAL[type[i]]);
-			res.apply(global, a);
-		}
-	});
-};
-schema.statics.typeLevel = function(type){
-	return TYPEVAL[type];
-};
-
-// create models
 module.exports = function(model, cb){
+	// define schema
+	var Schema = fw.db.Schema;
+	var schemaObj = {
+		_id: { type: String, index: { unique: true } },
+		type: { type: String, index: true, enum: [
+			'disabled', 'reader', 'contributor', 'writer', 'editor', 'admin'
+		] },
+		displayName: String,
+		email: String,
+		url: { type: String, default: '' },
+		description: { type: String, default: '' },
+		password: String,
+		avatar: { type: String, default: '' }
+	};
+	var schema = new Schema(schemaObj, {autoIndex: false});
+
+	// functions
+	schema.statics.checkPermission = function(conn, type, res){
+		this.findOne({_id: conn.session.userId}).select('type').exec(function(err, r){
+			if(typeof(type) !== 'object') {
+				if(err || !r)
+					res(false);
+				else
+					res(TYPEVAL[r.type] >= TYPEVAL[type]);
+			} else {
+				var a = [];
+				for(var i=0; i<type.length; i++)
+					if(err || !r)
+						a.push(false);
+					else
+						a.push(TYPEVAL[r.type] >= TYPEVAL[type[i]]);
+				res.apply(global, a);
+			}
+		});
+	};
+	schema.statics.typeLevel = function(type){
+		return TYPEVAL[type];
+	};
+
+	// create models
 	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
 	col.ensureIndexes(cb);

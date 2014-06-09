@@ -12,12 +12,12 @@ var drivers = {
 	tmpl: [],
 	style: []
 };
-var dirs = fs.readdirSync('client/lp.backstage/drivers');
+var dirs = fs.readdirSync('client/backstage/drivers');
 for(var i=dirs.length-1; i>=0; i--) {
 	var dir = dirs[i];
-	if(!fs.statSync('client/lp.backstage/drivers/' + dir).isDirectory())
+	if(!fs.statSync('client/backstage/drivers/' + dir).isDirectory())
 		continue;
-	var files = fs.readdirSync('client/lp.backstage/drivers/' + dir);
+	var files = fs.readdirSync('client/backstage/drivers/' + dir);
 	for(var j=files.length-1; j>=0; j--) {
 		var file = files[j];
 		var ext = path.extname(file);

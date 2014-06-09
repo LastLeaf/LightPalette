@@ -34,7 +34,7 @@ fw.main(function(pg){
 					{title: 'Blockquote', block: 'blockquote'},
 					{title: 'Pre', block: 'pre'},
 				],
-				content_css: '/~/lp.backstage/drivers/article/skins/tinymce.css',
+				content_css: '/~/backstage/drivers/article/skins/tinymce.css',
 				language: fw.language
 			});
 

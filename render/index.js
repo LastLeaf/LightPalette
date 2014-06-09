@@ -2,6 +2,9 @@
 'use strict';
 
 var Settings = fw.module('db_model').Settings;
+var User = fw.module('db_model').User;
+var Series = fw.module('db_model').Series;
+var Category = fw.module('db_model').Category;
 var sitePathParser = fw.module('site_path_parser.js');
 
 var tmpl = fw.tmpl('index.tmpl');
@@ -15,7 +18,7 @@ var sitePathParser = function(conn, path, cb){
 			from: 0,
 			count: LIST_LEN
 		};
-		conn.rpc('/lp.backstage/post:list', q, function(r){
+		conn.rpc('/backstage/post:list', q, function(r){
 			cb('index', '', 0, r);
 		}, function(err){
 			cb('index', '', 0, []);
@@ -31,21 +34,43 @@ var sitePathParser = function(conn, path, cb){
 			count: LIST_LEN
 		};
 		if(query) q[type] = query;
-		conn.rpc('/lp.backstage/post:list', q, function(r){
+		conn.rpc('/backstage/post:list', q, function(r){
 			if(!r || !r.rows.length) {
 				if(next) next();
 				else cb('404');
 				return;
 			}
-			cb(type, query, page, r);
+			// get query name
+			var queryNameGot = function(queryName){
+				cb(type, queryName, page, r);
+			};
+			if(type === 'author') {
+				User.findOne({_id: query}).select('displayName').exec(function(err, r){
+					if(err || !r) cb('404');
+					queryNameGot(r.displayName);
+				});
+			} else if(type === 'series') {
+				Series.findOne({_id: query}).select('title').exec(function(err, r){
+					if(err || !r) cb(query);
+					queryNameGot(r.title);
+				});
+			} else if(type === 'category') {
+				Category.findOne({_id: query}).select('title').exec(function(err, r){
+					if(err || !r) cb(query);
+					queryNameGot(r.title);
+				});
+			} else {
+				queryNameGot(query);
+			}
+			// TODO
 		}, function(err){
 			cb('404');
 		});
 	};
 
 	// special path
-	if(segs[0].slice(0, 3) === 'lp.') {
-		var type = segs[0].slice(3);
+	if(segs[0].match(/^(index|tag|category|series|author|search|post)$/)) {
+		var type = segs[0];
 		if(type === 'index') {
 			var page = (Number(segs[1]) || 1) - 1;
 			postList('index', '', page);
@@ -63,6 +88,13 @@ var sitePathParser = function(conn, path, cb){
 			postList('author', query, page);
 		} else if(type === 'search') {
 			postList('search', query, page);
+		} else if(type === 'post') {
+			conn.rpc('/backstage/post:read', {_id: query}, function(r){
+				if(!r) cb('404');
+				else cb('post', r.title, 0, r);
+			}, function(err){
+				cb('404');
+			});
 		}
 		return;
 	}
@@ -83,22 +115,10 @@ var sitePathParser = function(conn, path, cb){
 	};
 
 	// path
-	var tryPath = function(){
-		conn.rpc('/lp.backstage/post:read', {path: path}, function(r){
-			if(!r) guess();
-			else cb('post', r.title, 0, r);
-		}, guess);
-	};
-
-	// post id
-	if(path.match(/^[0-9a-f]{24}$/)) {
-		conn.rpc('/lp.backstage/post:read', {_id: path}, function(r){
-			if(!r) tryPath();
-			else cb('post', r.title, 0, r);
-		}, tryPath);
-	} else {
-		tryPath();
-	}
+	conn.rpc('/backstage/post:read', {path: path}, function(r){
+		if(!r) guess();
+		else cb('post', r.title, 0, r);
+	}, guess);
 };
 
 module.exports = function(conn, args, childRes, next){

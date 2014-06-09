@@ -17,7 +17,7 @@ var tmpl = fw.tmpl('user.tmpl');
 // returns the user infomation object of current session
 exports.current = function(conn, res, args){
 	var id = conn.session.userId;
-	User.findOne({id: id}, function(err, r){
+	User.findOne({_id: id}, function(err, r){
 		if(err || !r) return res({});
 		r.password = !!r.password;
 		return res(r);
@@ -28,11 +28,11 @@ exports.current = function(conn, res, args){
 exports.register = function(conn, res, args){
 	// filter data
 	args = formFilter(args, {
-		id: '',
+		_id: '',
 		password: '',
 		email: ''
 	});
-	if(!args.id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	if(args.password.length !== 64) return res.err('pwd');
 	// determine user type
@@ -41,18 +41,19 @@ exports.register = function(conn, res, args){
 		else args.type = 'admin';
 		// check allow-reg
 		Settings.get('user', function(err, r){
-			if(args.type !== 'admin' && (!err || !r || !r.allowReg)) return res.err('registerNotAllow');
+			if(args.type !== 'admin' && (err || !r || !r.allowReg)) return res.err('registerNotAllow');
 			// set deault args
-			args.displayName = args.id;
-			args.id = args.id.toLowerCase();
+			args.displayName = args._id;
+			var id = args._id.toLowerCase();
+			delete args._id;
 			password.hash(args.password, function(err, r){
 				if(err) return res.err('system');
 				args.password = r;
 				// check user exists
-				User.findOne({id: args.id}, function(err, r){
+				User.findOne({_id: id}, function(err, r){
 					if(err) return res.err('system');
 					if(r) return res.err('idUsed');
-					User.update({id: args.id}, args, {upsert: true}, function(err){
+					User.update({_id: id}, args, {upsert: true}, function(err){
 						if(err) return res.err('system');
 						res();
 						if(args.type === 'admin') return;
@@ -63,11 +64,11 @@ exports.register = function(conn, res, args){
 							Settings.get('email', function(err, r){
 								if(err || !r) return;
 								var mailOptions = r;
-								disablePath(args.id, args.email, function(err, r){
+								disablePath(id, args.email, function(err, r){
 									var content = tmpl(conn).regEmail({
 										siteTitle: siteTitle,
 										host: conn.host,
-										username: args.id,
+										username: id,
 										email: args.email,
 										disablePath: r
 									});
@@ -86,13 +87,13 @@ exports.register = function(conn, res, args){
 exports.login = function(conn, res, args){
 	// filter data
 	args = formFilter(args, {
-		id: '',
+		_id: '',
 		password: ''
 	});
-	if(!args.id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
-	var id = args.id.toLowerCase();
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	var id = args._id.toLowerCase();
 	// check password
-	User.findOne({id: id}).select('type password').exec(function(err, r){
+	User.findOne({_id: id}).select('type password').exec(function(err, r){
 		if(err) return res.err('system');
 		if(!r) return res.err('idNull');
 		if(r.type === 'disabled') return res.err('idDisabled');
@@ -117,22 +118,22 @@ exports.logout = function(conn, res, args){
 exports.recoverPassword = function(conn, res, args){
 	// filter data
 	args = formFilter(args, {
-		id: '',
+		_id: '',
 		email: ''
 	});
-	if(!args.id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	// check user and email pair
-	args.id = args.id.toLowerCase();
-	User.findOne({id: args.id}).select('email').exec(function(err, r){
+	args._id = args._id.toLowerCase();
+	User.findOne({_id: args._id}).select('email').exec(function(err, r){
 		if(err || !r) return res.err('idNull');
 		if(r.email !== args.email) return res.err('emailNotMatch');
 		crypto.randomBytes(6, function(err, r){
 			if(err) return res.err('system');
 			var pwd = r.toString('base64');
-			password.hash(crypto.createHash('sha256').update(args.id + '|' + pwd).digest('hex'), function(err, r){
+			password.hash(crypto.createHash('sha256').update(args._id + '|' + pwd).digest('hex'), function(err, r){
 				if(err) return res.err('system');
-				User.update({id: args.id}, {password: r}, function(){
+				User.update({_id: args._id}, {password: r}, function(){
 					res.err('pwdEmail');
 					// send email
 					Settings.get('basic', function(err, r){
@@ -143,7 +144,7 @@ exports.recoverPassword = function(conn, res, args){
 							var content = tmpl(conn).pwdEmail({
 								siteTitle: siteTitle,
 								host: conn.host,
-								username: args.id,
+								username: args._id,
 								email: args.email,
 								password: pwd
 							});
@@ -171,7 +172,7 @@ exports.modify = function(conn, res, args){
 	// check login status
 	User.checkPermission(conn, 'reader', function(r){
 		if(!r) return res.err('noPermission');
-		User.update({id: conn.session.userId}, args, function(err){
+		User.update({_id: conn.session.userId}, args, function(err){
 			if(err) return res.err('system');
 			res();
 		});
@@ -189,12 +190,12 @@ exports.modifyPassword = function(conn, res, args){
 	// check login status
 	User.checkPermission(conn, 'reader', function(r){
 		if(!r) return res.err('noPermission');
-		User.findOne({id: conn.session.userId}).select('password').exec(function(err, r){
+		User.findOne({_id: conn.session.userId}).select('password').exec(function(err, r){
 			if(err) return res.err('system');
 			if(!password.check(args.original, r.password)) return res.err('pwd');
 			password.hash(args.password, function(err, r){
 				if(err) return res.err('system');
-				User.update({id: conn.session.userId}, {password: r}, function(){
+				User.update({_id: conn.session.userId}, {password: r}, function(){
 					if(err) return res.err('system');
 					res();
 				});
@@ -210,9 +211,9 @@ exports.avatar = function(conn, res, dataUrl){
 		if(!r) return res.err('noPermission');
 		if(!dataUrl) {
 			// delete avatar
-			User.update({id: conn.session.userId}, {avatar: ''}, function(err){
+			User.update({_id: conn.session.userId}, {avatar: ''}, function(err){
 				if(err) return res.err('system');
-				var dir = 'static/lp.avatars/' + conn.session.userId;
+				var dir = 'static/avatars/' + conn.session.userId;
 				res();
 				var c = 3;
 				var cb = function(){
@@ -230,7 +231,7 @@ exports.avatar = function(conn, res, dataUrl){
 		try {
 			var buf = new Buffer(data[1], 'base64');
 			// save original image
-			var dir = 'static/lp.avatars' + conn.session.userId;
+			var dir = 'static/avatars' + conn.session.userId;
 			fs.mkdir(dir, function(err){
 				var file = dir + '/128.png';
 				fs.writeFile(file, buf, function(err){
@@ -239,7 +240,7 @@ exports.avatar = function(conn, res, dataUrl){
 					avatarResizer(dir, function(err){
 						if(err) return res.err('system');
 						// save to db
-						User.update({id: conn.session.userId}, {avatar: dir.slice(dir.indexOf('/', 2))}, function(err){
+						User.update({_id: conn.session.userId}, {avatar: dir.slice(dir.indexOf('/', 2))}, function(err){
 							if(err) return res.err('system');
 							res();
 						});
@@ -290,15 +291,15 @@ var avatarResizer = function(dir, cb){
 exports.disable = function(conn, res, args){
 	// filter data
 	args = formFilter(args, {
-		id: '',
+		_id: '',
 		email: '',
 		sign: '',
 	});
-	if(!args.id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
-	if(!password.check(args.id+'|'+args.email+'|'+fw.config.secret.cookie, args.sign)) return res.err('system');
+	if(!password.check(args._id+'|'+args.email+'|'+fw.config.secret.cookie, args.sign)) return res.err('system');
 	// check sign
-	User.update({id: args.id}, {type: 'disabled'}, function(err){
+	User.update({_id: args._id}, {type: 'disabled'}, function(err){
 		if(err) return res.err('system');
 		res();
 	});
@@ -307,7 +308,7 @@ exports.disable = function(conn, res, args){
 // generate a disable url for email
 var disablePath = function(id, email, cb){
 	password.hash(id+'|'+email+'|'+fw.config.secret.cookie, function(err, r){
-		cb(err, '/lp.user/disable?i=' + id + '&e=' + encodeURIComponent(email) + '&s=' + encodeURIComponent(r));
+		cb(err, '/backstage/user/disable?i=' + id + '&e=' + encodeURIComponent(email) + '&s=' + encodeURIComponent(r));
 	});
 };
 
@@ -325,7 +326,7 @@ exports.list = function(conn, res, args){
 		User.count(function(err, r){
 			if(err) return res.err('system');
 			var total = r;
-			User.find({}).select('id displayName type email url description').sort('id').limit(args.count, args.from).exec(function(err, r){
+			User.find({}).select('_id displayName type email url description').sort('_id').limit(args.count, args.from).exec(function(err, r){
 				if(err) return res.err('system');
 				res({
 					total: total,
@@ -340,7 +341,7 @@ exports.list = function(conn, res, args){
 exports.set = function(conn, res, args, isAdd){
 	// filter data
 	args = formFilter(args, {
-		id: '',
+		_id: '',
 		type: '',
 		displayName: '',
 		email: '',
@@ -348,7 +349,7 @@ exports.set = function(conn, res, args, isAdd){
 		description: '',
 		password: ''
 	});
-	if(!args.id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
 	if(!User.typeLevel(args.type)) return res.err('system');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	if((isAdd || args.password) && args.password.length !== 64) return res.err('pwdNull');
@@ -357,7 +358,8 @@ exports.set = function(conn, res, args, isAdd){
 	if(args.url.length > 256) return res.err('urlIllegal');
 	if(args.description.length > 100) return res.err('descriptionIllegal');
 	// check permission
-	args.id = args.id.toLowerCase();
+	var id = args._id.toLowerCase();
+	delete args._id;
 	User.checkPermission(conn, 'admin', function(r){
 		if(!r) return res.err('noPermission');
 		if(isAdd)
@@ -366,7 +368,7 @@ exports.set = function(conn, res, args, isAdd){
 				res();
 			});
 		else
-			User.update({id: args.id}, args, function(err){
+			User.update({_id: id}, args, function(err){
 				if(err) return res.err('system');
 				res();
 			});
@@ -377,14 +379,14 @@ exports.set = function(conn, res, args, isAdd){
 exports.remove = function(conn, res, args){
 	// filter data
 	args = formFilter(args, {
-		id: ''
+		_id: ''
 	});
-	if(!args.id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
 	// check permission
-	args.id = args.id.toLowerCase();
+	args._id = args._id.toLowerCase();
 	User.checkPermission(conn, 'admin', function(r){
 		if(!r) return res.err('noPermission');
-		User.remove({id: args.id}, function(err){
+		User.remove({_id: args._id}, function(err){
 			if(err) return res.err('system');
 			res();
 		});

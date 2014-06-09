@@ -1,5 +1,5 @@
 [{
-	"Hello {{displayName}}! You can <a fw href=\"/lp.backstage/home\">modify your infomation</a>, or <a fw href=\"#\" class=\"logout\">logout</a>.": "您好，{{displayName}}！您可以<a fw href=\"/lp.backstage/home\">修改个人信息</a>，或者<a fw href=\"#\" class=\"logout\">登出</a>。",
+	"Hello {{displayName}}! You can <a fw href=\"/backstage/home\">modify your infomation</a>, or <a fw href=\"#\" class=\"logout\">logout</a>.": "您好，{{displayName}}！您可以<a fw href=\"/backstage/home\">修改个人信息</a>，或者<a fw href=\"#\" class=\"logout\">登出</a>。",
 	"Dashboard": "控制盘",
 	"Statistics": "统计",
 	"Writing": "创作",

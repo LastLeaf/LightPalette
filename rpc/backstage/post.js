@@ -32,7 +32,7 @@ exports.set = function(conn, res, args){
 		path: '',
 		title: '',
 		status: 'draft',
-		author: '',
+		author: conn.session.userId,
 		time: Math.floor(new Date().getTime() / 1000),
 		category: '',
 		tag: '',
@@ -101,15 +101,17 @@ exports.get = function(conn, res, args){
 	});
 	User.checkPermission(conn, ['contributor', 'editor'], function(contributor, editor){
 		if(!contributor) return res.err('noPermission');
-		Post.findOne(args, function(err, r){
-			if(err || !r) return res.err('notFound');
-			if(!editor && r.author !== conn.session.userId)
-				return res.err('noPermission');
-			drivers[r.type].readFilter(r, function(err){
-				if(err) return res.err(err);
-				res(r);
+		Post.findOne(args)
+			.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
+			.exec(function(err, r){
+				if(err || !r) return res.err(err);
+				if(!editor && r.author !== conn.session.userId)
+					return res.err('noPermission');
+				drivers[r.type].readFilter(r, function(err){
+					if(err) return res.err(err);
+					res(r);
+				});
 			});
-		});
 	});
 };
 
@@ -122,13 +124,15 @@ exports.read = function(conn, res, args){
 	if(args._id) delete args.path;
 	else delete args._id;
 	args.status = 'published';
-	Post.findOne(args).where('time').lte(Math.floor(new Date().getTime() / 1000)).exec(function(err, r){
-		if(err || !r) return res.err('notFound');
-		drivers[r.type].readFilter(r, function(err){
-			if(err) return res.err(err);
-			res(r);
+	Post.findOne(args).where('time').lte(Math.floor(new Date().getTime() / 1000))
+		.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
+		.exec(function(err, r){
+			if(err || !r) return res.err('notFound');
+			drivers[r.type].readFilter(r, function(err){
+				if(err) return res.err(err);
+				res(r);
+			});
 		});
-	});
 };
 
 // get post list
@@ -146,8 +150,12 @@ exports.list = function(conn, res, args){
 	});
 	if(args.count > 20 || args.count < 1 || args.from < 0) return res.err('noPermission');
 	// add conditions
-	if(args.search) var query = Post.find({ $text: { $search: args.search } });
-	else var query = Post.find({});
+	if(args.search) {
+		// text search for mongodb >= 2.6
+		var query = Post.find({ $text: { $search: args.search } });
+	} else {
+		var query = Post.find({});
+	}
 	if(args.title) query = query.where('title').equals(args.title);
 	if(args.series) query = query.where('series').equals(args.series);
 	if(args.category) query = query.find({ category: args.category });
@@ -156,13 +164,15 @@ exports.list = function(conn, res, args){
 	// run query and return
 	var total = null;
 	var runQuery = function(){
-		query.select('_id path type title status author time category tag series abstract').sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
-			if(err) return res.err('system');
-			res({
-				total: total,
-				rows: r
+		query.select('_id path type title status author time category tag series abstract')
+			.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
+			.sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
+				if(err) return res.err('system');
+				res({
+					total: total,
+					rows: r
+				});
 			});
-		});
 	};
 	// permission to get other's draft
 	if(args.status !== 'published') {

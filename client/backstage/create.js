@@ -10,9 +10,9 @@ fw.main(function(pg){
 		var $this = $(this);
 		var type = $this.attr('driverId');
 		$btns.attr('disabled', true);
-		pg.rpc('post:create', {type: type}, function(id){
+		pg.rpc('post:create', {type: type}, function(_id){
 			$('#content').html(pg.parent.parent.tmpl.busy());
-			fw.go('/lp.backstage/post/' + id);
+			fw.go('/backstage/post/' + _id);
 		}, function(err){
 			lp.backstage.showError(err);
 			$btns.removeAttr('disabled');

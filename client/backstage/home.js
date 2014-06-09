@@ -8,7 +8,7 @@ fw.main(function(pg){
 	var showPage = function(){
 		if(pg.destroyed) return;
 		var userInfo = pg.parent.userInfo;
-		if(!userInfo.id) {
+		if(!userInfo._id) {
 
 			// login page
 			var $content = $('#content').html(tmpl.login());
@@ -35,11 +35,11 @@ fw.main(function(pg){
 					}
 					if($form.find('.password').val())
 						$form.find('[name=password]').val(
-							CryptoJS.SHA256($form.find('[name=id]').val().toLowerCase() +'|'+ $form.find('.password').val())
+							CryptoJS.SHA256($form.find('[name=_id]').val().toLowerCase() +'|'+ $form.find('.password').val())
 						);
 					$form.find('[type=submit]').prop('disabled', true);
 				}, function(){
-					location.pathname = '/lp.backstage/home';
+					location.pathname = '/backstage/home';
 				}, function(err){
 					$form.find('[type=submit]').prop('disabled', false);
 					lp.backstage.showError(err);
@@ -50,7 +50,7 @@ fw.main(function(pg){
 
 			// common page
 			var $content = $('#content').html(tmpl.main({
-				username: userInfo.id,
+				username: userInfo._id,
 				displayName: userInfo.displayName,
 				type: userInfo.type,
 				email: userInfo.email,
@@ -118,8 +118,8 @@ fw.main(function(pg){
 					$pwdForm.find('.newRe').val('').focus();
 					return false;
 				}
-				$pwdForm.find('[name=password]').val(CryptoJS.SHA256(userInfo.id.toLowerCase() +'|'+ $pwdForm.find('.new').val()));
-				$pwdForm.find('[name=original]').val(CryptoJS.SHA256(userInfo.id.toLowerCase() +'|'+ $pwdForm.find('.original').val()));
+				$pwdForm.find('[name=password]').val(CryptoJS.SHA256(userInfo._id.toLowerCase() +'|'+ $pwdForm.find('.new').val()));
+				$pwdForm.find('[name=original]').val(CryptoJS.SHA256(userInfo._id.toLowerCase() +'|'+ $pwdForm.find('.original').val()));
 				$pwdForm.find('.error').html('');
 				$pwdForm.find('.submit').attr('disabled', true);
 			}, function(){

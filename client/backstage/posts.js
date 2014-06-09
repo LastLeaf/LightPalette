@@ -10,7 +10,7 @@ fw.main(function(pg){
 	var showPage = function(){
 		if(pg.destroyed) return;
 		var userInfo = pg.parent.parent.userInfo;
-		if(!userInfo.id) return;
+		if(!userInfo._id) return;
 
 		// init page structure
 		var $content = $('#content').html(tmpl.main());
@@ -21,13 +21,13 @@ fw.main(function(pg){
 			{ id: 'title', name: _('Title'), input: 'add' },
 			{ id: 'type', name: _('Type'), input: 'add' },
 			{ id: 'status', name: _('Status'), input: 'add' },
-			{ id: 'author', name: _('Author'), input: 'add' },
+			{ id: 'author.displayName', name: _('Author'), input: 'add' },
 			{ id: 'time', type: 'extra', input: 'add' }
 		])
 		.data(function(page){
 			var q = {status: 'all', from: page*POST_LIST_LEN, count: POST_LIST_LEN};
 			if(userInfo.type !== 'editor' && userInfo.type !== 'admin')
-				q.author = userInfo.id;
+				q.author = userInfo._id;
 			pg.rpc('post:list', q, function(r){
 				table.setTotal(Math.ceil(r.total/POST_LIST_LEN));
 				var rows = r.rows;

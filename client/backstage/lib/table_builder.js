@@ -214,12 +214,15 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		for(var i=0; i<colDefine.length; i++) {
 			var col = colDefine[i];
 			if(col.type === 'hidden') continue;
+			var d = data;
+			var a = col.id.split('.');
+			while(a.length) d = d[a.shift()];
 			if(col.type === 'extra') {
-				var $td = $('<td colspan="'+colCount+'"></td>').text(data[col.id] || '').appendTo($tr[1]);
+				var $td = $('<td colspan="'+colCount+'"></td>').text(d || '').appendTo($tr[1]);
 			} else {
-				var $td = $('<td></td>').text(data[col.id] || '').appendTo($tr[0]);
+				var $td = $('<td></td>').text(d || '').appendTo($tr[0]);
 			}
-			$td.prop('lpTableColId', col.id).prop('lpTableInput', col.input).prop('lpTableData', data[col.id] || '');
+			$td.prop('lpTableColId', col.id).prop('lpTableInput', col.input).prop('lpTableData', d || '');
 		}
 		$tr[0].lpTableEditing = false;
 		return $tr;

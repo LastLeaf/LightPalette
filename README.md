@@ -5,7 +5,7 @@ Light-weight, multi-content-form blog engine based on node.js, mongodb, and fw.m
 LightPalette is still in early development.
 
 # Try It #
-1. Ensure you have node.js>=0.10.0 and mongodb>=2.4.0.
+1. Ensure you have node.js>=0.10.0 and mongodb>=2.4.0 (>=2.6.0 if you need post content search support).
 1. Clone this repo.
 1. Run `npm install .` in the root of this repo.
 1. Run `FW=DEBUG node app.js` in it.
