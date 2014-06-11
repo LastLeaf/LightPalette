@@ -16,7 +16,7 @@ module.exports = function(model, cb){
 		] },
 		author: { type: String, index: true, ref: fw.config.db.prefix + 'user' },
 		time: { type: Number, index: true },
-		category: { type: [String], index: true, ref: fw.config.db.prefix + 'category' },
+		category: [{ type: String, index: true, ref: fw.config.db.prefix + 'category' }],
 		tag: { type: [String], index: true, default: [] },
 		series: { type: String, index: true, ref: fw.config.db.prefix + 'series' },
 		content: { type: String, default: '' },
@@ -25,13 +25,14 @@ module.exports = function(model, cb){
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 
-	// full text search for mongodb >= 2.6.0
-	schema.index({title: 'text'});
-	schema.index({tag: 'text'});
-	schema.index({content: 'text'});
-
 	// create model
 	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
-	col.ensureIndexes(cb);
+
+	// full text search for mongodb >= 2.6.0
+	fw.db.connection.db.collection(col.collection.name, function(err, mongoCol){
+		mongoCol.ensureIndex({title: 'text', tag: 'text', abstract: 'text', content: 'text'}, {name: 'fulltext', default_language: 'none', language_override: 'search_language'}, function(err){
+			col.ensureIndexes(cb);
+		});
+	});
 };

@@ -32,7 +32,7 @@ exports.register = function(conn, res, args){
 		password: '',
 		email: ''
 	});
-	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	if(args.password.length !== 64) return res.err('pwd');
 	// determine user type
@@ -90,7 +90,7 @@ exports.login = function(conn, res, args){
 		_id: '',
 		password: ''
 	});
-	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	var id = args._id.toLowerCase();
 	// check password
 	User.findOne({_id: id}).select('type password').exec(function(err, r){
@@ -121,7 +121,7 @@ exports.recoverPassword = function(conn, res, args){
 		_id: '',
 		email: ''
 	});
-	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	// check user and email pair
 	args._id = args._id.toLowerCase();
@@ -295,7 +295,7 @@ exports.disable = function(conn, res, args){
 		email: '',
 		sign: '',
 	});
-	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	if(!password.check(args._id+'|'+args.email+'|'+fw.config.secret.cookie, args.sign)) return res.err('system');
 	// check sign
@@ -349,7 +349,7 @@ exports.set = function(conn, res, args, isAdd){
 		description: '',
 		password: ''
 	});
-	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(!User.typeLevel(args.type)) return res.err('system');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	if((isAdd || args.password) && args.password.length !== 64) return res.err('pwdNull');
@@ -381,7 +381,7 @@ exports.remove = function(conn, res, args){
 	args = formFilter(args, {
 		_id: ''
 	});
-	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('idIllegal');
+	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	// check permission
 	args._id = args._id.toLowerCase();
 	User.checkPermission(conn, 'admin', function(r){

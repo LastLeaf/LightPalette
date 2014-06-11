@@ -64,11 +64,6 @@ module.exports = {
 		tmpl: 'home',
 		style: 'home.css',
 	},
-	'./posts': {
-		parent: 'drivers',
-		main: 'posts',
-		tmpl: 'posts',
-	},
 	'./post': {
 		parent: 'drivers',
 		main: 'create',
@@ -80,6 +75,21 @@ module.exports = {
 		main: 'edit',
 		tmpl: 'edit',
 		style: 'edit.css',
+	},
+	'./posts': {
+		parent: 'drivers',
+		main: 'posts',
+		tmpl: 'posts',
+	},
+	'./categories': {
+		parent: 'backstage',
+		main: 'categories',
+		tmpl: 'categories',
+	},
+	'./series': {
+		parent: 'backstage',
+		main: 'series',
+		tmpl: 'series',
 	},
 	'./comments': {
 		parent: 'backstage',

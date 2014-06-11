@@ -3,14 +3,16 @@
 	<div id="post_list" class="post_list">{{#each rows}}
 		<div class="post_item">
 			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
-			<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
-			<ul class="post_categories">{{#each category}}
-				<li><a fw href="/category/{{this}}">{{this}}</a></li>
-			{{/each}}</ul>
-			<ul class="post_tags">{{#each tag}}
-				<li><a fw href="/tag/{{this}}">{{this}}</a></li>
-			{{/each}}</ul>
-			<div class="post_content">{{{abstract}}}</div>
+			<div class="post_head">
+				<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
+				<ul class="post_categories">{{#each category}}
+					<li><a fw href="/category/{{_id}}">{{title}}</a></li>
+				{{/each}}</ul>
+				<ul class="post_tags">{{#each tag}}
+					<li><a fw href="/tag/{{this}}">{{this}}</a></li>
+				{{/each}}</ul>
+			</div>
+			<div class="post_body post_abstract">{{{abstract}}}</div>
 		</div>
 	{{/each}}</div>
 	<div class="page">
@@ -22,14 +24,16 @@
 <tmpl id="single">
 	<div id="post_single" class="post_single">
 		<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
-		<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
-		<ul class="post_categories">{{#each category}}
-			<li><a fw href="/category/{{this}}">{{this}}</a></li>
-		{{/each}}</ul>
-		<ul class="post_tags">{{#each tag}}
-			<li><a fw href="/tag/{{this}}">{{this}}</a></li>
-		{{/each}}</ul>
-		<div class="post_content">{{{content}}}</div>
+		<div class="post_head">
+			<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
+			<ul class="post_categories">{{#each category}}
+				<li><a fw href="/category/{{_id}}">{{title}}</a></li>
+			{{/each}}</ul>
+			<ul class="post_tags">{{#each tag}}
+				<li><a fw href="/tag/{{this}}">{{this}}</a></li>
+			{{/each}}</ul>
+		</div>
+		<div class="post_body post_content">{{{content}}}</div>
 	</div>
 </tmpl>
 

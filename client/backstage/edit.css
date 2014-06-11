@@ -54,7 +54,7 @@
     width: 264px;
     margin-top: 5px;
 }
-.sidebar .button {
+.sidebar .button, .sidebar .checkbox {
     width: auto;
 }
 .sidebar textarea {

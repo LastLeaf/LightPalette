@@ -28,6 +28,11 @@
 			<a fw href="/backstage/posts"><div class="tab tab_posts">`Posts`</div></a>
 		{{/if}}
 		{{#if write}}
+			<a fw href="/backstage/series"><div class="tab tab_series">`Series`</div></a>
+		{{/if}}
+		{{#if edit}}
+			<a fw href="/backstage/categories"><div class="tab tab_categories">`Categories`</div></a>
+			<div class="tab_sep"></div>
 			<a fw href="/backstage/comments"><div class="tab tab_comments">`Comments`</div></a>
 		{{/if}}
 		{{#if admin}}
@@ -54,11 +59,12 @@
 	"notFound": "`Sorry, no related resource was found.`",
 	"registerNotAllow": "`Sorry, registration is not allowed currently.`",
 	"loggedIn": "`You have already logged in.`",
-	"idUsed": "`The username exists. Please choose another one.`",
-	"idNull": "`The username does not exist.`",
+	"idIllegal": "`The name is not legal. It should only contain visable characters.`",
+	"idUsed": "`The name exists. Please choose another one.`",
+	"idNull": "`The name does not exist.`",
 	"idDisabled": "`This account is disabled.`",
 	"pwdNull": "`The password is required.`",
-	"idIllegal": "`The username should contain 4 to 32 letters, numbers, underlines, and hyphens.`",
+	"usernameIllegal": "`The username should contain 4 to 32 letters, numbers, underlines, and hyphens.`",
 	"emailIllegal": "`The email address is illegal.`",
 	"displayNameIllegal": "`The display name is illegal.`",
 	"urlIllegal": "`The url address is illegal.`",

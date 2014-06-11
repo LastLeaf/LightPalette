@@ -1,6 +1,6 @@
 <tmpl id="main">
 	<div class="edit">
-		<form action="post" method="set" class="editor">
+		<form action="post" method="modify" class="editor">
 			<div class="editor_header">
 				<input type="button" class="editor_save" value="`Save`">
 				<div class="editor_title">
@@ -24,11 +24,16 @@
 				</div>
 				<div class="sidebar_item">
 					<div class="sidebar_title">`Categories`</div>
-					<textarea name="category" rows="3"></textarea>
+					<div class="sidebar_category_list">{{#each categories}}
+						<div>
+							<input type="checkbox" name="category[]" value="{{_id}}" id="sidebar_category_{{_id}}" class="checkbox">
+							<label for="sidebar_category_{{_id}}">{{title}}</label>
+						</div>
+					{{/each}}</div>
 				</div>
 				<div class="sidebar_item">
 					<div class="sidebar_title">`Tags`</div>
-					<textarea name="tag" rows="5"></textarea>
+					<textarea name="tag" rows="5" placeholder="`(one per line)`"></textarea>
 				</div>
 			</div>
 			<div class="editor_main">

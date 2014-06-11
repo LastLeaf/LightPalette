@@ -51,8 +51,10 @@ fw.main(function(pg){
 	pg.rpc('user:current', function(info){
 		// show tabbar
 		if(info.type === 'admin') {
-			var html = tmpl.userTabs({ contrib: true, write: true, admin: true });
-		} else if(info.type === 'editor' || info.type === 'writer') {
+			var html = tmpl.userTabs({ contrib: true, write: true, edit: true, admin: true });
+		} else if(info.type === 'editor') {
+			var html = tmpl.userTabs({ contrib: true, write: true, edit: true });
+		} else if(info.type === 'writer') {
 			var html = tmpl.userTabs({ contrib: true, write: true });
 		} else if(info.type === 'contributor') {
 			var html = tmpl.userTabs({ contrib: true });

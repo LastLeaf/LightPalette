@@ -76,7 +76,7 @@ var sitePathParser = function(conn, path, cb){
 			postList('index', '', page);
 			return;
 		}
-		var query = decodeURIComponent(segs[1]);
+		var query = decodeURIComponent(segs[1]) || '';
 		var page = (Number(segs[2]) || 1) - 1;
 		if(type === 'tag') {
 			postList('tag', query, page);

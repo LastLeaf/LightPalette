@@ -26,7 +26,7 @@ exports.create = function(conn, res, args){
 };
 
 // modify a post
-exports.set = function(conn, res, args){
+exports.modify = function(conn, res, args){
 	var filtered = formFilter(args, {
 		_id: '',
 		path: '',
@@ -34,17 +34,14 @@ exports.set = function(conn, res, args){
 		status: 'draft',
 		author: conn.session.userId,
 		time: Math.floor(new Date().getTime() / 1000),
-		category: '',
-		tag: '',
+		category: [String, /\S([\S ]*\S)?/g],
+		tag: [String, /\S([\S ]*\S)?/g],
 		series: '',
 		content: '',
 		abstract: ''
 	});
 	filtered.driver = args.driver;
 	args = filtered;
-	// split categories and tags
-	args.category = args.category.match(/\S([\S ]*\S)?/g);
-	args.tag = args.tag.match(/\S([\S ]*\S)?/g);
 	// validate
 	if(args.time >= 2147483647) return res.err('system');
 	User.checkPermission(conn, ['contributor', 'writer', 'editor'], function(contributor, writer, editor){
@@ -108,7 +105,7 @@ exports.get = function(conn, res, args){
 				if(!editor && r.author !== conn.session.userId)
 					return res.err('noPermission');
 				drivers[r.type].readFilter(r, function(err){
-					if(err) return res.err(err);
+					if(err) return res.err('system');
 					res(r);
 				});
 			});
@@ -152,7 +149,7 @@ exports.list = function(conn, res, args){
 	// add conditions
 	if(args.search) {
 		// text search for mongodb >= 2.6
-		var query = Post.find({ $text: { $search: args.search } });
+		var query = Post.find({ $text: { $search: args.search, $language: 'none' } });
 	} else {
 		var query = Post.find({});
 	}

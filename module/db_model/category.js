@@ -10,6 +10,7 @@ module.exports = function(model, cb){
 	var schemaObj = {
 		_id: { type: String, index: { unique: true } },
 		title: String,
+		description: String,
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 

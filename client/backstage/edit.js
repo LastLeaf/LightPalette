@@ -5,17 +5,21 @@ fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
 
-	var initPage = function(post){
+	var initPage = function(post, extraData){
 
 		// show content
-		var $content = $('#content').html(tmpl.main());
+		var $content = $('#content').html(tmpl.main(extraData));
 		var $form = $content.find('.editor');
 		$form.find('[name]').each(function(){
 			var name = $(this).attr('name');
 			if(!post[name]) return;
 			if(typeof(post[name]) === 'string') this.value = post[name];
-			else if(post[name].constructor === Array) this.value = post[name].join('\r\n');
 		});
+		// categories
+		for(var i=0; i<post.category.length; i++)
+			$('#sidebar_category_'+post.category[i]._id).prop('checked', true);
+		// tags
+		$('[name=tag]').val(post.tag.join('\r\n'));
 		var editor = lp.driverEditor(post.type, $content.find('.driver')[0], post);
 
 		// save
@@ -26,13 +30,22 @@ fw.main(function(pg){
 			e.preventDefault();
 			// collect args
 			var args = {
-				_id: post._id
+				_id: post._id,
 			};
 			var dynArgs = editor.get();
-			var elems = $form[0].elements;
-			for(var i=0; i<elems.length; i++)
-				if(elems[i].name)
-					args[elems[i].name] = elems[i].value;
+			var a = $form[0].elements;
+			for(var i=0; i<a.length; i++) {
+				// parse inputs
+				var name = a[i].name;
+				if(!name || ((a[i].type === 'radio' || a[i].type === 'checkbox') && a[i].checked === false)) continue;
+				if(name.slice(-2) === '[]') {
+					name = name.slice(0, -2);
+					if(args[name]) args[name].push(a[i].value);
+					else args[name] = [a[i].value];
+				} else {
+					args[name] = a[i].value;
+				}
+			}
 			for(var k in dynArgs)
 				args[k] = dynArgs[k];
 			// rpc
@@ -49,7 +62,13 @@ fw.main(function(pg){
 
 	// get post information
 	pg.rpc('post:get', {_id: fw.getArgs()['*']}, function(r){
-		initPage(r);
+		pg.rpc('category:list', function(categories){
+			initPage(r, {
+				categories: categories
+			});
+		}, function(err){
+			lp.backstage.showError(err);
+		});
 	}, function(err){
 		lp.backstage.showError(err);
 	});
