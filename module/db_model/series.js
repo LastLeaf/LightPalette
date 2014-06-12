@@ -11,8 +11,8 @@ module.exports = function(model, cb){
 		_id: { type: String, index: { unique: true } },
 		title: String,
 		description: String,
+		time: { type: Number, index: true },
 		owner: { type: String, index: true, ref: fw.config.db.prefix + 'user' },
-		post: { type: [Schema.Types.ObjectId], ref: fw.config.db.prefix + 'post' },
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 

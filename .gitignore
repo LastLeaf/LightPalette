@@ -2,7 +2,7 @@
 /node_modules
 /cache
 /client/theme
-/static/uploads
+/static/files
 /static/avatar
 /rc/favicon.ico
 /rc/loading.gif

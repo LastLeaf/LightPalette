@@ -13,12 +13,10 @@ fw.main(function(pg){
 
 	// build table
 	var table = lp.tableBuilder($table, {idCol: '_id'}, [
-		{ id: '_id', name: _('Short Name'), input: 'add' },
 		{ id: 'title', name: _('Title') },
+		{ id: '_id', name: _('Short Name'), input: 'add' },
 		{ id: 'description', type: 'extra' }
-	], {
-		type: _('reader')
-	})
+	], {})
 	.data(function(page){
 		pg.rpc('category:list', {from: page*LIST_LEN, count: LIST_LEN}, function(r){
 			table.setTotal(Math.ceil(r.total/LIST_LEN));
@@ -32,7 +30,7 @@ fw.main(function(pg){
 
 	// table operations
 	table.add(function(data){
-		pg.rpc('category:create', data, true, function(){
+		pg.rpc('category:create', data, function(){
 			table.addRow(data._id, data);
 		}, function(err){
 			lp.backstage.showError(err);
@@ -40,7 +38,7 @@ fw.main(function(pg){
 		});
 	});
 	table.change(function(data){
-		pg.rpc('category:modify', data, false, function(){
+		pg.rpc('category:modify', data, function(){
 			table.setRow(data._id, data);
 		}, function(err){
 			lp.backstage.showError(err);
@@ -52,7 +50,7 @@ fw.main(function(pg){
 			table.removeRow(_id);
 		}, function(err){
 			lp.backstage.showError(err);
-			table.enableModify(data._id);
+			table.enableModify(_id);
 		});
 	});
 });

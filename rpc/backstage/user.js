@@ -213,7 +213,7 @@ exports.avatar = function(conn, res, dataUrl){
 			// delete avatar
 			User.update({_id: conn.session.userId}, {avatar: ''}, function(err){
 				if(err) return res.err('system');
-				var dir = 'static/avatars/' + conn.session.userId;
+				var dir = 'static/avatar/' + conn.session.userId;
 				res();
 				var c = 3;
 				var cb = function(){
@@ -231,7 +231,7 @@ exports.avatar = function(conn, res, dataUrl){
 		try {
 			var buf = new Buffer(data[1], 'base64');
 			// save original image
-			var dir = 'static/avatars' + conn.session.userId;
+			var dir = 'static/avatar/' + conn.session.userId;
 			fs.mkdir(dir, function(err){
 				var file = dir + '/128.png';
 				fs.writeFile(file, buf, function(err){
@@ -337,6 +337,36 @@ exports.list = function(conn, res, args){
 	});
 };
 
+// editor: get author list
+exports.listAuthors = function(conn, res, args){
+	args = formFilter(args, {
+		from: 0,
+		count: 0
+	});
+	if(args.count < 0 || args.from < 0) return res.err('system');
+	User.checkPermission(conn, 'editor', function(r){
+		if(args.count) {
+			// get part of all authors
+			User.where('type').in(['contributor', 'writer', 'editor', 'admin']).count(function(err, count){
+				if(err) return res.err('system');
+				User.find().sort('_id').skip(args.from).limit(args.count).exec(function(err, r){
+					if(err) return res.err('system');
+					res({
+						total: count,
+						rows: r
+					});
+				});
+			});
+		} else {
+			// list all authors
+			User.find().where('type').in(['contributor', 'writer', 'editor', 'admin']).select('_id displayName').sort('_id').exec(function(err, r){
+				if(err) return res.err('system');
+				res(r);
+			});
+		}
+	});
+};
+
 // admin: create or update a user
 exports.set = function(conn, res, args, isAdd){
 	// filter data
@@ -362,16 +392,30 @@ exports.set = function(conn, res, args, isAdd){
 	delete args._id;
 	User.checkPermission(conn, 'admin', function(r){
 		if(!r) return res.err('noPermission');
-		if(isAdd)
-			new User(args).save(function(err){
-				if(err) return res.err('system');
-				res();
+		var next = function(){
+			if(isAdd) {
+				args._id = id;
+				new User(args).save(function(err){
+					if(err) return res.err('system');
+					res();
+				});
+			} else {
+				User.update({_id: id}, args, function(err){
+					if(err) return res.err('system');
+					res();
+				});
+			}
+		};
+		if(!args.password) {
+			delete args.password;
+			next();
+		} else {
+			password.hash(args.password, function(err, r){
+				if(err)  return res.err('system');
+				args.password = r;
+				next();
 			});
-		else
-			User.update({_id: id}, args, function(err){
-				if(err) return res.err('system');
-				res();
-			});
+		}
 	});
 };
 

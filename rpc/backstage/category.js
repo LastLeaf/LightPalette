@@ -6,9 +6,9 @@ var User = fw.module('db_model').User;
 var Category = fw.module('db_model').Category;
 var Post = fw.module('db_model').Post;
 
-// modify a category
+// create a category
 exports.create = function(conn, res, args){
-	var filtered = formFilter(args, {
+	var args = formFilter(args, {
 		_id: '',
 		title: '',
 		description: ''
@@ -25,7 +25,7 @@ exports.create = function(conn, res, args){
 
 // modify a category
 exports.modify = function(conn, res, args){
-	var filtered = formFilter(args, {
+	var args = formFilter(args, {
 		_id: '',
 		title: '',
 		description: ''
@@ -39,7 +39,7 @@ exports.modify = function(conn, res, args){
 	});
 };
 
-// remove a post
+// remove a category
 exports.remove = function(conn, res, args){
 	var args = formFilter(args, {
 		_id: '',
@@ -57,13 +57,13 @@ exports.remove = function(conn, res, args){
 	});
 };
 
-// get post list
+// get category list
 exports.list = function(conn, res, args){
 	args = formFilter(args, {
 		from: 0,
 		count: 0
 	});
-	if(args.count < 0 || args.from < 0) return res.err('noPermission');
+	if(args.count < 0 || args.from < 0) return res.err('system');
 	if(args.count) {
 		// get part of all categories
 		Category.count(function(err, count){

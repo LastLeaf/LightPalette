@@ -9,7 +9,7 @@ module.exports = function(model, cb){
 	var Schema = fw.db.Schema;
 	var schemaObj = {
 		type: String,
-		path: { type: String, default: '' },
+		path: { type: String, index: true, default: '' },
 		title: { type: String, index: true, default: '' },
 		status: { type: String, default: 'draft', enum: [
 			'draft', 'pending', 'published'

@@ -4,6 +4,9 @@
 var formFilter = fw.module('form_filter');
 var Post = fw.module('db_model').Post;
 var User = fw.module('db_model').User;
+var Series = fw.module('db_model').Series;
+var Category = fw.module('db_model').Category;
+var preservedPath = fw.module('preserved_path.js');
 var drivers = fw.module('drivers');
 
 // create a new post and return its id
@@ -19,7 +22,7 @@ exports.create = function(conn, res, args){
 			author: conn.session.userId,
 			time: Math.floor(new Date().getTime() / 1000)
 		}).save(function(err, r){
-			if(err) return res.err('system');
+			if(err) return res.err('system', err);
 			res(r._id);
 		});
 	});
@@ -33,7 +36,6 @@ exports.modify = function(conn, res, args){
 		title: '',
 		status: 'draft',
 		author: conn.session.userId,
-		time: Math.floor(new Date().getTime() / 1000),
 		category: [String, /\S([\S ]*\S)?/g],
 		tag: [String, /\S([\S ]*\S)?/g],
 		series: '',
@@ -49,24 +51,60 @@ exports.modify = function(conn, res, args){
 		if(!contributor) return res.err('noPermission');
 		if(!writer && (args.status !== 'draft' && args.status !== 'pending'))
 			return res.err('noPermission');
+		if(!writer && args.series)
+			return res.err('noPermission');
 		if(!editor && args.author !== conn.session.userId)
 			return res.err('noPermission');
-		Post.findOne({_id: args._id}, function(err, r){
-			if(err) return res.err('system');
-			if(!editor && r.author !== conn.session.userId)
-				return res.err('noPermission');
-			// call driver's filter
-			drivers[r.type].writeFilter(args, function(err){
-				if(err) return res.err(err);
-				// save
-				var id = args._id;
-				delete args._id;
-				Post.update({_id: id}, args, function(err){
+		// check path
+		if(args.path.indexOf('?') >= 0) return res.err('pathUsed');
+		if(preservedPath.check(args.path)) return res.err('pathUsed');
+		var next = function(){
+			// check category
+			Category.find().where('_id').in(args.category).exec(function(err, r){
+				if(err || r.length !== args.category.length) return res.err('system');
+				// check id existence and author
+				Post.findOne({_id: args._id}, function(err, r){
 					if(err) return res.err('system');
-					res();
+					if(!editor && r.author !== conn.session.userId)
+						return res.err('noPermission');
+					var next = function(){
+						// call driver's filter
+						drivers[r.type].writeFilter(args, function(err){
+							if(err) return res.err(err);
+							// save
+							var id = args._id;
+							delete args._id;
+							Post.update({_id: id}, args, function(err){
+								if(err) return res.err('system');
+								// update to series
+								Series.update({_id: args.series}, {time: Math.floor(new Date().getTime() / 1000)}, function(){
+									res();
+								});
+							});
+						});
+					};
+					// check series
+					if(!args.series || editor) {
+						next();
+					} else {
+						Series.find({_id: args.series}).select('owner').exec(function(err, r){
+							if(err) return res.err('system');
+							if(r.owner !== conn.session.userId) return res.err('noPermission');
+							next();
+						});
+					}
 				});
 			});
-		});
+		};
+		if(args.status === 'published' && args.path) {
+			Post.findOne({path: args.path, status: 'published'}, function(err, r){
+				if(err) return res.err('system');
+				if(r) return res.err('pathUsed');
+				next();
+			});
+		} else {
+			next();
+		}
 	});
 };
 
@@ -102,7 +140,7 @@ exports.get = function(conn, res, args){
 			.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 			.exec(function(err, r){
 				if(err || !r) return res.err(err);
-				if(!editor && r.author !== conn.session.userId)
+				if(!editor && r.author._id !== conn.session.userId)
 					return res.err('noPermission');
 				drivers[r.type].readFilter(r, function(err){
 					if(err) return res.err('system');
@@ -145,7 +183,7 @@ exports.list = function(conn, res, args){
 		from: 0,
 		count: 10
 	});
-	if(args.count > 20 || args.count < 1 || args.from < 0) return res.err('noPermission');
+	if(args.count > 20 || args.count < 1 || args.from < 0) return res.err('system');
 	// add conditions
 	if(args.search) {
 		// text search for mongodb >= 2.6
@@ -159,17 +197,19 @@ exports.list = function(conn, res, args){
 	if(args.tag) query = query.find({ tag: args.tag });
 	if(args.author) query = query.where('author').equals(args.author);
 	// run query and return
-	var total = null;
 	var runQuery = function(){
-		query.select('_id path type title status author time category tag series abstract')
-			.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
-			.sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
-				if(err) return res.err('system');
-				res({
-					total: total,
-					rows: r
+		query.count(function(err, count){
+			if(err) return res.err('system');
+			query.find().select('_id path type title status author time category tag series abstract')
+				.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
+				.sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
+					if(err) return res.err('system');
+					res({
+						total: count,
+						rows: r
+					});
 				});
-			});
+		});
 	};
 	// permission to get other's draft
 	if(args.status !== 'published') {
@@ -179,24 +219,16 @@ exports.list = function(conn, res, args){
 			if(args.status !== 'all') {
 				var q = {status: args.status};
 				if(args.author) q.author = args.author;
-				Post.count(q, function(err, r){
-					if(err) return res.err('system');
-					total = r;
-					query = query.where('status').equals(args.status);
-					runQuery();
-				});
+				query = query.where('status').equals(args.status);
+				return runQuery();
 			} else {
 				var q = {};
 				if(args.author) q.author = args.author;
-				Post.count(q, function(err, r){
-					if(err) return res.err('system');
-					total = r;
-					runQuery();
-				});
+				return runQuery();
 			}
 		});
 	} else {
 		query = query.where('status').equals('published').where('time').lte(Math.floor(new Date().getTime() / 1000));
-		runQuery();
+		return runQuery();
 	}
 };

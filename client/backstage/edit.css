@@ -43,6 +43,9 @@
     font-size: 0.9em;
     box-shadow: 0 0 3px #888;
 }
+.sidebar_row {
+    margin: 5px 0;
+}
 .sidebar_title {
     font-size: 1.1em;
     padding: 5px;

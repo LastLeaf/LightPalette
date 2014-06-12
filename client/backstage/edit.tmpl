@@ -9,19 +9,26 @@
 			</div>
 			<div class="sidebar">
 				<div class="sidebar_item">
-					<div class="sidebar_title">`Status and Shortcut`</div>
-					`Publish Status` <select name="status">
-						<option value="draft">`draft`</option>
-						<option value="pending">`pending`</option>
-						<option value="published">`published`</option>
-					</select>
+					<div class="sidebar_title">`Basic Configuration`</div>
 					<input type="text" name="path" placeholder="A shortcut URL...">
+					<div class="sidebar_row">
+						`Publish Status` <select name="status">
+							<option value="draft">`draft`</option>
+							<option value="pending">`pending`</option>
+							{{#if write}}<option value="published">`published`</option>{{/if}}
+						</select>
+					</div>
+					<div class="sidebar_row">
+						{{#if edit}}`Author` <select name="author">{{#each authors}}
+							<option value="{{_id}}">{{displayName}}</option>
+						{{/each}}</select>{{/if}}
+					</div>
 				</div>
-				<div class="sidebar_item">
+				{{#if write}}<div class="sidebar_item">
 					<div class="sidebar_title">`Series`</div>
 					<select name="series"></select>
 					<input type="button" class="button" value="`Create New Series`">
-				</div>
+				</div>{{/if}}
 				<div class="sidebar_item">
 					<div class="sidebar_title">`Categories`</div>
 					<div class="sidebar_category_list">{{#each categories}}

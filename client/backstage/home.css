@@ -88,10 +88,6 @@
     height: 0;
     overflow: hidden;
 }
-.home_user .avatar_error {
-    color: red;
-    font-size: 0.9em;
-}
 .home_user .email, .home_user .url, .home_user .description {
     font-size: 0.9em;
     color: #888;

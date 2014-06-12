@@ -76,13 +76,13 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 	var enterEditMode = function(){
 		if(loading || this.lpTableEditing) return;
 		if(clickHandled) {
-			trigger('click', $(this).attr('rowId'));
+			trigger('click', unescape($(this).attr('rowId')));
 			return;
 		}
 		var row = this;
 		row.lpTableEditing = true;
 		// put inputs
-		var rowId = $(row).attr('rowId');
+		var rowId = unescape($(row).attr('rowId'));
 		var $tr = $(row).next().andSelf();
 		$tr.children('td').each(function(){
 			var colId = this.lpTableColId;
@@ -115,7 +115,14 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		var getValue = function(){
 			var vals = {};
 			$tr.find('[name]').each(function(){
-				vals[$(this).attr('name')] = $(this).val();
+				var name = $(this).attr('name').split(/\./g);
+				var cur = vals;
+				while(name.length > 1) {
+					var n = name.shift();
+					if(typeof(cur[n]) === 'undefined') cur[n] = {};
+					cur = cur[n];
+				}
+				cur[name[0]] = $(this).val();
 			});
 			return vals;
 		};
@@ -200,7 +207,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		});
 	};
 	var enableModify = function(id){
-		var $tr = $tbody.find('[rowId='+id+']');
+		var $tr = $tbody.find('[rowId="'+escape(id)+'"]');
 		$tr.find('.lp_table_edit_btn').slideDown(200, function(){
 			$tr.find('input, select, textarea').removeAttr('disabled');
 		});
@@ -208,15 +215,16 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 
 	// data control
 	var rowContent = function(id, data){
-		var $tr = $tbody.children('[rowId="'+id+'"]').html('');
+		var $tr = $tbody.children('[rowId="'+escape(id)+'"]').html('');
 		if(!$tr.length)
-			$tr = $('<tr class="lp_table_row" rowId="'+id+'"></tr><tr rowId="'+id+'" class="lp_table_extra"></tr>').appendTo($tbody);
+			$tr = $('<tr class="lp_table_row" rowId="'+escape(id)+'"></tr><tr rowId="'+escape(id)+'" class="lp_table_extra"></tr>').appendTo($tbody);
 		for(var i=0; i<colDefine.length; i++) {
 			var col = colDefine[i];
 			if(col.type === 'hidden') continue;
 			var d = data;
-			var a = col.id.split('.');
-			while(a.length) d = d[a.shift()];
+			var a = col.id.split(/\./g);
+			while(a.length && d) d = d[a.shift()];
+			if(typeof(col.input) === 'object') d = col.input[d];
 			if(col.type === 'extra') {
 				var $td = $('<td colspan="'+colCount+'"></td>').text(d || '').appendTo($tr[1]);
 			} else {
@@ -244,7 +252,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		return setRow(id, data);
 	};
 	var removeRow = function(id){
-		var $tr = $tbody.children('[rowId="'+id+'"]').fadeOut(200, function(){
+		var $tr = $tbody.children('[rowId="'+escape(id)+'"]').fadeOut(200, function(){
 			$tr.remove();
 		});
 	};

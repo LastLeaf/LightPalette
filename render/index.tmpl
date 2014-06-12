@@ -1,9 +1,10 @@
 <tmpl id="list">
 	{{#if query}}<div class="query query-{{type}}">{{query}}</div>{{/if}}
 	<div id="post_list" class="post_list">{{#each rows}}
-		<div class="post_item">
+		<div class="post_item post_item-{{type}}">
 			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
 			<div class="post_head">
+				<div class="post_time">{{time}}</div>
 				<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
 				<ul class="post_categories">{{#each category}}
 					<li><a fw href="/category/{{_id}}">{{title}}</a></li>

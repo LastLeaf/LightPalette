@@ -27,14 +27,13 @@ fw.main(function(pg){
 		{ id: 'password', name: _('Password'), input: 'password' },
 		{ id: 'description', type: 'extra' }
 	], {
-		type: _('reader')
+		type: 'reader'
 	})
 	.data(function(page){
 		pg.rpc('user:list', {from: page*USER_LIST_LEN, count: USER_LIST_LEN}, function(r){
 			table.setTotal(Math.ceil(r.total/USER_LIST_LEN));
 			var rows = r.rows;
 			for(var i=0; i<rows.length; i++) {
-				rows[i].type = _(rows[i].type);
 				rows[i].password = '******';
 			}
 			table.set(rows);
@@ -49,7 +48,6 @@ fw.main(function(pg){
 		if(data.password)
 			data.password = CryptoJS.SHA256(data._id.toLowerCase() + '|' + data.password).toString();
 		pg.rpc('user:set', data, true, function(){
-			data.type = _(data.type);
 			data.password = '******';
 			table.addRow(data._id, data);
 		}, function(err){
@@ -61,7 +59,6 @@ fw.main(function(pg){
 		if(data.password)
 			data.password = CryptoJS.SHA256(data._id.toLowerCase() + '|' + data.password).toString();
 		pg.rpc('user:set', data, false, function(){
-			data.type = _(data.type);
 			data.password = '******';
 			table.setRow(data._id, data);
 		}, function(err){
@@ -74,7 +71,7 @@ fw.main(function(pg){
 			table.removeRow(_id);
 		}, function(err){
 			lp.backstage.showError(err);
-			table.enableModify(data._id);
+			table.enableModify(_id);
 		});
 	});
 });

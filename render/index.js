@@ -5,6 +5,7 @@ var Settings = fw.module('db_model').Settings;
 var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
+var preservedPath = fw.module('preserved_path.js');
 var sitePathParser = fw.module('site_path_parser.js');
 
 var tmpl = fw.tmpl('index.tmpl');
@@ -19,13 +20,13 @@ var sitePathParser = function(conn, path, cb){
 			count: LIST_LEN
 		};
 		conn.rpc('/backstage/post:list', q, function(r){
-			cb('index', '', 0, r);
+			cb('index', '', 0, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 		}, function(err){
-			cb('index', '', 0, []);
+			cb('index', '', 0, Math.ceil(r.total/LIST_LEN) || 0, []);
 		});
 		return;
 	}
-	var segs = path.split('/');
+	var segs = path.split('?',2)[0].split('/');
 
 	// basic listing funcs
 	var postList = function(type, query, page, next){
@@ -42,7 +43,7 @@ var sitePathParser = function(conn, path, cb){
 			}
 			// get query name
 			var queryNameGot = function(queryName){
-				cb(type, queryName, page, r);
+				cb(type, queryName, page, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 			};
 			if(type === 'author') {
 				User.findOne({_id: query}).select('displayName').exec(function(err, r){
@@ -62,14 +63,13 @@ var sitePathParser = function(conn, path, cb){
 			} else {
 				queryNameGot(query);
 			}
-			// TODO
 		}, function(err){
 			cb('404');
 		});
 	};
 
 	// special path
-	if(segs[0].match(/^(index|tag|category|series|author|search|post)$/)) {
+	if(preservedPath.check(path)) {
 		var type = segs[0];
 		if(type === 'index') {
 			var page = (Number(segs[1]) || 1) - 1;
@@ -91,10 +91,12 @@ var sitePathParser = function(conn, path, cb){
 		} else if(type === 'post') {
 			conn.rpc('/backstage/post:read', {_id: query}, function(r){
 				if(!r) cb('404');
-				else cb('post', r.title, 0, r);
+				else cb('post', r.title, 0, 0, r);
 			}, function(err){
 				cb('404');
 			});
+		} else {
+			cb('404');
 		}
 		return;
 	}
@@ -115,9 +117,9 @@ var sitePathParser = function(conn, path, cb){
 	};
 
 	// path
-	conn.rpc('/backstage/post:read', {path: path}, function(r){
+	conn.rpc('/backstage/post:read', {path: decodeURI(path)}, function(r){
 		if(!r) guess();
-		else cb('post', r.title, 0, r);
+		else cb('post', r.title, 0, 0, r);
 	}, guess);
 };
 
@@ -127,22 +129,22 @@ module.exports = function(conn, args, childRes, next){
 		if(!r) r = {};
 		childRes.siteInfo = r;
 		childRes.title = r.siteTitle || fw.config.app.title;
-		sitePathParser(conn, args['*'], function(type, query, page, data){
+		sitePathParser(conn, args['*'], function(type, query, page, totalPages, data){
 			var title = query;
 			if(type === '404') {
 				childRes.content = tmpl(conn).notFound();
 			} else if(type === 'post') {
 				childRes.content = tmpl(conn).single(data);
-				if(title) childRes.title = title + '|' + childRes.title;
+				if(title) childRes.title = title + ' | ' + childRes.title;
 			} else {
 				childRes.content = tmpl(conn).list({
-					rows: data.rows,
+					rows: data,
 					type: type,
 					query: query,
 					pagePrev: page,
-					pageNext: page+2,
+					pageNext: (page+2 > totalPages ? 0 : page+2),
 				});
-				if(title) childRes.title = title + '|' + childRes.title;
+				if(title) childRes.title = title + ' | ' + childRes.title;
 			}
 			next(childRes);
 		});

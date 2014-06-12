@@ -15,6 +15,8 @@ fw.main(function(pg){
 			if(!post[name]) return;
 			if(typeof(post[name]) === 'string') this.value = post[name];
 		});
+		// author
+		$('[name=author]').val(post.author._id);
 		// categories
 		for(var i=0; i<post.category.length; i++)
 			$('#sidebar_category_'+post.category[i]._id).prop('checked', true);
@@ -61,15 +63,41 @@ fw.main(function(pg){
 	};
 
 	// get post information
-	pg.rpc('post:get', {_id: fw.getArgs()['*']}, function(r){
-		pg.rpc('category:list', function(categories){
-			initPage(r, {
-				categories: categories
+	var getInfo = function(){
+		var userInfo = pg.parent.parent.userInfo;
+		var next = function(authors){
+			// get category list
+			pg.rpc('post:get', {_id: fw.getArgs()['*']}, function(r){
+				pg.rpc('category:list', function(categories){
+					// init page
+					initPage(r, {
+						categories: categories,
+						authors: authors,
+						write: (userInfo.type !== 'contributor'),
+						edit: (userInfo.type === 'editor' || userInfo.type === 'admin')
+					});
+				}, function(err){
+					lp.backstage.showError(err);
+				});
+			}, function(err){
+				lp.backstage.showError(err);
 			});
-		}, function(err){
-			lp.backstage.showError(err);
-		});
-	}, function(err){
-		lp.backstage.showError(err);
-	});
+		};
+		// get author list
+		if(userInfo.type === 'editor' || userInfo.type === 'admin') {
+			pg.rpc('user:listAuthors', function(authors){
+				next(authors);
+			}, function(err){
+				lp.backstage.showError(err);
+			});
+		} else {
+			next();
+		}
+	};
+
+	if(pg.parent.parent.userInfo) {
+		getInfo();
+	} else {
+		pg.parent.on('userInfoReady', getInfo);
+	}	
 });

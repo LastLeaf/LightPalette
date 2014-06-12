@@ -76,7 +76,7 @@ fw.main(function(pg){
 					pg.rpc('user:avatar', canvas.toDataURL('image/png'), function(){
 						location.reload();
 					}, function(err){
-						$user.find('.avatar_error').html(tmpl.error(err));
+						lp.backstage.showError(err);
 					});
 				};
 				img.src = url;
@@ -88,8 +88,8 @@ fw.main(function(pg){
 				pg.rpc('user:avatar', '', function(){
 					location.reload();
 				}, function(err){
-						$user.find('.avatar_error').html(tmpl.error(err));
-					});
+					lp.backstage.showError(err);
+				});
 			});
 			$user.find('.avatar').click(function(){
 				$user.find('.avatar_file input').click();

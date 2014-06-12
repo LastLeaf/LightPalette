@@ -53,7 +53,7 @@ fw.main(function(pg){
 				table.removeRow(id);
 			}, function(err){
 				lp.backstage.showError(err);
-				table.enableModify(data.id);
+				table.enableModify(id);
 			});
 		});
 	};
