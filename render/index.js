@@ -7,6 +7,7 @@ var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
 var preservedPath = fw.module('preserved_path.js');
 var sitePathParser = fw.module('site_path_parser.js');
+var dateString = fw.module('date_string.js');
 
 var tmpl = fw.tmpl('index.tmpl');
 

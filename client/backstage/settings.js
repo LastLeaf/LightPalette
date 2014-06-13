@@ -23,9 +23,15 @@ fw.main(function(pg){
 				$form.find('[name='+k+']').val(res[k]);
 		}, lp.backstage.showError);
 	};
-	$content.find('form').each(function(){
-		updateForm(this);
-	});
+
+	// load available timezones
+	pg.rpc('time:listTimezones', function(r){
+		$('[name=timezone]').html(tmpl.timezone(r));
+		// start load form data
+		$content.find('form').each(function(){
+			updateForm(this);
+		});
+	}, lp.backstage.showError);
 
 	// form submit
 	$content.find('form').each(function(){

@@ -20,9 +20,9 @@ fw.main(function(pg){
 		var table = lp.tableBuilder($table, {idCol: '_id', editMore: true}, [
 			{ id: 'title', name: _('Title'), input: 'add' },
 			{ id: 'type', name: _('Type'), input: 'add' },
-			{ id: 'status', name: _('Status'), input: 'add' },
 			{ id: 'author.displayName', name: _('Author'), input: 'add' },
-			{ id: 'time', type: 'extra', input: 'add' }
+			{ id: 'status', name: _('Status'), input: 'add' },
+			{ id: 'extra', type: 'extra', input: 'add' }
 		])
 		.data(function(page){
 			var q = {status: 'all', from: page*POST_LIST_LEN, count: POST_LIST_LEN};
@@ -35,7 +35,13 @@ fw.main(function(pg){
 					var row = r.rows[i];
 					row.type = lp.driverName(row.type);
 					row.status = _(row.status);
-					row.time = new Date(row.time*1000).toLocaleString();
+					var extra = [];
+					extra.push(row.dateTimeString);
+					if(row.series)
+						extra.push(row.series.title);
+					for(var j=0; j<row.category.length; j++)
+						extra.push(row.category[j].title);
+					row.extra = extra.join(' / ');
 				}
 				table.set(rows);
 			}, function(err){

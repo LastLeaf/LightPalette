@@ -5,8 +5,14 @@ var formFilter = fw.module('form_filter');
 var Settings = fw.module('db_model').Settings;
 var User = fw.module('db_model').User;
 var mail = fw.module('mail');
+var dateString = fw.module('date_string.js');
 
 var tmpl = fw.tmpl('settings.tmpl');
+
+// config date string module
+Settings.get('date', function(err, r){
+	if(!err) dateString.config(r);
+});
 
 // set blog settings
 exports.set = function(conn, res, args){
@@ -20,6 +26,9 @@ exports.set = function(conn, res, args){
 		Settings.set(key, args, function(err){
 			if(err) return res.err('system');
 			res();
+			// config date_string module
+			if(key === 'date')
+				dateString.config(args);
 		});
 	});
 };

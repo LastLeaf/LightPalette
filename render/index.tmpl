@@ -4,8 +4,9 @@
 		<div class="post_item post_item-{{type}}">
 			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
 			<div class="post_head">
-				<div class="post_time">{{time}}</div>
+				{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}
 				<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
+				<div class="post_date">{{dateString}}</div>
 				<ul class="post_categories">{{#each category}}
 					<li><a fw href="/category/{{_id}}">{{title}}</a></li>
 				{{/each}}</ul>
@@ -26,7 +27,9 @@
 	<div id="post_single" class="post_single">
 		<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
 		<div class="post_head">
+			{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}
 			<div class="post_author"><a fw href="/author/{{author._id}}">{{author.displayName}}</a></div>
+			<div class="post_date">{{dateString}}</div>
 			<ul class="post_categories">{{#each category}}
 				<li><a fw href="/category/{{_id}}">{{title}}</a></li>
 			{{/each}}</ul>

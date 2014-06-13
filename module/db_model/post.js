@@ -16,6 +16,8 @@ module.exports = function(model, cb){
 		] },
 		author: { type: String, index: true, ref: fw.config.db.prefix + 'user' },
 		time: { type: Number, index: true },
+		dateString: String,
+		dateTimeString: String,
 		category: [{ type: String, index: true, ref: fw.config.db.prefix + 'category' }],
 		tag: { type: [String], index: true, default: [] },
 		series: { type: String, index: true, ref: fw.config.db.prefix + 'series' },

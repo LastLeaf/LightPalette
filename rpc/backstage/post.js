@@ -7,6 +7,7 @@ var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
 var preservedPath = fw.module('preserved_path.js');
+var dateString = fw.module('date_string.js');
 var drivers = fw.module('drivers');
 
 // create a new post and return its id
@@ -97,7 +98,7 @@ exports.modify = function(conn, res, args){
 			});
 		};
 		if(args.status === 'published' && args.path) {
-			Post.findOne({path: args.path, status: 'published'}, function(err, r){
+			Post.findOne({path: args.path, status: 'published'}).where('_id').ne(args._id).exec(function(err, r){
 				if(err) return res.err('system');
 				if(r) return res.err('pathUsed');
 				next();
@@ -142,6 +143,8 @@ exports.get = function(conn, res, args){
 				if(err || !r) return res.err(err);
 				if(!editor && r.author._id !== conn.session.userId)
 					return res.err('noPermission');
+				r.dateString = dateString.date(r.time*1000);
+				r.dateTimeString = dateString.dateTime(r.time*1000);
 				drivers[r.type].readFilter(r, function(err){
 					if(err) return res.err('system');
 					res(r);
@@ -163,6 +166,8 @@ exports.read = function(conn, res, args){
 		.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 		.exec(function(err, r){
 			if(err || !r) return res.err('notFound');
+			r.dateString = dateString.date(r.time*1000);
+			r.dateTimeString = dateString.dateTime(r.time*1000);
 			drivers[r.type].readFilter(r, function(err){
 				if(err) return res.err(err);
 				res(r);
@@ -204,6 +209,10 @@ exports.list = function(conn, res, args){
 				.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 				.sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
 					if(err) return res.err('system');
+					for(var i=0; i<r.length; i++) {
+						r[i].dateString = dateString.date(r[i].time*1000);
+						r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
+					}
 					res({
 						total: count,
 						rows: r

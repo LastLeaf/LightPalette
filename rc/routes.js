@@ -17,7 +17,7 @@ exports.global = {
 			userAgent: '^.*(?!MSIE (6|7|8)\.)'
 		}
 	],
-	main: 'global',
+	main: ['global', '/lib/timezone'],
 };
 
 // frontstage

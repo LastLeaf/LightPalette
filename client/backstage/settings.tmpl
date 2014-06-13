@@ -25,6 +25,28 @@
 			</form>
 		</div>
 
+		<div class="settings_section" section="date">
+			<div class="settings_title">`Date`</div>
+			<form action="settings" method="set" class="settings_form">
+				<input type="hidden" name="_key" value="`date`">
+				<div>
+					<label>`Timezone`</label>
+					<select name="timezone">
+						<option value="">`Loading...`</option>
+					</select>
+				</div>
+				<div>
+					<label>`Date Format`</label>
+					<input type="text" name="dateFormat" placeholder="%F">
+				</div>
+				<div>
+					<label>`Date Time Format`</label>
+					<input type="text" name="dateTimeFormat" placeholder="%F %T">
+				</div>
+				<input type="submit" class="submit" value="`Save Settings`">
+			</form>
+		</div>
+		
 		<div class="settings_section" section="user">
 			<div class="settings_title">`User`</div>
 			<form action="settings" method="set" class="settings_form">
@@ -79,12 +101,19 @@
 				<input type="submit" class="submit" value="`Save Settings`">
 			</form>
 		</div>
+
 	</div>
 	<ul class="settings_navi">
 		<li for="basic">`Basic`</li>
-		<li for="email">`User`</li>
+		<li for="date">`Date`</li>
+		<li for="user">`User`</li>
 		<li for="email">`Email`</li>
 	</ul>
+</tmpl>
+
+<tmpl id="timezone">
+	<option value="" selected>Default (UTC)</option>
+	{{#each this}}<option value="{{this}}">{{this}}</option>{{/each}}
 </tmpl>
 
 <tmpl id="sentEmail">

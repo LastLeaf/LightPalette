@@ -11,9 +11,10 @@ module.exports = function(model, cb){
 		user: { type: String, ref: fw.config.db.prefix + 'user' },
 		displayName: String,
 		email: String,
+		acceptNotify: Boolean,
 		url: String,
 		content: String,
-		response: { type: [Schema.Types.ObjectId], ref: fw.config.db.prefix + COLLECTION_NAME },
+		response: [{ type: Schema.Types.ObjectId, ref: fw.config.db.prefix + COLLECTION_NAME }],
 		responseTo: { type: Schema.Types.ObjectId, ref: fw.config.db.prefix + COLLECTION_NAME },
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});

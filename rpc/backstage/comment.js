@@ -3,18 +3,20 @@
 
 var formFilter = fw.module('form_filter');
 var User = fw.module('db_model').User;
-var Series = fw.module('db_model').Series;
-var Post = fw.module('db_model').Post;
+var Comment = fw.module('db_model').Comment;
+
+// TODO
 
 // create a series
 exports.create = function(conn, res, args){
 	args = formFilter(args, {
-		_id: '',
-		title: '',
-		owner: conn.session.userId,
+		user: '',
+		email: '',
+		acceptNotify: 'yes',
+		url: '',
+		content: '',
 		description: ''
 	});
-	if(!args._id.match(/^[\S ]+$/)) return res.err('idIllegal');
 	args.time = Math.floor(new Date().getTime() / 1000);
 	User.checkPermission(conn, ['writer', 'editor'], function(writer, editor){
 		if(!writer) return res.err('noPermission');

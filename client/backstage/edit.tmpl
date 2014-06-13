@@ -26,8 +26,12 @@
 				</div>
 				{{#if write}}<div class="sidebar_item">
 					<div class="sidebar_title">`Series`</div>
-					<select name="series"></select>
-					<input type="button" class="button" value="`Create New Series`">
+					<input type="hidden" name="series" value="">
+					<select class="sidebar_series">
+						<option value="none">`(Not in Any Series)`</option>
+						<option value="select">`(Select a Series)`</option>
+					</select>
+					<div class="form_row sidebar_series_select"></div>
 				</div>{{/if}}
 				<div class="sidebar_item">
 					<div class="sidebar_title">`Categories`</div>
@@ -47,5 +51,15 @@
 				<div class="driver"></div>
 			</div>
 		</form>
+	</div>
+</tmpl>
+
+<tmpl id="seriesSelect">
+	<div class="sidebar_series_list">{{#each rows}}
+		<div><input type="radio" name="seriesRadio" value="{{_id}}" id="sidebar_series_item_{{_id}}" class="radio"> <label for="sidebar_series_item_{{_id}}">{{title}}</label></div>
+	{{/each}}</div>
+	<div>
+		{{#if prev}}<input type="button" class="button sidebar_series_prev" value="&lt;">{{/if}}
+		{{#if next}}<input type="button" class="button sidebar_series_next" value="&gt;">{{/if}}
 	</div>
 </tmpl>
