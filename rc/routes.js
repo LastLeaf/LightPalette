@@ -8,16 +8,9 @@ var site = fw.module('db_model').Site;
 
 exports.global = {
 	lib: [
-		'/lib/crypto',
-		{
-			src: '/lib/jquery-1.11.1',
-			userAgent: 'MSIE (6|7|8)\.'
-		}, {
-			src: '/lib/jquery-2.1.1',
-			userAgent: '^.*(?!MSIE (6|7|8)\.)'
-		}
+		'/lib/crypto'
 	],
-	main: ['global', '/lib/timezone'],
+	main: 'global',
 };
 
 // frontstage

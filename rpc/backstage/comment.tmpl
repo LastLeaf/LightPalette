@@ -1,0 +1,15 @@
+<tmpl id="commentNotifyEmailTitle">`Reply Notification on {{siteTitle}}`</tmpl>
+
+<tmpl id="commentNotifyEmail">
+	<p>`There is a new reply on your comment on {{siteTitle}}.`</p>
+	<p>`{{comment.displayName}} says,`</p>
+	<p style="white-space:pre-wrap;">{{comment.content}}</p>
+	<p>`You can visit the original post by clicking the link below.`</p>
+	<p><a href="http://{{host}}{{postPath}}">http://{{host}}{{postPath}}</a></p>
+	<p>`Enjoy!`</p>
+	<hr>
+	<p>`If you do not want to receive notification of this comment, please click the link below.`</p>
+	<p><a href="http://{{host}}{{disablePath}}">http://{{host}}{{disablePath}}</a></p>
+	<hr>
+	<p>`This email is sent automatically. Please do not reply.`</p>
+</tmpl>

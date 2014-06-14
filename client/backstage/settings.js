@@ -61,7 +61,7 @@ fw.main(function(pg){
 		$this.prop('disabled', true);
 		pg.rpc('settings:testEmail', args, function(to){
 			$this.prop('disabled', false);
-			$form.find('.error').html(tmpl.sentEmail({to: to}));
+			$this.val(tmpl.sentEmail({to: to}));
 		}, function(err, detail){
 			$this.prop('disabled', false);
 			lp.backstage.showError(err, detail);

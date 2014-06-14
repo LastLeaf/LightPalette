@@ -21,12 +21,13 @@ fw.main(function(pg){
 			tinymce.init({
 				selector: '#' + tinymceId,
 				theme: 'modern',
+				height: 400,
 				plugins: [
-					'anchor autoresize charmap code contextmenu hr image link lists searchreplace table textcolor wordcount'
+					'anchor charmap code contextmenu hr image link lists searchreplace table textcolor'
 				],
 				menubar: 'edit insert view format table tools',
 				toolbar: 'styleselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat',
-				statusbar: false,
+				statusbar: true,
 				style_formats: [
 					{title: 'Heading 1', block: 'h1'},
 					{title: 'Heading 2', block: 'h2'},

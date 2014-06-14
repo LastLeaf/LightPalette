@@ -4,6 +4,13 @@
 fw.main(function(pg){
 	var tmpl = pg.tmpl;
 
+	// read user info
+	var wrapper = document.getElementById('wrapper');
+	pg.userInfo = {
+		_id: wrapper.getAttribute('user-id'),
+		displayName: wrapper.getAttribute('user-displayName')
+	};
+
 	pg.on('render', function(res){
 		document.title = res.title;
 		document.getElementById('content').innerHTML = res.content;

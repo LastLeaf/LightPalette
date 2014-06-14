@@ -4,7 +4,7 @@
 var tmpl = fw.tmpl('disable.tmpl');
 
 module.exports = function(req, res){
-	req.conn.rpc('/backstage/user:disable', {
+	req.conn.rpc('/backstage/comment:disableNotify', {
 		_id: req.query.i || '',
 		email: req.query.e || '',
 		sign: req.query.s || '',

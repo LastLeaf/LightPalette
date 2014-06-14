@@ -61,13 +61,14 @@ exports.register = function(conn, res, args){
 						Settings.get('basic', function(err, r){
 							if(err || !r) return;
 							var siteTitle = r.siteTitle;
+							var host = r.siteHost;
 							Settings.get('email', function(err, r){
 								if(err || !r) return;
 								var mailOptions = r;
 								disablePath(id, args.email, function(err, r){
 									var content = tmpl(conn).regEmail({
 										siteTitle: siteTitle,
-										host: conn.host,
+										host: host || conn.host,
 										username: id,
 										email: args.email,
 										disablePath: r
@@ -139,11 +140,12 @@ exports.recoverPassword = function(conn, res, args){
 					Settings.get('basic', function(err, r){
 						if(err || !r) return;
 						var siteTitle = r.siteTitle;
+						var host = r.siteHost;
 						Settings.get('email', function(err, r){
 							if(err || !r) return;
 							var content = tmpl(conn).pwdEmail({
 								siteTitle: siteTitle,
-								host: conn.host,
+								host: host || conn.host,
 								username: args._id,
 								email: args.email,
 								password: pwd
@@ -167,7 +169,7 @@ exports.modify = function(conn, res, args){
 	});
 	if(args.displayName.length <= 0 || args.displayName.length > 32) return res.err('displayNameIllegal');
 	if(!args.url.match(/^https?:\/\//)) args.url = 'http://' + args.url;
-	if(args.url.length > 256) return res.err('urlIllegal');
+	if(args.url.length > 1024) return res.err('urlIllegal');
 	if(args.description.length > 100) return res.err('descriptionIllegal');
 	// check login status
 	User.checkPermission(conn, 'reader', function(r){
@@ -298,7 +300,6 @@ exports.disable = function(conn, res, args){
 	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
 	if(!password.check(args._id+'|'+args.email+'|'+fw.config.secret.cookie, args.sign)) return res.err('system');
-	// check sign
 	User.update({_id: args._id}, {type: 'disabled'}, function(err){
 		if(err) return res.err('system');
 		res();

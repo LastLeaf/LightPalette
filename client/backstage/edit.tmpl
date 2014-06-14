@@ -15,6 +15,7 @@
 						`Publish Status` <select name="status">
 							<option value="draft">`draft`</option>
 							<option value="pending">`pending`</option>
+							{{#if write}}<option value="visible">`visible`</option>{{/if}}
 							{{#if write}}<option value="published">`published`</option>{{/if}}
 						</select>
 					</div>

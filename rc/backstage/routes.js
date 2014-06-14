@@ -46,10 +46,17 @@ for(var i=dirs.length-1; i>=0; i--) {
 module.exports = {
 	backstage: {
 		parent: 'global',
-		lib: [{
-			src: ['lib/table_builder', 'lib/driver_manager'],
-			minify: 'libs'
-		}],
+		lib: [
+			{
+				src: '/lib/jquery-1.11.1',
+				userAgent: 'MSIE (6|7|8)\.'
+			}, {
+				src: '/lib/jquery-2.1.1',
+				userAgent: '^.*(?!MSIE (6|7|8)\.)'
+			}, {
+				src: ['lib/table_builder', 'lib/driver_manager'],
+				minify: 'libs'
+			}],
 		main: 'main',
 		tmpl: 'main',
 		style: 'main.css',

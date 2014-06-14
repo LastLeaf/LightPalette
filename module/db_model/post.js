@@ -12,7 +12,7 @@ module.exports = function(model, cb){
 		path: { type: String, index: true, default: '' },
 		title: { type: String, index: true, default: '' },
 		status: { type: String, default: 'draft', enum: [
-			'draft', 'pending', 'published'
+			'draft', 'pending', 'visible', 'published'
 		] },
 		author: { type: String, index: true, ref: fw.config.db.prefix + 'user' },
 		time: { type: Number, index: true },
@@ -21,6 +21,7 @@ module.exports = function(model, cb){
 		category: [{ type: String, index: true, ref: fw.config.db.prefix + 'category' }],
 		tag: { type: [String], index: true, default: [] },
 		series: { type: String, index: true, ref: fw.config.db.prefix + 'series' },
+		acceptComment: { type: Boolean, default: true },
 		content: { type: String, default: '' },
 		abstract: { type: String, default: '' },
 		driver: Object

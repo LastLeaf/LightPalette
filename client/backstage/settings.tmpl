@@ -6,6 +6,10 @@
 			<form action="settings" method="set" class="settings_form">
 				<input type="hidden" name="_key" value="`basic`">
 				<div>
+					<label>`Site Domain`</label>
+					<input type="text" name="siteHost" required>
+				</div>
+				<div>
 					<label>`Site Title`</label>
 					<input type="text" name="siteTitle" required>
 				</div>
@@ -116,6 +120,4 @@
 	{{#each this}}<option value="{{this}}">{{this}}</option>{{/each}}
 </tmpl>
 
-<tmpl id="sentEmail">
-	`An email has been sent to {{to}}.`
-</tmpl>
+<tmpl id="sentEmail">`Email has been sent to {{to}}.`</tmpl>

@@ -20,7 +20,8 @@ fw.main(function(pg){
 			editor: _('editor'),
 			writer: _('writer'),
 			contributor: _('contributor'),
-			reader: _('reader')
+			reader: _('reader'),
+			disabled: _('disabled')
 		} },
 		{ id: 'email', name: _('Email') },
 		{ id: 'url', name: _('URL') },

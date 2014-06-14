@@ -58,9 +58,9 @@ exports.testEmail = function(conn, res, args){
 	});
 	User.checkPermission(conn, 'admin', function(r){
 		if(!r) return res.err('noPermission');
-		User.findOne({id: conn.session.userId}).select('displayName email').exec(function(err, r){
+		User.findOne({_id: conn.session.userId}).select('displayName email').exec(function(err, r){
 			if(err || !r) return res.err('system');
-			mail(args, r.displayName, r.email, tmpl(conn).i18n('WordPalette Email Test'), tmpl(conn).testEmail(), null, function(err){
+			mail(args, r.displayName, r.email, tmpl(conn).i18n('LightPalette Email Test'), tmpl(conn).testEmail(), null, function(err){
 				if(err) res.err('mail', err.data||err.code);
 				else res(r.email);
 			});

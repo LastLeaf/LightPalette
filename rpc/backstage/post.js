@@ -6,6 +6,7 @@ var Post = fw.module('db_model').Post;
 var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
+var Comment = fw.module('db_model').Comment;
 var preservedPath = fw.module('preserved_path.js');
 var dateString = fw.module('date_string.js');
 var drivers = fw.module('drivers');
@@ -40,10 +41,12 @@ exports.modify = function(conn, res, args){
 		category: [String, /\S([\S ]*\S)?/g],
 		tag: [String, /\S([\S ]*\S)?/g],
 		series: '',
+		denyComment: '',
 		content: '',
 		abstract: ''
 	});
 	filtered.driver = args.driver;
+	filtered.acceptComment = !filtered.denyComment;
 	args = filtered;
 	// validate
 	if(args.time >= 2147483647) return res.err('system');
@@ -97,8 +100,8 @@ exports.modify = function(conn, res, args){
 				});
 			});
 		};
-		if(args.status === 'published' && args.path) {
-			Post.findOne({path: args.path, status: 'published'}).where('_id').ne(args._id).exec(function(err, r){
+		if((args.status === 'published' || args.status === 'visible') && args.path) {
+			Post.findOne({path: args.path}).or([{status: 'published'}, {status: 'visible'}]).where('_id').ne(args._id).exec(function(err, r){
 				if(err) return res.err('system');
 				if(r) return res.err('pathUsed');
 				next();
@@ -124,6 +127,8 @@ exports.remove = function(conn, res, args){
 				return res.err('noPermission');
 			Post.remove(args, function(err){
 				if(err) return res.err('system');
+				// remove related comment
+				Comment.remove({post: args._id}).exec();
 				res();
 			});
 		});
@@ -161,8 +166,7 @@ exports.read = function(conn, res, args){
 	});
 	if(args._id) delete args.path;
 	else delete args._id;
-	args.status = 'published';
-	Post.findOne(args).where('time').lte(Math.floor(new Date().getTime() / 1000))
+	Post.findOne(args).or([{status: 'published'}, {status: 'visible'}]).where('time').lte(Math.floor(new Date().getTime() / 1000))
 		.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 		.exec(function(err, r){
 			if(err || !r) return res.err('notFound');

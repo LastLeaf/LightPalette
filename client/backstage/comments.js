@@ -7,20 +7,25 @@ fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
 
-	// TODO
-
 	// init page structure
 	var $content = $('#content').html(tmpl.main());
 	var $table = $content.find('.table');
 
 	// build table
 	var table = lp.tableBuilder($table, {idCol: '_id'}, [
-		{ id: 'title', name: _('Title') },
-		{ id: '_id', name: _('Short Name'), input: 'add' },
-		{ id: 'description', type: 'extra' }
-	], {})
+		{ id: 'displayName', name: _('User'), input: 'add' },
+		{ id: 'email', name: _('Email'), input: 'add' },
+		{ id: 'url', name: _('URL'), input: 'add' },
+		{ id: 'post.title', name: _('Post'), input: 'add' },
+		{ id: 'dateTimeString', name: _('Time'), input: 'add' },
+		{ id: 'blocked', name: _('Blocked'), input: {
+			'false': 'no',
+			'true': 'yes'
+		} },
+		{ id: 'content', type: 'extra', input: 'add' }
+	])
 	.data(function(page){
-		pg.rpc('category:list', {from: page*LIST_LEN, count: LIST_LEN}, function(r){
+		pg.rpc('comment:list', {desc: 'yes', blocked: 'yes', depth: 1, from: page*LIST_LEN, count: LIST_LEN}, function(r){
 			table.setTotal(Math.ceil(r.total/LIST_LEN));
 			var rows = r.rows;
 			table.set(rows);
@@ -32,23 +37,26 @@ fw.main(function(pg){
 
 	// table operations
 	table.add(function(data){
-		pg.rpc('category:create', data, function(){
+		pg.rpc('comment:create', data, function(){
 			table.addRow(data._id, data);
 		}, function(err){
 			lp.backstage.showError(err);
 			table.enableAdd();
 		});
 	});
-	table.change(function(data){
-		pg.rpc('category:modify', data, function(){
-			table.setRow(data._id, data);
+	table.change(function(data, _id){
+		pg.rpc('comment:block', {
+			_id: _id,
+			blocked: (data.blocked === 'true' ? 'yes' : '')
+		}, function(){
+			table.setRow(_id, data);
 		}, function(err){
 			lp.backstage.showError(err);
-			table.enableModify(data._id);
+			table.enableModify(_id);
 		});
 	});
 	table.remove(function(_id){
-		pg.rpc('category:remove', {_id: _id}, function(){
+		pg.rpc('comment:remove', {_id: _id}, function(){
 			table.removeRow(_id);
 		}, function(err){
 			lp.backstage.showError(err);
