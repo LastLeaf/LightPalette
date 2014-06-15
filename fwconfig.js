@@ -37,6 +37,9 @@ module.exports = {
 		favicon: favicon,
 		loadingLogo: loadingLogo,
 		loadingLogoBackground: '#fff',
+		meta: {
+			viewport: 'width=device-width, initial-scale=1'
+		}
 	},
 	server: {
 		ip: config.host || '',
