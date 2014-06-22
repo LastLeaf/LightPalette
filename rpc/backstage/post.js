@@ -35,6 +35,7 @@ exports.modify = function(conn, res, args){
 	var filtered = formFilter(args, {
 		_id: '',
 		path: '',
+		timeString: '',
 		title: '',
 		status: 'draft',
 		author: conn.session.userId,
@@ -47,9 +48,11 @@ exports.modify = function(conn, res, args){
 	});
 	filtered.driver = args.driver;
 	filtered.acceptComment = !filtered.denyComment;
+	filtered.time = dateString.parse(filtered.timeString);
+	if(typeof(filtered.time) !== 'number') return res.err('timeFormatIllegal');
+	filtered.time = Math.floor(filtered.time / 1000);
+	delete filtered.timeString;
 	args = filtered;
-	// validate
-	if(args.time >= 2147483647) return res.err('system');
 	User.checkPermission(conn, ['contributor', 'writer', 'editor'], function(contributor, writer, editor){
 		// check permission
 		if(!contributor) return res.err('noPermission');
@@ -138,18 +141,23 @@ exports.remove = function(conn, res, args){
 // get a post for editing
 exports.get = function(conn, res, args){
 	args = formFilter(args, {
-		_id: ''
+		_id: '',
+		originalTimeFormat: '',
 	});
 	User.checkPermission(conn, ['contributor', 'editor'], function(contributor, editor){
 		if(!contributor) return res.err('noPermission');
-		Post.findOne(args)
+		Post.findOne({_id: args._id})
 			.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 			.exec(function(err, r){
-				if(err || !r) return res.err(err);
+				if(err || !r) return res.err('notFound');
 				if(!editor && r.author._id !== conn.session.userId)
 					return res.err('noPermission');
-				r.dateString = dateString.date(r.time*1000);
-				r.dateTimeString = dateString.dateTime(r.time*1000);
+				if(args.originalTimeFormat) {
+					r.dateTimeString = dateString.dateTime(r.time*1000, '%F %T');
+				} else {
+					r.dateString = dateString.date(r.time*1000);
+					r.dateTimeString = dateString.dateTime(r.time*1000);
+				}
 				drivers[r.type].readFilter(r, function(err){
 					if(err) return res.err('system');
 					res(r);

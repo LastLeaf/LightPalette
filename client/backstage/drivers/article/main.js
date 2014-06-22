@@ -23,7 +23,7 @@ fw.main(function(pg){
 				theme: 'modern',
 				height: 400,
 				plugins: [
-					'anchor charmap code contextmenu hr image link lists searchreplace table textcolor'
+					'anchor charmap code contextmenu hr image link lists paste searchreplace table textcolor'
 				],
 				menubar: 'edit insert view format table tools',
 				toolbar: 'styleselect | bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat',
@@ -36,7 +36,9 @@ fw.main(function(pg){
 					{title: 'Pre', block: 'pre'},
 				],
 				content_css: '/~/backstage/drivers/article/skins/tinymce.css',
-				language: fw.language
+				language: fw.language,
+				paste_as_text: true,
+				paste_word_valid_elements: ([ 'h1', 'h2', 'h3', 'img', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'pre', 'sup', 'sub', 'div', 'span' ]).join(',')
 			});
 
 			// abstract

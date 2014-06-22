@@ -43,11 +43,14 @@ module.exports = function(next){
 			}
 			return true;
 		},
-		dateTime: function(d){
-			return convert(d, conf.dateTimeFormat || '%F %T');
+		dateTime: function(d, format){
+			return convert(d, format || conf.dateTimeFormat || '%F %T');
 		},
-		date: function(d){
-			return convert(d, conf.dateFormat || '%F');
+		date: function(d, format){
+			return convert(d, format || conf.dateFormat || '%F');
+		},
+		parse: function(s){
+			return tzCur(s, conf.timezone);
 		}
 	});
 };

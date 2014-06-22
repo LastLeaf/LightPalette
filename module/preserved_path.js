@@ -13,7 +13,7 @@ module.exports = function(cb){
 	cb({
 		// preserved path checker
 		check: function(path){
-			return !!path.match(/^\/?(backstage|index|tag|category|series|author|search|post|avatar|files)[\/$]/);
+			return !!path.match(/^\/?(backstage|index|tag|category|series|author|search|post|avatar|files|feed)[\/$]/);
 		}
 	});
 };

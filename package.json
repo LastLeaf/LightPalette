@@ -10,7 +10,8 @@
 		"nodemailer": ">=0.6.5",
 		"pngjs": ">=0.4.0",
 		"sanitize-html": ">=1.1.7",
-		"timezone": ">=0.0.32"
+		"timezone": ">=0.0.32",
+		"rss": ">=0.3.2"
 	},
 	"author": "LastLeaf <bqfu@163.com> http://lastleaf.me",
 	"contributors": []

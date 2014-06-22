@@ -12,6 +12,11 @@
 					<div class="sidebar_title">`Basic Configuration`</div>
 					<input type="text" name="path" placeholder="A shortcut URL...">
 					<div class="sidebar_row">
+						{{#if edit}}`Author` <select name="author">{{#each authors}}
+							<option value="{{_id}}">{{displayName}}</option>
+						{{/each}}</select>{{/if}}
+					</div>
+					<div class="sidebar_row">
 						`Publish Status` <select name="status">
 							<option value="draft">`draft`</option>
 							<option value="pending">`pending`</option>
@@ -19,11 +24,7 @@
 							{{#if write}}<option value="published">`published`</option>{{/if}}
 						</select>
 					</div>
-					<div class="sidebar_row">
-						{{#if edit}}`Author` <select name="author">{{#each authors}}
-							<option value="{{_id}}">{{displayName}}</option>
-						{{/each}}</select>{{/if}}
-					</div>
+					<input type="text" name="timeString" placeholder="`Publish Time XXXX-XX-XX XX:XX:XX`">
 				</div>
 				{{#if write}}<div class="sidebar_item">
 					<div class="sidebar_title">`Series`</div>

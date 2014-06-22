@@ -19,6 +19,9 @@ fw.main(function(pg){
 		});
 		// author
 		$form.find('[name=author]').val(post.author._id);
+		// time string
+		if(post.status !== 'draft')
+			$form.find('[name=timeString]').val(post.dateTimeString);
 		// categories
 		var categoryMap = {};
 		for(var i=0; i<post.category.length; i++)
@@ -120,7 +123,7 @@ fw.main(function(pg){
 		var userInfo = pg.parent.parent.userInfo;
 		var next = function(authors){
 			// get category list
-			pg.rpc('post:get', {_id: fw.getArgs()['*']}, function(r){
+			pg.rpc('post:get', {_id: fw.getArgs()['*'], 'originalTimeFormat': 'yes'}, function(r){
 				pg.rpc('category:list', function(categories){
 					// init page
 					initPage(r, {

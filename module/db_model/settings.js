@@ -22,7 +22,19 @@ module.exports = function(model, cb){
 		});
 	};
 	schema.statics.set = function(key, value, cb){
-		this.update({_id: key}, {v: value}, {upsert: true}, cb);
+		this.update({_id: key}, {v: value}, {upsert: true}, function(){
+			if(changeEvents[key])
+				for(var i=0; i<changeEvents[key].length; i++)
+					changeEvents[key][i]();
+			cb();
+		});
+	};
+
+	// update bindings
+	var changeEvents = {};
+	schema.statics.changed = function(key, cb){
+		if(!changeEvents.hasOwnProperty(key)) changeEvents[key] = [ cb ];
+		else changeEvents[key].push(cb);
 	};
 
 	// create model
