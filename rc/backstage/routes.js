@@ -114,4 +114,10 @@ module.exports = {
 		tmpl: 'settings',
 		style: 'settings.css'
 	},
+	'./files': {
+		parent: 'backstage',
+		main: 'files',
+		tmpl: 'files',
+		style: 'files.css',
+	},
 };

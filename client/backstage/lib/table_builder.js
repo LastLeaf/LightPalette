@@ -33,9 +33,10 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 	var colCount = 0;
 	for(var i=0; i<colDefine.length; i++) {
 		var col = colDefine[i];
-		if(col.type === 'hidden' || col.type === 'extra') continue;
+		if(col.type === 'extra') continue;
 		colCount++;
-		$('<th></th>').text(col.name).appendTo($theadTr);
+		var $th = $('<th></th>').text(col.name).appendTo($theadTr);
+		if(col.type === 'hidden') $th.hide();
 	}
 	var $navi = $('<tr><th colspan="'+colCount+'" class="lp_table_navi"></th></tr>').appendTo($tfoot).find('th');
 	if(allowAdd)
@@ -99,6 +100,9 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 			} else if(type === 'password') {
 				// password
 				var $input = $('<input type="password" name="'+colId+'">');
+			} else if(type === 'hidden') {
+				// text
+				var $input = $('<input type="hidden" name="'+colId+'">').val(this.lpTableData);
 			} else if(type === 'add' && !$tr.hasClass('lp_table_add_row')) {
 				// hidden
 				var $input = $('<span></span>').text(this.lpTableData).add($('<input type="hidden" name="'+colId+'">').val(this.lpTableData));
@@ -220,7 +224,6 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 			$tr = $('<tr class="lp_table_row" rowId="'+escape(id)+'"></tr><tr rowId="'+escape(id)+'" class="lp_table_extra"></tr>').appendTo($tbody);
 		for(var i=0; i<colDefine.length; i++) {
 			var col = colDefine[i];
-			if(col.type === 'hidden') continue;
 			var d = data;
 			var a = col.id.split(/\./g);
 			while(a.length && d) d = d[a.shift()];
@@ -229,6 +232,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 				var $td = $('<td colspan="'+colCount+'"></td>').text(d || '').appendTo($tr[1]);
 			} else {
 				var $td = $('<td></td>').text(d || '').appendTo($tr[0]);
+				if(col.type === 'hidden') $td.hide();
 			}
 			$td.prop('lpTableColId', col.id).prop('lpTableInput', col.input).prop('lpTableData', d || '');
 		}
@@ -303,13 +307,14 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		return this;
 	};
 	var setPage = function(pos, total){
-		pagePos = pos;
+		if(typeof(pos) !== 'undefined')
+			pagePos = pos;
 		if(typeof(total) !== 'undefined')
 			pageTotal = total;
 		updateNavi();
 		startLoading();
 		setTimeout(function(){
-			trigger('data', pos);
+			trigger('data', pagePos);
 		}, 0);
 		return this;
 	};

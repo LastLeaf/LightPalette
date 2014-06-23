@@ -1,0 +1,15 @@
+/* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
+
+.button, .submit {
+  display: inline-block;
+}
+.create {
+  margin: 0.5em 0;
+}
+.create iframe {
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+  height: 1.5em;
+  width: 15em;
+}
