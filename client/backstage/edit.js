@@ -81,6 +81,9 @@ fw.main(function(pg){
 		});
 
 		// save
+		$content.find('.editor_preview').click(function(){
+			window.open('/backstage/preview/'+post._id, 'preview');
+		});
 		var $save = $content.find('.editor_save').click(function(){
 			$form.submit();
 		});

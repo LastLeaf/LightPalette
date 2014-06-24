@@ -58,6 +58,10 @@
 }
 .sidebar .button, .sidebar .checkbox, .sidebar .radio {
     width: auto;
+    padding: 0.25em 0.5em;
+}
+.editor_preview {
+    float: right;
 }
 .sidebar textarea {
     width: 264px;

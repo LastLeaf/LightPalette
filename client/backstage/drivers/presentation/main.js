@@ -7,6 +7,24 @@ fw.main(function(pg){
 
 	lp.registerDriver('presentation', {
 		name: _('Presentation'),
-		priority: 1000,
+		priority: 5000,
+		editor: function(div, data){
+
+			var $div = $(div).html(tmpl.presentation(data));
+
+			// events
+			return {
+				get: function(){
+					var abstract = $div.find('.driver_abstract textarea').val();
+					var content = $div.find('.driver_content textarea').val().split(/<===>/g);
+					return {
+						driver: {
+							abstract: abstract,
+							content: content
+						}
+					};
+				}
+			};
+		}
 	});
 });

@@ -13,7 +13,8 @@
 		"timezone": ">=0.0.32",
 		"rss": ">=0.3.2",
 		"multiparty": ">=3.2.9",
-		"mv": ">=2.0.0"
+		"mv": ">=2.0.0",
+		"marked": ">=0.3.2"
 	},
 	"author": "LastLeaf <bqfu@163.com> http://lastleaf.me",
 	"contributors": []

@@ -25,6 +25,11 @@ fw.main(function(pg){
 	});
 	pg.on('childLoadEnd', function(){
 		document.body.scrollTop = 0;
+		var post = document.getElementById('post_single');
+		if(post) {
+			// init driver for single post
+			lp.initDriver(post.getAttribute('post-type'));
+		}
 		pg.emit('contentLoaded');
 	});
 });

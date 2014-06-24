@@ -17,8 +17,12 @@ exports.create = function(conn, res, args){
 		type: ''
 	});
 	if(!args.type) return res.err('system');
-	User.checkPermission(conn, 'contributor', function(r){
-		if(!r) return res.err('noPermission');
+	if(!drivers[args.type]) return res.err('system');
+	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin){
+		if(!contributor) return res.err('noPermission');
+		if(drivers[args.type].permission === 'admin' && !admin) return res.err('noPermission');
+		if(drivers[args.type].permission === 'editor' && !editor) return res.err('noPermission');
+		if(drivers[args.type].permission === 'writer' && !writer) return res.err('noPermission');
 		new Post({
 			type: args.type,
 			author: conn.session.userId,
@@ -46,14 +50,19 @@ exports.modify = function(conn, res, args){
 		content: '',
 		abstract: ''
 	});
-	filtered.driver = args.driver;
+	filtered.driver = args.driver || {};
+	if(typeof(filtered.driver) !== 'object') res.err('system');
 	filtered.acceptComment = !filtered.denyComment;
-	filtered.time = dateString.parse(filtered.timeString);
-	if(typeof(filtered.time) !== 'number') return res.err('timeFormatIllegal');
+	if(filtered.timeString) {
+		filtered.time = dateString.parse(filtered.timeString);
+		if(typeof(filtered.time) !== 'number') return res.err('timeFormatIllegal');
+	} else {
+		filtered.time = new Date().getTime();
+	}
 	filtered.time = Math.floor(filtered.time / 1000);
 	delete filtered.timeString;
 	args = filtered;
-	User.checkPermission(conn, ['contributor', 'writer', 'editor'], function(contributor, writer, editor){
+	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin){
 		// check permission
 		if(!contributor) return res.err('noPermission');
 		if(!writer && (args.status !== 'draft' && args.status !== 'pending'))
@@ -76,6 +85,10 @@ exports.modify = function(conn, res, args){
 						return res.err('noPermission');
 					var next = function(){
 						// call driver's filter
+						if(!drivers[r.type]) return res.err('system');
+						if(drivers[r.type].permission === 'admin' && !admin) return res.err('noPermission');
+						if(drivers[r.type].permission === 'editor' && !editor) return res.err('noPermission');
+						if(drivers[r.type].permission === 'writer' && !writer) return res.err('noPermission');
 						drivers[r.type].writeFilter(args, function(err){
 							if(err) return res.err(err);
 							// save
@@ -158,6 +171,7 @@ exports.get = function(conn, res, args){
 					r.dateString = dateString.date(r.time*1000);
 					r.dateTimeString = dateString.dateTime(r.time*1000);
 				}
+				if(!drivers[r.type]) return res.err('system');
 				drivers[r.type].readFilter(r, function(err){
 					if(err) return res.err('system');
 					res(r);
@@ -180,6 +194,7 @@ exports.read = function(conn, res, args){
 			if(err || !r) return res.err('notFound');
 			r.dateString = dateString.date(r.time*1000);
 			r.dateTimeString = dateString.dateTime(r.time*1000);
+			if(!drivers[r.type]) return res.err('system');
 			drivers[r.type].readFilter(r, function(err){
 				if(err) return res.err(err);
 				res(r);

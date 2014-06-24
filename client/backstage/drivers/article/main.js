@@ -13,7 +13,7 @@ fw.main(function(pg){
 			// init editor in div
 			if(!data.driver) data.driver = {};
 			var tinymceId = 'tinymce-' + new Date().getTime();
-			var $div = $(div).html(tmpl.main({
+			var $div = $(div).html(tmpl.article({
 				tinymceId: tinymceId,
 				content: data.content,
 				abstractManual: data.driver.abstract || ''

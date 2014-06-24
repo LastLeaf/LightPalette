@@ -37,13 +37,15 @@ exports.writeFilter = function(args, cb){
 	args.content = sanitizeHtml(args.content, sanitizeOptions);
 	if(args.driver.abstractType === 'manualText') {
 		// generate abstract
-		var s = args.driver.abstract.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n?/g, '\n').replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
+		var s = String(args.driver.abstract).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n?/g, '\n').replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
 		args.abstract = '<p>' + s + '</p>';
 	} else {
 		args.abstract = args.driver.abstract = sanitizeHtml(args.driver.abstract || '', sanitizeOptions);
 	}
+	if(args.content.length >= 65536) return cb('contentIllegal');
+	if(args.abstract.length >= 4096) return cb('abstractIllegal');
 	args.driver = {
-		abstractType: args.driver.abstractType,
+		abstractType: String(args.driver.abstractType),
 		abstract: args.driver.abstract
 	};
 	cb();

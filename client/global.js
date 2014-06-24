@@ -8,6 +8,13 @@ fw.main(function(pg){
 		fw.loadingLogo.disabled = true;
 	});
 
+	// forestage drivers
+	var drivers = {};
+	lp.initDriver = function(id, func){
+		if(func) drivers[id] = func;
+		else if(drivers[id]) drivers[id]();
+	};
+
 	// gravatar helper
 	lp.gravatarUrl = function(email, size, def){
 		var url = 'http://www.gravatar.com/avatar/' + CryptoJS.MD5(email) + '?d=' + encodeURIComponent(def || 'mm');

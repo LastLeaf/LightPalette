@@ -1,0 +1,34 @@
+<tmpl id="presentation"><!DOCTYPE html>
+	<html>
+		<head>
+			<meta charset="UTF-8">
+			<link rel="stylesheet" href="/~/lib/reveal.js/css/reveal.min.css">
+			<link rel="stylesheet" href="/~/lib/reveal.js/css/theme/sky.css" id="theme">
+			<link rel="stylesheet" href="/~/lib/reveal.js/lib/css/zenburn.css">
+			<!-- <link rel="stylesheet" href="/~/theme/drivers/presentation.css" id="theme"> -->
+		</head>
+		<body>
+{{{this}}}
+			<script src="/~/lib/reveal.js/lib/js/head.min.js"></script>
+			<script src="/~/lib/reveal.js/js/reveal.min.js"></script>
+			<script>
+				Reveal.initialize({
+					controls: true,
+					progress: true,
+					history: false,
+					center: true,
+					transition: 'default',
+					// Optional libraries used to extend on reveal.js
+					dependencies: [
+						{ src: '/~/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+						{ src: '/~/lib/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+						{ src: '/~/lib/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+						{ src: '/~/lib/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+						{ src: '/~/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+						{ src: '/~/lib/reveal.js/plugin/math/math.js', async: true }
+					]
+				});
+			</script>
+		</body>
+	</html>
+</tmpl>

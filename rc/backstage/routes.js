@@ -120,4 +120,8 @@ module.exports = {
 		tmpl: 'files',
 		style: 'files.css',
 	},
+	'./preview/*': {
+		parent: 'forestage',
+		render: '/backstage/preview',
+	}
 };

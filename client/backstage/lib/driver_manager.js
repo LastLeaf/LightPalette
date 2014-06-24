@@ -6,13 +6,23 @@
 	lp.registerDriver = function(id, options){
 		drivers[id] = options;
 	};
-	lp.listDrivers = function(){
+	lp.listDrivers = function(userType){
 		var r = [];
-		for(var k in drivers)
+		for(var k in drivers) {
+			if(drivers[k].permission) {
+				var permission = drivers[k].permission;
+				if(permission === 'admin' && userType !== 'admin')
+					continue;
+				if(permission === 'editor' && userType !== 'admin' && userType !== 'editor')
+					continue;
+				if(permission === 'writer' && userType !== 'admin' && userType !== 'editor' && userType !== 'writer')
+					continue;
+			}
 			r.push({
 				id: k,
 				name: drivers[k].name
 			});
+		}
 		r.sort(function(a, b){
 			return (drivers[b.id].priority || 0) - (drivers[a.id].priority || 0);
 		});

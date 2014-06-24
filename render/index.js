@@ -6,8 +6,6 @@ var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
 var preservedPath = fw.module('preserved_path.js');
-var sitePathParser = fw.module('site_path_parser.js');
-var dateString = fw.module('date_string.js');
 
 var tmpl = fw.tmpl('index.tmpl');
 
@@ -126,8 +124,7 @@ var sitePathParser = function(conn, path, cb){
 
 module.exports = function(conn, args, childRes, next){
 	Settings.get('basic', function(err, r){
-		if(err) return next(childRes);
-		if(!r) r = {};
+		if(err || !r) r = {};
 		childRes.siteInfo = r;
 		childRes.title = r.siteTitle || fw.config.app.title;
 		sitePathParser(conn, args['*'], function(type, query, page, totalPages, data){
