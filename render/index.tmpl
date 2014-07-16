@@ -1,7 +1,7 @@
 <tmpl id="list">
 	{{#if query}}<div class="query query-{{type}}">{{query}}</div>{{/if}}
 	<div id="post_list" class="post_list">{{#each rows}}
-		<div class="post_item" post-id="{{_id}}" post-type="{{type}}">
+		<div class="post_item post_{{type}}" post-id="{{_id}}" post-type="{{type}}">
 			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
 			<div class="post_head">
 				{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}
@@ -24,7 +24,7 @@
 </tmpl>
 
 <tmpl id="single">
-	<div id="post_single" class="post_single" post-id="{{_id}}" post-type="{{type}}">
+	<div id="post_single" class="post_single post_{{type}}" post-id="{{_id}}" post-type="{{type}}">
 		<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
 		<div class="post_head">
 			{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}

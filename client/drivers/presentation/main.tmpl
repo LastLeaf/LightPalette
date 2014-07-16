@@ -3,32 +3,46 @@
 		<head>
 			<meta charset="UTF-8">
 			<link rel="stylesheet" href="/~/lib/reveal.js/css/reveal.min.css">
-			<link rel="stylesheet" href="/~/lib/reveal.js/css/theme/sky.css" id="theme">
-			<link rel="stylesheet" href="/~/lib/reveal.js/lib/css/zenburn.css">
-			<!-- <link rel="stylesheet" href="/~/theme/drivers/presentation.css" id="theme"> -->
+			<link rel="stylesheet" href="/~/lib/reveal_theme.css" id="theme">
+			<link rel="stylesheet" href="/~/theme/drivers/presentation.css" id="theme">
+			<script src="/~/lib/reveal.js/lib/js/head.min.js"></script>
+			<script src="/~/lib/reveal.js/js/reveal.js"></script>
 		</head>
 		<body>
 {{{this}}}
-			<script src="/~/lib/reveal.js/lib/js/head.min.js"></script>
-			<script src="/~/lib/reveal.js/js/reveal.min.js"></script>
-			<script>
-				Reveal.initialize({
-					controls: true,
-					progress: true,
-					history: false,
-					center: true,
-					transition: 'default',
-					// Optional libraries used to extend on reveal.js
-					dependencies: [
-						{ src: '/~/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-						{ src: '/~/lib/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-						{ src: '/~/lib/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-						{ src: '/~/lib/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-						{ src: '/~/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-						{ src: '/~/lib/reveal.js/plugin/math/math.js', async: true }
-					]
-				});
-			</script>
+<script>
+(function(){
+	if(typeof(Reveal) === 'undefined') {
+		setTimeout(arguments.callee, 200);
+		return;
+	}
+	Reveal.initialize({
+		controls: true,
+		progress: true,
+		history: false,
+		center: true,
+		transition: 'default',
+		dependencies: [
+			{ src: '/~/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+			{ src: '/~/lib/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: '/~/lib/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: '/~/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+			{ src: '/~/lib/reveal.js/plugin/math/math.js', async: true }
+		]
+	});
+	var btn = document.createElement('div');
+	btn.className = 'full-screen-button';
+	btn.style.position = 'absolute';
+	btn.style.right = '57px';
+	btn.style.bottom = '57px';
+	btn.style.width = '16px';
+	btn.style.height = '16px';
+	document.body.appendChild(btn);
+	document.body.ondblclick = btn.onclick = function(){
+		document.toggleFullScreen();
+	};
+})();
+</script>
 		</body>
 	</html>
 </tmpl>
