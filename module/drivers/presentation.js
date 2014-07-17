@@ -14,19 +14,17 @@ marked.setOptions({
 });
 
 exports.writeFilter = function(args, cb){
-	args.abstract = marked(String(args.driver.abstract));
+	args.abstract = marked(escape(String(args.driver.abstract)));
 	// convert content object to reveal.js structure
 	var content = args.driver.content;
 	if(!content || content.constructor !== Array) return cb('system');
 	var s = args.abstract + '<div class="reveal" id="driver-presentation"><div class="slides">';
 	for(var i=0; i<content.length; i++) {
-		if(content[i].constructor === Array) {
+		if(!content[i] || content[i].constructor === Array) {
 			s += '<section>';
-			for(var j=0; i<content[i].length; j++)
-				s += '<section data-markdown><script type="text/template">' + String(content[i]) + '</script></section>';
+			for(var j=0; j<content[i].length; j++)
+				s += '<section data-markdown><script type="text/template">' + String(content[i][j]) + '</script></section>';
 			s += '</section>';
-		} else {
-			s += '<section data-markdown><script type="text/template">' + String(content[i]) + '</script></section>';
 		}
 	}
 	args.content = s + '</div></div>';

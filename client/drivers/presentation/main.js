@@ -69,5 +69,6 @@ fw.main(function(pg){
 				iframeFullScreen();
 		};
 		iframe.contentWindow.document.close();
+		iframe.focus();
 	});
 });
