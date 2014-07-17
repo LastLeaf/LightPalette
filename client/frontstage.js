@@ -24,7 +24,6 @@ fw.main(function(pg){
 		pg.emit('contentUnloaded');
 	});
 	pg.on('childLoadEnd', function(){
-		document.body.scrollTop = 0;
 		var post = document.getElementById('post_single');
 		if(post) {
 			// init driver for single post
