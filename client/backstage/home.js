@@ -46,8 +46,10 @@ fw.main(function(pg){
 				});
 			});
 
-		} else {
+			return;
+		}
 
+		var latestGot = function(posts, comments){
 			// common page
 			var $content = $('#content').html(tmpl.main({
 				username: userInfo._id,
@@ -57,8 +59,14 @@ fw.main(function(pg){
 				url: userInfo.url,
 				description: userInfo.description,
 				avatar: (userInfo.avatar ? userInfo.avatar+'/128.png' : lp.gravatarUrl(userInfo.email, 128)),
-				avatarDel: !!userInfo.avatar
+				avatarDel: !!userInfo.avatar,
+				posts: posts,
+				comments: comments,
 			}));
+			// main page content
+			$content.find('.new_post').click(function(){
+				fw.go('/backstage/post');
+			});
 			// user settings
 			var $user = $content.children('.home_user');
 			$user.find('.avatar_file input').change(function(){
@@ -130,8 +138,18 @@ fw.main(function(pg){
 				$pwdForm.find('.submit').attr('disabled', false);
 				lp.backstage.showError(err);
 			});
+		};
 
-		}
+		// read hot posts and resent comments
+		pg.rpc('comment:list', {depth: 1, desc: 'yes', from: 0, count: 10}, function(comments){
+			pg.rpc('post:list', {from: 0, count: 10}, function(posts){
+				latestGot(posts, comments);
+			}, function(err){
+				if(err) lp.backstage.showError(err);
+			});
+		}, function(err){
+			if(err) lp.backstage.showError(err);
+		});
 	};
 
 	if(pg.parent.userInfo) {

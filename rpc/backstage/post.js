@@ -3,6 +3,7 @@
 
 var formFilter = fw.module('form_filter');
 var Post = fw.module('db_model').Post;
+var StatPost = fw.module('db_model').StatPost;
 var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
@@ -198,6 +199,9 @@ exports.read = function(conn, res, args){
 			drivers[r.type].readFilter(r, function(err){
 				if(err) return res.err(err);
 				res(r);
+				// add to stat
+				var date = Math.floor(new Date().getTime() / 86400000)*86400;
+				StatPost.update({post: args._id, date: date}, {$inc: {reads: 1}}, {upsert: true}, function(){});
 			});
 		});
 };

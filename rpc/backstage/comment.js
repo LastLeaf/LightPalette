@@ -271,7 +271,7 @@ exports.list = function(conn, res, args){
 		});
 	};
 	// validate
-	if(args.blocked || !args.post)
+	if(args.blocked)
 		User.checkPermission(conn, 'editor', function(r){
 			if(!r) return res.err('noPermission');
 			doList();

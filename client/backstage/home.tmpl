@@ -35,7 +35,22 @@
 		</form>
 	</div>
 	<div class="home_main">
-		<a fw href="/backstage/post" class="write">`Write New Post`</a>
+		<div class="home_head">
+			`There are {{posts.total}} published posts, and {{comments.total}} comments on this blog.`
+			<input type="button" class="button new_post" value="`Write New Post`">
+		</div>
+		<div class="home_list">
+			<div class="home_list_title">`Recent Posts`</div>
+			{{#each posts.rows}}
+				<div class="home_list_item"><a href="{{#if path}}/{{path}}{{else}}/post/{{_id}}{{/if}}">{{title}}</a> `by` <a href="/author/{{author._id}}">{{author.displayName}}</a> `on` {{dateString}}</div>
+			{{/each}}
+		</div>
+		<div class="home_list">
+			<div class="home_list_title">`Recent Comments`</div>
+			{{#each comments.rows}}
+				<div class="home_list_item"><a href="{{url}}">{{displayName}}</a> `at` {{dateTimeString}} `on` <a href="{{#if post.path}}/{{post.path}}{{else}}/post/{{post._id}}{{/if}}">{{post.title}}</a></div>
+			{{/each}}
+		</div>
 	</div>
 </tmpl>
 

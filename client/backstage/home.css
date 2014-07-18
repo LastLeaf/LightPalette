@@ -144,3 +144,35 @@
     margin-top: -15px;
     margin-bottom: 10px;
 }
+
+.home_main {
+    margin-left: 221px;
+}
+.home_head {
+    color: #666;
+    font-size: 0.9em;
+    text-align: center;
+}
+.home_head input {
+    margin: 10px auto;
+    font-size: 1.5em;
+}
+.home_list {
+    margin: 1em 0;
+}
+.home_list_title {
+    color: #888;
+    font-size: 1.4em;
+    padding: 0.25em 0;
+    margin: 0.25em 0;
+    border-bottom: 1px dashed #888;
+    display: inline-block;
+}
+.home_list_item {
+    margin: 0.25em 0 0 2em;
+    color: #444;
+    font-size: 0.9em;
+}
+.home_list_item a {
+    font-size: 1.2em;
+}
