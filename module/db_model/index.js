@@ -8,7 +8,7 @@ var models = [
 	'category.js',
 	'post.js',
 	'comment.js',
-	'stat_post.js'
+	'stat.js'
 ];
 
 module.exports = function(next){

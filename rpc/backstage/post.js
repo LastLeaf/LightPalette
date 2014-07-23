@@ -3,7 +3,7 @@
 
 var formFilter = fw.module('form_filter');
 var Post = fw.module('db_model').Post;
-var StatPost = fw.module('db_model').StatPost;
+var Stat = fw.module('db_model').Stat;
 var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
@@ -200,8 +200,12 @@ exports.read = function(conn, res, args){
 				if(err) return res.err(err);
 				res(r);
 				// add to stat
-				var date = Math.floor(new Date().getTime() / 86400000)*86400;
-				StatPost.update({post: args._id, date: date}, {$inc: {reads: 1}}, {upsert: true}, function(){});
+				var time = Math.floor(new Date().getTime() / 1000);
+				new Stat({post: args._id, time: time, sessionId: conn.session.id, ip: conn.ip }).save();
+				if(!conn.session.userAgent) {
+					conn.session.userAgent = conn.headers['user-agent'];
+					conn.session.save();
+				}
 			});
 		});
 };

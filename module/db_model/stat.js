@@ -1,16 +1,17 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var COLLECTION_NAME = 'statPost';
-var MODEL_NAME = 'StatPost';
+var COLLECTION_NAME = 'stat';
+var MODEL_NAME = 'Stat';
 
 module.exports = function(model, cb){
 	// define schema
 	var Schema = fw.db.Schema;
 	var schemaObj = {
 		post: { type: Schema.Types.ObjectId, index: true, ref: fw.config.db.prefix + 'post' },
-		date: { type: Number, index: true },
-		reads: { type: Number, index: true, default: 0 },
+		time: { type: Number, index: true },
+		sid: { type: String, index: true },
+		ip: { type: String, index: true }
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 
