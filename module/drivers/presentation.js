@@ -14,11 +14,11 @@ marked.setOptions({
 });
 
 exports.writeFilter = function(args, cb){
-	args.abstract = marked(escape(String(args.driver.abstract)));
+	args.content = args.abstract = marked(escape(String(args.driver.abstract)));
 	// convert content object to reveal.js structure
 	var content = args.driver.content;
 	if(!content || content.constructor !== Array) return cb('system');
-	var s = args.abstract + '<div class="reveal" id="driver-presentation"><div class="slides">';
+	var s = '<div class="reveal" id="driver-presentation"><div class="slides">';
 	for(var i=0; i<content.length; i++) {
 		if(!content[i] || content[i].constructor === Array) {
 			s += '<section>';
@@ -27,12 +27,17 @@ exports.writeFilter = function(args, cb){
 			s += '</section>';
 		}
 	}
-	args.content = s + '</div></div>';
-	if(args.content.length >= 65536) return cb('contentIllegal');
+	args.extra = s + '</div></div>';
+	if(args.extra.length >= 65536) return cb('contentIllegal');
 	if(args.abstract.length >= 4096) return cb('abstractIllegal');
 	cb();
 };
 
+exports.readEditFilter = function(args, cb){
+	cb();
+};
+
 exports.readFilter = function(args, cb){
+	delete args.driver;
 	cb();
 };

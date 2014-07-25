@@ -174,7 +174,7 @@ exports.get = function(conn, res, args){
 					r.dateTimeString = dateString.dateTime(r.time*1000);
 				}
 				if(!drivers[r.type]) return res.err('system');
-				drivers[r.type].readFilter(r, function(err){
+				drivers[r.type].readEditFilter(r, function(err){
 					if(err) return res.err('system');
 					res(r);
 				});
@@ -202,7 +202,7 @@ exports.read = function(conn, res, args){
 				res(r);
 				// add to stat
 				var time = Math.floor(new Date().getTime() / 1000);
-				new Stat({post: args._id, time: time, sid: conn.session.id, ip: conn.ip }).save();
+				new Stat({post: r._id, time: time, sid: conn.session.id, ip: conn.ip }).save();
 				if(!conn.session.userAgent) {
 					conn.session.userAgent = conn.headers['user-agent'];
 					conn.session.save();

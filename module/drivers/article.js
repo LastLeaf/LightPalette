@@ -51,6 +51,11 @@ exports.writeFilter = function(args, cb){
 	cb();
 };
 
+exports.readEditFilter = function(args, cb){
+	cb();
+};
+
 exports.readFilter = function(args, cb){
+	delete args.driver;
 	cb();
 };
