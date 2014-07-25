@@ -71,6 +71,27 @@ module.exports = {
 		tmpl: 'home',
 		style: 'home.css',
 	},
+	'./stat': {
+		redirect: './stat/hot'
+	},
+	'./stat/hot': {
+		parent: 'backstage',
+		main: 'stat_hot',
+		tmpl: 'stat_hot',
+		style: 'stat.css',
+	},
+	'./stat/post/:id': {
+		parent: 'backstage',
+		main: 'stat_post',
+		tmpl: 'stat_post',
+		style: 'stat.css',
+	},
+	'./stat/visitor/:id': {
+		parent: 'backstage',
+		main: 'stat_visitor',
+		tmpl: 'stat_visitor',
+		style: 'stat.css',
+	},
 	'./post': {
 		parent: 'drivers',
 		main: 'create',

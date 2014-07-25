@@ -9,7 +9,7 @@ module.exports = function(model, cb){
 	var Schema = fw.db.Schema;
 	var schemaObj = {
 		v: Schema.Types.Mixed,
-		_id: String,
+		_id: { type: String, index: { unique: true } },
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 

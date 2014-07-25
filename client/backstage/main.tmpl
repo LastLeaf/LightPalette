@@ -22,6 +22,9 @@
 	<div class="tabs">
 		<div class="tab_sep"></div>
 		<a fw href="/backstage/home"><div class="tab tab_home">`Dashboard`</div></a>
+		{{#if admin}}
+			<a fw href="/backstage/stat"><div class="tab tab_stat">`Statistics`</div></a>
+		{{/if}}
 		{{#if contrib}}
 			<div class="tab_sep"></div>
 			<a fw href="/backstage/post"><div class="tab tab_post">`Writing`</div></a>

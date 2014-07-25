@@ -146,6 +146,7 @@ exports.remove = function(conn, res, args){
 				if(err) return res.err('system');
 				// remove related comment
 				Comment.remove({post: args._id}).exec();
+				Stat.remove({post: args._id}).exec();
 				res();
 			});
 		});

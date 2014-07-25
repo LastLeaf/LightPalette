@@ -327,7 +327,7 @@ exports.list = function(conn, res, args){
 		User.count(function(err, r){
 			if(err) return res.err('system');
 			var total = r;
-			User.find({}).select('_id displayName type email url description').sort('_id').limit(args.count, args.from).exec(function(err, r){
+			User.find({}).select('_id displayName type email url description').sort('_id').limit(args.count).skip(args.from).exec(function(err, r){
 				if(err) return res.err('system');
 				res({
 					total: total,

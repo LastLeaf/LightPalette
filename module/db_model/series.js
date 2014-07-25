@@ -11,10 +11,12 @@ module.exports = function(model, cb){
 		_id: { type: String, index: { unique: true } },
 		title: String,
 		description: String,
-		time: { type: Number, index: true },
-		owner: { type: String, index: true, ref: fw.config.db.prefix + 'user' },
+		time: { type: Number },
+		owner: { type: String, ref: fw.config.db.prefix + 'user' },
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
+	schema.index({time: -1});
+	schema.index({owner: 1, time: -1});
 
 	// create model
 	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);

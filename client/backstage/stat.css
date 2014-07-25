@@ -1,0 +1,13 @@
+.stat_options {
+	float: right;
+}
+.stat_options, .stat_title, .stat_meta {
+	margin-bottom: 10px;
+	color: #444;
+}
+.stat_meta {
+	color: #888;
+}
+.table {
+	clear: both;
+}

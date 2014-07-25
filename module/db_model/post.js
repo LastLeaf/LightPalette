@@ -10,23 +10,31 @@ module.exports = function(model, cb){
 	var schemaObj = {
 		type: String,
 		path: { type: String, index: true, default: '' },
-		title: { type: String, index: true, default: '' },
+		title: { type: String, default: '' },
 		status: { type: String, default: 'draft', enum: [
 			'draft', 'pending', 'visible', 'published'
 		] },
-		author: { type: String, index: true, ref: fw.config.db.prefix + 'user' },
-		time: { type: Number, index: true },
+		author: { type: String, ref: fw.config.db.prefix + 'user' },
+		time: { type: Number },
 		dateString: String,
 		dateTimeString: String,
-		category: [{ type: String, index: true, ref: fw.config.db.prefix + 'category' }],
-		tag: { type: [String], index: true, default: [] },
-		series: { type: String, index: true, ref: fw.config.db.prefix + 'series' },
+		category: [{ type: String, ref: fw.config.db.prefix + 'category' }],
+		tag: { type: [String], default: [] },
+		series: { type: String, ref: fw.config.db.prefix + 'series' },
 		acceptComment: { type: Boolean, default: true },
 		content: { type: String, default: '' },
 		abstract: { type: String, default: '' },
+		extra: String,
 		driver: Object
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
+	schema.index({ time: -1 });
+	schema.index({ status: 1, time: -1 });
+	schema.index({ title: 1, time: -1 });
+	schema.index({ author: 1, time: -1 });
+	schema.index({ category: 1, time: -1 });
+	schema.index({ tag: 1, time: -1 });
+	schema.index({ series: 1, time: -1 });
 
 	// create model
 	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);

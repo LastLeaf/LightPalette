@@ -5,6 +5,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 	var idCol = options.idCol || '_id';
 	var editMore = !!options.editMore;
 	var allowAdd = !!addDef;
+	var allowRemove = !options.noRemove;
 
 	// events
 	var events = {};
@@ -156,7 +157,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 				})
 				.appendTo($btns);
 		} else {
-			if(editMore) var t = _('Edit');
+			if(editMore) var t = _('Details');
 			else var t = _('Save');
 			$('<input type="button" value="'+t+'">')
 				.click(function(){
@@ -174,31 +175,33 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 				})
 				.appendTo($btns);
 			// remove buttons
-			var $removeCancel = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('No, thanks.')+'">')
-				.click(function(){
-					if(loading) return;
-					$removeConfirm.hide();
-					$removeCancel.hide();
-					$remove.fadeIn(200);
-				})
-				.hide()
-				.appendTo($btns);
-			var $removeConfirm = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('Yes, remove!')+'">')
-				.click(function(){
-					if(loading) return;
-					disableInputs();
-					trigger('remove', rowId);
-				})
-				.hide()
-				.appendTo($btns);
-			var $remove = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('Remove')+'">')
-				.click(function(){
-					if(loading) return;
-					$remove.hide();
-					$removeCancel.fadeIn(200);
-					$removeConfirm.fadeIn(200);
-				})
-				.appendTo($btns);
+			if(allowRemove) {
+				var $removeCancel = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('No, thanks.')+'">')
+					.click(function(){
+						if(loading) return;
+						$removeConfirm.hide();
+						$removeCancel.hide();
+						$remove.fadeIn(200);
+					})
+					.hide()
+					.appendTo($btns);
+				var $removeConfirm = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('Yes, remove!')+'">')
+					.click(function(){
+						if(loading) return;
+						disableInputs();
+						trigger('remove', rowId);
+					})
+					.hide()
+					.appendTo($btns);
+				var $remove = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('Remove')+'">')
+					.click(function(){
+						if(loading) return;
+						$remove.hide();
+						$removeCancel.fadeIn(200);
+						$removeConfirm.fadeIn(200);
+					})
+					.appendTo($btns);
+			}
 		}
 	};
 	$tbody.on('click', '.lp_table_row', enterEditMode);
