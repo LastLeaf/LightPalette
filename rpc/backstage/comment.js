@@ -56,7 +56,7 @@ exports.create = function(conn, res, args){
 	var next = function(){
 		Post.findOne({_id: args.post}, function(err, r){
 			if(err) return res.err('system');
-			if(!r || !r.acceptComment || (r.status !== 'published' && r.status !== 'visible')) return res.err('noPermission');
+			if(!r || !r.acceptComment || (r.status !== 'published' && r.status !== 'visible' && r.status !== 'special')) return res.err('noPermission');
 			var postPath = '/' + (r.path || 'post/'+r._id);
 			new Comment(args).save(function(err, comment){
 				if(err) return res.err('system');

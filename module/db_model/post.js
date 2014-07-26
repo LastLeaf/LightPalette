@@ -12,7 +12,7 @@ module.exports = function(model, cb){
 		path: { type: String, index: true, default: '' },
 		title: { type: String, default: '' },
 		status: { type: String, default: 'draft', enum: [
-			'draft', 'pending', 'visible', 'published'
+			'draft', 'pending', 'published', 'visible', 'special'
 		] },
 		author: { type: String, ref: fw.config.db.prefix + 'user' },
 		time: { type: Number },

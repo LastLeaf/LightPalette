@@ -68,6 +68,8 @@ exports.modify = function(conn, res, args){
 		if(!contributor) return res.err('noPermission');
 		if(!writer && (args.status !== 'draft' && args.status !== 'pending'))
 			return res.err('noPermission');
+		if(!editor && (args.status === 'special'))
+			return res.err('noPermission');
 		if(!writer && args.series)
 			return res.err('noPermission');
 		if(!editor && args.author !== conn.session.userId)
@@ -117,8 +119,8 @@ exports.modify = function(conn, res, args){
 				});
 			});
 		};
-		if((args.status === 'published' || args.status === 'visible') && args.path) {
-			Post.findOne({path: args.path}).or([{status: 'published'}, {status: 'visible'}]).where('_id').ne(args._id).exec(function(err, r){
+		if((args.status === 'published' || args.status === 'visible' || args.status === 'special') && args.path) {
+			Post.findOne({path: args.path}).or([{status: 'published'}, {status: 'visible'}, {status: 'special'}]).where('_id').ne(args._id).exec(function(err, r){
 				if(err) return res.err('system');
 				if(r) return res.err('pathUsed');
 				next();
@@ -190,7 +192,7 @@ exports.read = function(conn, res, args){
 	});
 	if(args._id) delete args.path;
 	else delete args._id;
-	Post.findOne(args).or([{status: 'published'}, {status: 'visible'}]).where('time').lte(Math.floor(new Date().getTime() / 1000))
+	Post.findOne(args).or([{status: 'published'}, {status: 'visible'}, {status: 'special'}]).where('time').lte(Math.floor(new Date().getTime() / 1000))
 		.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 		.exec(function(err, r){
 			if(err || !r) return res.err('notFound');
