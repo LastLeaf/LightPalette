@@ -7,12 +7,8 @@
 				{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}
 				<div class="post_author">{{#if author}}<a fw href="/author/{{author._id}}">{{author.displayName}}</a>{{/if}}</div>
 				<div class="post_date">{{dateString}}</div>
-				<ul class="post_categories">{{#each category}}
-					<li><a fw href="/category/{{_id}}">{{title}}</a></li>
-				{{/each}}</ul>
-				<ul class="post_tags">{{#each tag}}
-					<li><a fw href="/tag/{{this}}">{{this}}</a></li>
-				{{/each}}</ul>
+				<ul class="post_categories">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul>
+				<ul class="post_tags">{{#each tag}}<li><a fw href="/tag/{{this}}">{{this}}</a></li>{{/each}}</ul>
 			</div>
 			<div class="post_body post_abstract">{{{abstract}}}</div>
 		</div>
@@ -30,12 +26,8 @@
 			{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}
 			<div class="post_author">{{#if author}}<a fw href="/author/{{author._id}}">{{author.displayName}}</a>{{/if}}</div>
 			<div class="post_date">{{dateString}}</div>
-			<ul class="post_categories">{{#each category}}
-				<li><a fw href="/category/{{_id}}">{{title}}</a></li>
-			{{/each}}</ul>
-			<ul class="post_tags">{{#each tag}}
-				<li><a fw href="/tag/{{this}}">{{this}}</a></li>
-			{{/each}}</ul>
+			<ul class="post_categories">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul>
+			<ul class="post_tags">{{#each tag}}<li><a fw href="/tag/{{this}}">{{this}}</a></li>{{/each}}</ul>
 		</div>
 		<div class="post_body">
 			<div class="post_content">{{{content}}}</div>

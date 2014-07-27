@@ -55,8 +55,15 @@ exports.post = function(conn, res, args){
 			if(err) return res.err('system');
 			Stat.count({post: args.post}).where('time').gt(fromTime).exec(function(err, visits){
 				if(err) return res.err('system');
-				Stat.distinct('sid').count({post: args.post}).where('time').gt(fromTime).exec(function(err, visitors){
-					if(err) return res.err('system');
+				Stat.aggregate()
+					.match({ post: fw.db.Types.ObjectId(args.post), time: { $gt: fromTime } })
+					.group({ _id: '$sid', visitsPerSid: { $sum: 1 } })
+					.append()
+					.group({ _id: null, count: { $sum: 1 } })
+				.exec(function(err, r){
+					if(err) return res.err('system', err);
+					if(r.length) var visitors = r[0].count;
+					else var visitors = 0;
 					Stat.find({post: args.post}).where('time').gt(fromTime).sort('-time').limit(args.count).skip(args.from).exec(function(err, r){
 						if(err) return res.err('system');
 						for(var i=0; i<r.length; i++)
