@@ -21,14 +21,20 @@ exports.create = function(conn, res, args){
 	if(!drivers[args.type]) return res.err('system');
 	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin){
 		if(!contributor) return res.err('noPermission');
-		if(drivers[args.type].permission === 'admin' && !admin) return res.err('noPermission');
-		if(drivers[args.type].permission === 'editor' && !editor) return res.err('noPermission');
-		if(drivers[args.type].permission === 'writer' && !writer) return res.err('noPermission');
-		new Post({
+		var postArgs = {
 			type: args.type,
 			author: conn.session.userId,
-			time: Math.floor(new Date().getTime() / 1000)
-		}).save(function(err, r){
+			time: Math.floor(new Date().getTime() / 1000),
+			driver: {}
+		};
+		var writePermission = drivers[args.type].writePermission;
+		if(typeof(writePermission) === 'function') {
+			writePermission = writePermission(postArgs);
+		}
+		if(writePermission === 'admin' && !admin) return res.err('noPermission');
+		if(writePermission === 'editor' && !editor) return res.err('noPermission');
+		if(writePermission === 'writer' && !writer) return res.err('noPermission');
+		new Post(postArgs).save(function(err, r){
 			if(err) return res.err('system', err);
 			res(r._id);
 		});
@@ -63,7 +69,7 @@ exports.modify = function(conn, res, args){
 	filtered.time = Math.floor(filtered.time / 1000);
 	delete filtered.timeString;
 	args = filtered;
-	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin){
+	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin, userType){
 		// check permission
 		if(!contributor) return res.err('noPermission');
 		if(!writer && (args.status !== 'draft' && args.status !== 'pending'))
@@ -89,9 +95,13 @@ exports.modify = function(conn, res, args){
 					var next = function(){
 						// call driver's filter
 						if(!drivers[r.type]) return res.err('system');
-						if(drivers[r.type].permission === 'admin' && !admin) return res.err('noPermission');
-						if(drivers[r.type].permission === 'editor' && !editor) return res.err('noPermission');
-						if(drivers[r.type].permission === 'writer' && !writer) return res.err('noPermission');
+						var writePermission = drivers[r.type].writePermission;
+						if(typeof(writePermission) === 'function') {
+							writePermission = writePermission(args);
+						}
+						if(writePermission === 'admin' && !admin) return res.err('noPermission');
+						if(writePermission === 'editor' && !editor) return res.err('noPermission');
+						if(writePermission === 'writer' && !writer) return res.err('noPermission');
 						drivers[r.type].writeFilter(args, function(err){
 							if(err) return res.err(err);
 							// save

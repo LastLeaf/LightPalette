@@ -19,13 +19,12 @@
 	Reveal.initialize({
 		controls: true,
 		progress: true,
+		slideNumber: true,
 		history: false,
 		center: true,
 		transition: 'default',
 		dependencies: [
 			{ src: '/~/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-			{ src: '/~/lib/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-			{ src: '/~/lib/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 			{ src: '/~/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
 		]
 	});
@@ -37,7 +36,8 @@
 	btn.style.width = '16px';
 	btn.style.height = '16px';
 	document.body.appendChild(btn);
-	document.body.ondblclick = btn.onclick = function(){
+	document.body.ondblclick = btn.onclick = function(e){
+		if(e.target.parentElement.className === 'controls') return;
 		document.toggleFullScreen();
 	};
 })();

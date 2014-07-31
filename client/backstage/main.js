@@ -70,6 +70,7 @@ fw.main(function(pg){
 					e.preventDefault();
 					lp.logout(function(){
 						location.href = '/backstage/home';
+						return false;
 					});
 				});
 		// raise an event to notify child pages

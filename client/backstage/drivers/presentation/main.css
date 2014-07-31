@@ -1,8 +1,11 @@
 /* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
 
+.presentation .driver_use_html {
+	color: #444;
+}
 .presentation .driver_abstract, .presentation .driver_content {
 	padding-right: 10px;
-	margin-bottom: 10px;
+	margin: 10px 0;
 }
 .presentation .driver_abstract textarea, .presentation .driver_content textarea {
 	width: 100%;
@@ -79,6 +82,9 @@
 }
 .presentation .driver_slide_table {
 	margin-right: 120px;
+	white-space: nowrap;
+	overflow: auto;
+	max-height: 360px;
 }
 .presentation .driver_slide_col {
 	display: inline-block;

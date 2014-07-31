@@ -51,12 +51,13 @@ fw.main(function(pg){
 	lp.logout = function(cb){
 		cb = cb || function(){};
 		pg.rpc('/backstage/user:logout', function(err){
-			if(err) cb(err);
-			else {
-				cb();
-				setTimeout(function(){
-					location.reload();
-				}, 0);
+			if(err) {
+				cb(err);
+			} else {
+				if(cb() !== false)
+					setTimeout(function(){
+						location.reload();
+					}, 0);
 			}
 		}, function(){
 			cb({timeout: true});

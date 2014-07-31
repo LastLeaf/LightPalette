@@ -8,6 +8,8 @@ fw.main(function(pg){
 		var contentDiv = document.createElement('div');
 		contentDiv.className = 'post_presentation_content';
 		div.parentElement.insertBefore(contentDiv, div);
+		div.parentElement.removeChild(div);
+		div.style.display = 'block';
 		var iframe = document.createElement('iframe');
 		iframe.style.display = 'block';
 		iframe.style.width = '100%';

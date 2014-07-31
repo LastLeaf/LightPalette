@@ -45,6 +45,7 @@ module.exports = function(model, cb){
 						a.push(false);
 					else
 						a.push(TYPEVAL[r.type] >= TYPEVAL[type[i]]);
+				a.push(type);
 				res.apply(global, a);
 			}
 		});

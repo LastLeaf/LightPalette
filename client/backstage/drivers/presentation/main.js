@@ -7,10 +7,13 @@ fw.main(function(pg){
 
 	lp.registerDriver('presentation', {
 		name: _('Presentation'),
-		priority: 5000,
-		editor: function(div, data){
+		priority: 6000,
+		editor: function(div, data, userInfo){
 
-			var $div = $(div).html(tmpl.presentation(data));
+			var $div = $(div).html(tmpl.presentation({
+				driver: data.driver,
+				admin: userInfo.type === 'admin'
+			}));
 
 			// table builder
 			var $table = $('.presentation .driver_slide_table');
@@ -27,7 +30,7 @@ fw.main(function(pg){
 					tableAddCol();
 				$table.children().each(function(k, v){
 					$(v).children()
-						.eq(0).text(k+1).end()
+						.eq(0).text(k).end()
 						.eq(1).text('').end();
 				});
 			};
@@ -41,7 +44,7 @@ fw.main(function(pg){
 					$newRow.appendTo($col);
 				$table.children().each(function(k, v){
 					$(v).children()
-						.eq(0).text(k+1).end()
+						.eq(0).text(k).end()
 						.eq(1).text('').end();
 				});
 				return $newRow;
@@ -97,11 +100,11 @@ fw.main(function(pg){
 			};
 			var tableHideSlide = function($row){
 				$row.removeClass('driver_slide_row-selected');
-				$($row[0].contentTextarea).hide();
+				if($row[0]) $($row[0].contentTextarea).hide();
 			};
 			var tableShowSlide = function($row){
 				$row.addClass('driver_slide_row-selected');
-				$($row[0].contentTextarea).show().focus();
+				if($row[0]) $($row[0].contentTextarea).show().focus();
 			};
 			var tableSaveSlide = function(){
 				content[curCol][curRow] = $slide.children().val();
@@ -213,6 +216,7 @@ fw.main(function(pg){
 					var abstract = $div.find('.driver_abstract textarea').val();
 					return {
 						driver: {
+							enableHtml: $('.presentation .driver_use_html input').prop('checked'),
 							abstract: abstract,
 							content: content
 						}

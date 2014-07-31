@@ -2,6 +2,17 @@
 'use strict';
 
 var sanitizeHtml = require('sanitize-html');
+var marked = require('marked');
+marked.setOptions({
+	renderer: new marked.Renderer(),
+	gfm: true,
+	tables: true,
+	breaks: false,
+	pedantic: false,
+	sanitize: true,
+	smartLists: true,
+	smartypants: false
+});
 
 // filter
 var styleFilter = function(tagName, attr){
@@ -35,7 +46,10 @@ var sanitizeOptions = {
 
 exports.writeFilter = function(args, cb){
 	args.content = sanitizeHtml(args.content, sanitizeOptions);
-	if(args.driver.abstractType === 'manualText') {
+	if(args.driver.abstractType === 'manualMarkdown') {
+		// generate abstract
+		args.abstract = marked(String(args.driver.abstract));
+	} else if(args.driver.abstractType === 'manualText') {
 		// generate abstract
 		var s = String(args.driver.abstract).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\r\n?/g, '\n').replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>');
 		args.abstract = '<p>' + s + '</p>';

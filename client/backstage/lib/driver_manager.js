@@ -32,8 +32,8 @@
 		if(drivers[id]) return drivers[id].name;
 		return '';
 	};
-	lp.driverEditor = function(id, div, data){
+	lp.driverEditor = function(id, div, data, userInfo){
 		if(drivers[id] && drivers[id].editor)
-			return drivers[id].editor(div, data);
+			return drivers[id].editor(div, data, userInfo);
 	};
 })();

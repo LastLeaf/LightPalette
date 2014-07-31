@@ -13,17 +13,22 @@ marked.setOptions({
 	smartypants: false
 });
 
+exports.writePermission = function(args){
+	if(args.driver.enableHtml) return 'admin';
+};
+
 exports.writeFilter = function(args, cb){
-	args.content = args.abstract = marked(escape(String(args.driver.abstract)));
+	marked.setOptions({sanitize: !args.driver.enableHtml});
+	args.content = args.abstract = marked(String(args.driver.abstract));
 	// convert content object to reveal.js structure
 	var content = args.driver.content;
 	if(!content || content.constructor !== Array) return cb('system');
-	var s = '<div class="reveal" id="driver-presentation"><div class="slides">';
+	var s = '<div class="reveal" id="driver-presentation" style="display:none"><div class="slides" id="driver-presentation-slides">';
 	for(var i=0; i<content.length; i++) {
 		if(!content[i] || content[i].constructor === Array) {
 			s += '<section>';
 			for(var j=0; j<content[i].length; j++)
-				s += '<section data-markdown><script type="text/template">' + String(content[i][j]) + '</script></section>';
+				s += '<section>' + marked(String(content[i][j])) + '</section>';
 			s += '</section>';
 		}
 	}

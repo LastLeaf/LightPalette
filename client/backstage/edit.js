@@ -6,6 +6,7 @@ var SERIES_LIST_LEN = 10;
 fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
+	var userInfo = null;
 
 	var initPage = function(post, extraData){
 
@@ -32,7 +33,7 @@ fw.main(function(pg){
 		});
 		// tags
 		$form.find('[name=tag]').val(post.tag.join('\r\n'));
-		var editor = lp.driverEditor(post.type, $content.find('.driver')[0], post);
+		var editor = lp.driverEditor(post.type, $content.find('.driver')[0], post, userInfo);
 
 		// series
 		var $series = $form.find('.sidebar_series');
@@ -123,7 +124,7 @@ fw.main(function(pg){
 
 	// get post information
 	var getInfo = function(){
-		var userInfo = pg.parent.parent.userInfo;
+		userInfo = pg.parent.parent.userInfo;
 		var next = function(authors){
 			// get category list
 			pg.rpc('post:get', {_id: fw.getArgs()['*'], 'originalTimeFormat': 'yes'}, function(r){
