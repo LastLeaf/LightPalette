@@ -2,7 +2,9 @@
 'use strict';
 
 fw.main(function(pg){
-	lp.initDriver('presentation', function(){
+	lp.initDriver('presentation', function(args){
+		var postId = args.id;
+
 		// init structure
 		var div = document.getElementById('driver-presentation');
 		var contentDiv = document.createElement('div');
@@ -64,7 +66,9 @@ fw.main(function(pg){
 		iframeCancelFullScreen();
 		iframe.contentWindow.document.open();
 		iframe.contentWindow.document.write(pg.tmpl.presentation(div.outerHTML));
-		iframe.contentWindow.document.toggleFullScreen = function(){
+		iframe.contentWindow.pg = fw.getPage();
+		iframe.contentWindow.postId = postId;
+		iframe.contentWindow.toggleFullScreen = function(){
 			if(iframeIsFullScreen())
 				iframeCancelFullScreen();
 			else

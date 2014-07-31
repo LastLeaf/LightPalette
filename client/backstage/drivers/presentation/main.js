@@ -21,7 +21,6 @@ fw.main(function(pg){
 			var tableDelRow = function(col, row){
 				var $col = $table.children().eq(col);
 				var $row = $col.children().eq(row);
-				$($row[0].contentTextarea).remove();
 				if($col.children().length <= 1)
 					$col.remove();
 				else
@@ -36,7 +35,6 @@ fw.main(function(pg){
 			};
 			var tableAddRow = function(col, row, data){
 				var $newRow = $('<div class="driver_slide_row"></div>');
-				$newRow[0].contentTextarea = $(tmpl.presentation_content(typeof(data) === 'undefined' ? content[col][row] : data)).appendTo($slide);
 				var $col = $table.children().eq(col);
 				if(typeof(row) !== 'undefined' && row < $col.children().length)
 					$newRow.insertBefore($col.children().eq(row));
@@ -100,11 +98,11 @@ fw.main(function(pg){
 			};
 			var tableHideSlide = function($row){
 				$row.removeClass('driver_slide_row-selected');
-				if($row[0]) $($row[0].contentTextarea).hide();
+				$slide.html('');
 			};
 			var tableShowSlide = function($row){
 				$row.addClass('driver_slide_row-selected');
-				if($row[0]) $($row[0].contentTextarea).show().focus();
+				$slide.html(tmpl.presentationContent(content[curCol][curRow]));
 			};
 			var tableSaveSlide = function(){
 				content[curCol][curRow] = $slide.children().val();
@@ -134,24 +132,28 @@ fw.main(function(pg){
 				tableAddCol(curCol, '');
 				content.splice(curCol, 0, ['']);
 				tableSelect(curCol, 0, curCol+1, curRow);
+				$slide.children().focus();
 			};
 			var slideAddRight = function(){
 				tableSaveSlide();
 				tableAddCol(curCol+1, '');
 				content.splice(curCol+1, 0, ['']);
 				tableSelect(curCol+1, 0, curCol, curRow);
+				$slide.children().focus();
 			};
 			var slideAddTop = function(){
 				tableSaveSlide();
 				tableAddRow(curCol, curRow, '');
 				content[curCol].splice(curRow, 0, '');
 				tableSelect(curCol, curRow, curCol, curRow+1);
+				$slide.children().focus();
 			};
 			var slideAddBottom = function(){
 				tableSaveSlide();
 				tableAddRow(curCol, curRow+1, '');
 				content[curCol].splice(curRow+1, 0, '');
 				tableSelect(curCol, curRow+1, curCol, curRow);
+				$slide.children().focus();
 			};
 			var slideDel = function(){
 				tableDelRow(curCol, curRow);
@@ -164,6 +166,7 @@ fw.main(function(pg){
 					content[curCol].splice(curRow, 1);
 				}
 				tableSelect(curCol, curRow);
+				$slide.children().focus();
 			};
 			$('.presentation .driver_slide_add-left').click(slideAddLeft);
 			$('.presentation .driver_slide_add-right').click(slideAddRight);
@@ -173,16 +176,24 @@ fw.main(function(pg){
 
 			// control key
 			var slideLeft = function(){
+				tableSaveSlide();
 				tableSelect(curCol-1, curRow);
+				$slide.children().focus();
 			};
 			var slideRight = function(){
+				tableSaveSlide();
 				tableSelect(curCol+1, curRow);
+				$slide.children().focus();
 			};
 			var slideTop = function(){
+				tableSaveSlide();
 				tableSelect(curCol, curRow-1);
+				$slide.children().focus();
 			};
 			var slideBottom = function(){
+				tableSaveSlide();
 				tableSelect(curCol, curRow+1);
+				$slide.children().focus();
 			};
 			$slide.on('keyup', 'textarea', function(e){
 				if(e.ctrlKey || e.metaKey) {

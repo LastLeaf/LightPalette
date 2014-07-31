@@ -27,7 +27,9 @@ fw.main(function(pg){
 		var post = document.getElementById('post_single');
 		if(post) {
 			// init driver for single post
-			lp.initDriver(post.getAttribute('post-type'));
+			lp.initDriver(post.getAttribute('post-type'), {
+				id: post.getAttribute('post-id')
+			});
 		}
 		pg.emit('contentLoaded');
 	});
