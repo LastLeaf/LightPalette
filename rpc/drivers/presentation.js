@@ -17,6 +17,7 @@ currentSlides.addReader = function(id, conn){
 	if(!currentSlides[id]) currentSlides.init(id);
 	currentSlides[id].readers.push(conn);
 	conn.on('close', function(){
+		if(!currentSlides[id]) return;
 		var readers = currentSlides[id].readers;
 		for(var i=0; i<readers.length; i++)
 			if(readers[i] === conn) {
