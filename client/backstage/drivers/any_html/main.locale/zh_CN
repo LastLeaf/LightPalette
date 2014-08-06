@@ -1,3 +1,11 @@
-[{},{
-	"Any HTML": "任意HTML"
-}]
+[
+	{
+		"<b>DANGEROUS</b> Do not edit unless you know what the contents mean to the website.": "<b>危险！</b> 不要编辑它，除非你知道这对于网站有怎样的潜在威胁。",
+		"Abstract": "摘要",
+		"Content": "内容"
+	},
+	{
+		"Any HTML": "任意HTML"
+	},
+	{}
+]

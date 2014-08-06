@@ -10,17 +10,17 @@
 			<div class="email"><a href="mailto:{{email}}">{{email}}</a></div>
 			{{#if url}}
 				<div class="url info">{{url}}</div>
-				<input type="text" class="url" name="url" value="{{url}}" placeholder="URL">
+				<input type="text" class="url" name="url" value="{{url}}" placeholder="`URL`">
 			{{else}}
 				<div class="url info">`(URL not set)`</div>
-				<input type="text" class="url" name="url" placeholder="URL">
+				<input type="text" class="url" name="url" placeholder="`URL`">
 			{{/if}}
 			{{#if description}}
 				<div class="description info">{{description}}</div>
-				<textarea id="description" class="description" name="description" placeholder="Short description...">{{description}}</textarea>
+				<textarea id="description" class="description" name="description" placeholder="`Short description...`">{{description}}</textarea>
 			{{else}}
 				<div class="description info">`(description not set)`</div>
-				<textarea id="description" class="description" name="description" placeholder="Short description..."></textarea>
+				<textarea id="description" class="description" name="description" placeholder="`Short description...`"></textarea>
 			{{/if}}
 			<input type="submit" class="submit" value="`Update`">
 		</form>
@@ -28,9 +28,9 @@
 		<form action="user" method="modifyPassword" class="user_password">
 			<input type="hidden" name="original">
 			<input type="hidden" name="password">
-			<input type="password" class="original" required placeholder="Original Password">
-			<input type="password" class="new" required placeholder="New Password">
-			<input type="password" class="newRe" required placeholder="Retype...">
+			<input type="password" class="original" required placeholder="`Original Password`">
+			<input type="password" class="new" required placeholder="`New Password`">
+			<input type="password" class="newRe" required placeholder="`Retype...`">
 			<input type="submit" class="submit" value="`Modify Password`">
 		</form>
 	</div>

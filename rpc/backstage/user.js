@@ -168,7 +168,7 @@ exports.modify = function(conn, res, args){
 		description: ''
 	});
 	if(args.displayName.length <= 0 || args.displayName.length > 32) return res.err('displayNameIllegal');
-	if(!args.url.match(/^https?:\/\//)) args.url = 'http://' + args.url;
+	if(args.url && !args.url.match(/^https?:\/\//)) args.url = 'http://' + args.url;
 	if(args.url.length > 1024) return res.err('urlIllegal');
 	if(args.description.length > 100) return res.err('descriptionIllegal');
 	// check login status

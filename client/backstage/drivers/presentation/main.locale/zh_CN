@@ -1,3 +1,12 @@
-[{},{
-	"Presentation": "演示"
-}]
+[
+	{
+		"Allow HTML Tags (<b>DANGEROUS</b> Do not check unless you know why it is dangerous.)": "允许HTML标签（<b>危险</b> 不要勾选此项，除非你知道会有怎样的潜在危险。）",
+		"Introduction (Markdown)": "简介（Markdown）",
+		"Delete": "删除",
+		"Slide Content (Markdown)": "本页内容（Markdown）"
+	},
+	{
+		"Presentation": "演示"
+	},
+	{}
+]

@@ -1,0 +1,16 @@
+[
+	{
+		"Visits in": "访问量",
+		"1 hour": "1小时",
+		"24 hours": "24小时",
+		"3 days": "3天",
+		"7 days": "7天",
+		"30 days": "30天",
+		"90 days": "90天",
+		"365 days": "365天",
+		"All History": "完整历史",
+		"{{visits}} Visits by Visitor ID {{id}}": "{{visits}} 次访问，来自用户ID {{id}}"
+	},
+	{},
+	{}
+]

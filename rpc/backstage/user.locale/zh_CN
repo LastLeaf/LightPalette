@@ -1,0 +1,13 @@
+[
+	{
+		"Thanks for registering on <i>{{siteTitle}}</i>. Your account details is listed below.": "感谢您在 <i>{{siteTitle}}</i> 上注册。您的账号信息如下。",
+		"Username: {{username}}<br>Email: {{email}}": "用户名： {{username}}<br>电子邮箱： {{email}}",
+		"You can login with the password you set before. The home page is <a href=\"http://{{{host}}}/\">http://{{host}}/</a> .": "您可以使用您已设置的密码来登录。主页地址是 <a href=\"http://{{{host}}}/\">http://{{host}}/</a> 。",
+		"If it is not your operation, you can disable this account by click the link below.": "如果这不是您的主动操作，您可以点击下面的链接来禁用这个账号。",
+		"This email is sent automatically. Please do not reply.": "本邮件是系统自动发送的，请不要直接回复。",
+		"You password on <i>{{siteTitle}}</i> has been reset. Your account details is listed below.": "您在 <i>{{siteTitle}}</i> 上的密码已经被重置。您的账号信息如下。",
+		"Please login with this password and set a new password. The home page is <a href=\"http://{{{host}}}/\">http://{{host}}/</a> .": "请使用这个密码登录并设置一个新的密码。主页地址是 <a href=\"http://{{{host}}}/\">http://{{host}}/</a> 。"
+	},
+	{},
+	{}
+]

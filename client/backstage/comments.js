@@ -19,8 +19,8 @@ fw.main(function(pg){
 		{ id: 'post.title', name: _('Post'), input: 'add' },
 		{ id: 'dateTimeString', name: _('Time'), input: 'add' },
 		{ id: 'blocked', name: _('Blocked'), input: {
-			'false': 'no',
-			'true': 'yes'
+			'false': _('no'),
+			'true': _('yes')
 		} },
 		{ id: 'content', type: 'extra', input: 'add' }
 	])

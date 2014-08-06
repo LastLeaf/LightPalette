@@ -1,3 +1,13 @@
-[{},{
-	"Article": "文章"
-}]
+[
+	{
+		"First Paragraph as Abstract": "将第一段作为摘要",
+		"Manual Abstract (Markdown)": "手动编写摘要（Markdown格式）",
+		"Manual Abstract (Pure Text)": "手动编写摘要（纯文本）",
+		"Manual Abstract (HTML)": "手动编写摘要（HTML）",
+		"Abstract...": "摘要……"
+	},
+	{
+		"Article": "文章"
+	},
+	{}
+]

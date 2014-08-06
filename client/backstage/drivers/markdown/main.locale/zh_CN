@@ -1,3 +1,11 @@
-[{},{
-	"Markdown Doc": "Markdown文档"
-}]
+[
+	{
+		"Allow HTML Tags (<b>DANGEROUS</b> Do not check unless you know why it is dangerous.)": "允许HTML标签（<b>危险</b> 不要勾选此项，除非你知道会有怎样的潜在危险。）",
+		"Abstract": "摘要",
+		"Content": "内容"
+	},
+	{
+		"Markdown Doc": "Markdown文档"
+	},
+	{}
+]
