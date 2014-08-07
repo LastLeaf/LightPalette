@@ -6,7 +6,7 @@
 	"repository": { "type": "git", "url": "https://github.com/LastLeaf/LightPalette.git" },
 	"License": "MIT",
 	"dependencies": {
-		"fw.mpa": ">=0.2.10",
+		"fw.mpa": ">=0.2.11",
 		"nodemailer": ">=0.6.5",
 		"pngjs": ">=0.4.0",
 		"sanitize-html": ">=1.1.7",

@@ -23,7 +23,7 @@ exports.writeFilter = function(args, cb){
 	// convert content object to reveal.js structure
 	var content = args.driver.content;
 	if(!content || content.constructor !== Array) return cb('system');
-	var s = '<div class="reveal" id="driver-presentation" style="display:none"><div class="slides" id="driver-presentation-slides">';
+	var s = '<div class="reveal" id="driver-presentation"><div class="slides" id="driver-presentation-slides">';
 	for(var i=0; i<content.length; i++) {
 		if(!content[i] || content[i].constructor === Array) {
 			s += '<section>';
