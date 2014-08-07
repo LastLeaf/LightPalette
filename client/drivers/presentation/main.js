@@ -11,6 +11,14 @@ fw.main(function(pg){
 		contentDiv.className = 'post_presentation_content';
 		div.parentElement.insertBefore(contentDiv, div);
 		div.parentElement.removeChild(div);
+
+		// set anchor _blank
+		var a = div.querySelectorAll('a');
+		for(var i=0; i<a.length; i++)
+			if(!a[i].getAttribute('target'))
+				a[i].setAttribute('target', '_blank');
+
+		// init iframe
 		var iframe = document.createElement('iframe');
 		iframe.style.display = 'block';
 		iframe.style.width = '100%';
