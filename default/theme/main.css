@@ -1,0 +1,109 @@
+a {
+	text-decoration: none;
+	color: #07a;
+}
+a:hover {
+	text-decoration: underline;
+}
+body {
+	margin: 0;
+	background: #444;
+}
+
+.header, .content, .footer{
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 10px;
+}
+.header {
+	padding-top: 0;
+}
+.content_wrapper {
+	background: #ddd;
+	box-shadow: 0 0 5px #ddd;
+}
+.content {
+	max-width: 700px;
+}
+
+.header a {
+	color: #bbb;
+}
+.title a {
+	color: #ddd;
+}
+.subtitle, .links {
+	margin: 10px 0 5px 0;
+}
+.title {
+	font-size: 2em;
+	margin: 20px 0;
+}
+.subtitle {
+	font-size: 1.5em;
+	font-weight: normal;
+}
+.links ul, .links li {
+	list-style: none;
+	margin: 0 0.5em 0 0;
+	padding: 0;
+	display: inline;
+}
+.footer {
+	color: #bbb;
+	font-size: 0.8em;
+}
+
+.post_item {
+	padding: 0.5em 0;
+	border-bottom: 1px solid #bbb;
+}
+.post_title {
+	font-size: 1.5em;
+	margin: 0.5em 0;
+}
+.post_head div, .post_head ul, .post_head li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+.post_head div, .post_head li {
+	margin-right: 0.5em;
+}
+.post_head {
+	font-size: 0.9em;
+	margin: 0.5em 0;
+	color: #888;
+}
+.post_head a {
+	color: #666;
+}
+.page {
+	padding: 1em 1em 0.5em;
+	height: 1em;
+}
+.page_prev {
+	float: left;
+}
+.page_next {
+	float: right;
+}
+
+.post_body h1 {
+	font-size: 1.5em;
+}
+.post_body h2 {
+	font-size: 1.35em;
+}
+.post_body h3 {
+	font-size: 1.2em;
+}
+.post_body table {
+	width: 100%;
+}
+.post_body td {
+	border: 1px solid #bbb;
+}
+.post_body p, .post_body ul, .post_body ol {
+	margin: 0.5em 0;
+}

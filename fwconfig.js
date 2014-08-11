@@ -20,11 +20,11 @@ if(fs.existsSync('config.js')) {
 if(fs.existsSync('rc/favicon.ico'))
 	var favicon = 'favicon.ico';
 else
-	var favicon = 'default_favicon.ico';
+	var favicon = '';
 if(fs.existsSync('rc/loading.gif'))
 	var loadingLogo = 'loading.gif';
 else
-	var loadingLogo = 'default_loading.gif';
+	var loadingLogo = '';
 
 // generate config
 module.exports = {

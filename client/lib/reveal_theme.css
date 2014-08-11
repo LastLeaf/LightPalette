@@ -1,5 +1,8 @@
 /* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
 
+body {
+	margin: 0;
+}
 .reveal {
 	font-size: 2em;
 }

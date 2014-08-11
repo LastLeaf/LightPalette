@@ -74,7 +74,7 @@ fw.main(function(pg){
 					});
 				});
 		// raise an event to notify child pages
-		pg.userInfo = info;
+		lp.backstage.userInfo = info;
 		pg.emit('userInfoReady');
 	}, lp.backstage.showError);
 });

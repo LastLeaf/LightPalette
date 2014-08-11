@@ -8,7 +8,7 @@ fw.main(function(pg){
 	var _ = tmpl.i18n;
 
 	var showPage = function(authorList){
-		var userInfo = pg.parent.userInfo;
+		var userInfo = lp.backstage.userInfo;
 
 		// init page structure
 		var $content = $('#content').html(tmpl.main());
@@ -64,7 +64,7 @@ fw.main(function(pg){
 	};
 
 	var getAuthorList = function(next){
-		if(pg.parent.userInfo.type === 'writer') {
+		if(lp.backstage.userInfo.type === 'writer') {
 			var obj = {};
 			obj[pg.parent.userInfo._id] = pg.parent.userInfo.displayName;
 			showPage(obj);
@@ -82,7 +82,7 @@ fw.main(function(pg){
 		});
 	};
 
-	if(pg.parent.userInfo) {
+	if(lp.backstage.userInfo) {
 		getAuthorList();
 	} else {
 		pg.parent.on('userInfoReady', getAuthorList);

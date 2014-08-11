@@ -80,29 +80,28 @@ var frontstage = exports.forestage = {
 };
 
 // get theme file list
-if(fs.existsSync('client/theme')) {
-	var files = fs.readdirSync('client/theme');
-	for(var i=0; i<files.length; i++) {
-		var file = files[i];
-		var ext = path.extname(file);
-		if(ext === '.js' && file.slice(-7) !== '.min.js') {
-			if(file === 'main.js')
-				frontstage.lib.src.push('theme/' + file);
-			else
-				frontstage.lib.src.unshift('theme/' + file);
-		}
-		if(ext === '.stylus' || (ext === '.css' && file.slice(-8) !== '.min.css')) {
-			if(file === 'main.css' || file === 'main.stylus')
-				frontstage.style.src.push('theme/' + file);
-			else
-				frontstage.style.src.unshift('theme/' + file);
-		}
-		if(ext === '.tmpl') {
-			if(file === 'main.tmpl')
-				frontstage.tmpl.src.push('theme/' + file);
-			else
-				frontstage.tmpl.src.unshift('theme/' + file);
-		}
+var files = fs.readdirSync('client/theme');
+var themeDir = 'theme/';
+for(var i=0; i<files.length; i++) {
+	var file = files[i];
+	var ext = path.extname(file);
+	if(ext === '.js' && file.slice(-7) !== '.min.js') {
+		if(file === 'main.js')
+			frontstage.lib.src.push(themeDir + file);
+		else
+			frontstage.lib.src.unshift(themeDir + file);
+	}
+	if(ext === '.stylus' || (ext === '.css' && file.slice(-8) !== '.min.css')) {
+		if(file === 'main.css' || file === 'main.stylus')
+			frontstage.style.src.push(themeDir + file);
+		else
+			frontstage.style.src.unshift(themeDir + file);
+	}
+	if(ext === '.tmpl') {
+		if(file === 'main.tmpl')
+			frontstage.tmpl.src.push(themeDir + file);
+		else
+			frontstage.tmpl.src.unshift(themeDir + file);
 	}
 }
 if(!frontstage.lib.src.length)

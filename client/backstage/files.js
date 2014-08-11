@@ -119,7 +119,7 @@ fw.main(function(pg){
 
 	// get author list
 	var getAuthors = function(next){
-		var userInfo = pg.parent.userInfo;
+		var userInfo = lp.backstage.userInfo;
 		// get author list
 		if(userInfo.type === 'editor' || userInfo.type === 'admin') {
 			pg.rpc('user:listAuthors', function(authors){
@@ -138,7 +138,7 @@ fw.main(function(pg){
 		}
 	};
 
-	if(pg.parent.userInfo) {
+	if(lp.backstage.userInfo) {
 		getAuthors();
 	} else {
 		pg.parent.on('userInfoReady', getAuthors);

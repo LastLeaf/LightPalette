@@ -9,7 +9,7 @@ fw.main(function(pg){
 
 	var showPage = function(){
 		if(pg.destroyed) return;
-		var userInfo = pg.parent.userInfo;
+		var userInfo = lp.backstage.userInfo;
 		if(!userInfo._id) return;
 
 		// init page structure
@@ -56,7 +56,7 @@ fw.main(function(pg){
 		});
 	};
 
-	if(pg.parent.userInfo) {
+	if(lp.backstage.userInfo) {
 		showPage();
 	} else {
 		pg.parent.on('userInfoReady', showPage);

@@ -124,7 +124,7 @@ fw.main(function(pg){
 
 	// get post information
 	var getInfo = function(){
-		userInfo = pg.parent.parent.userInfo;
+		userInfo = lp.backstage.userInfo;
 		var next = function(authors){
 			// get category list
 			pg.rpc('post:get', {_id: fw.getArgs()['*'], 'originalTimeFormat': 'yes'}, function(r){
@@ -155,7 +155,7 @@ fw.main(function(pg){
 		}
 	};
 
-	if(pg.parent.parent.userInfo) {
+	if(lp.backstage.userInfo) {
 		getInfo();
 	} else {
 		pg.parent.on('userInfoReady', getInfo);

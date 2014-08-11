@@ -6,9 +6,10 @@ fw.main(function(pg){
 
 	// read user info
 	var wrapper = document.getElementById('wrapper');
-	pg.userInfo = {
+	lp.userInfo = {
 		_id: wrapper.getAttribute('user-id'),
-		displayName: wrapper.getAttribute('user-displayName')
+		displayName: wrapper.getAttribute('user-displayName'),
+		type: wrapper.getAttribute('user-type')
 	};
 
 	pg.on('render', function(res){

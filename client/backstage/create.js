@@ -6,7 +6,7 @@ fw.main(function(pg){
 	var _ = tmpl.i18n;
 
 	var initPage = function(){
-		var userInfo = pg.parent.parent.userInfo;
+		var userInfo = lp.backstage.userInfo;
 		var $btns = $('#content').html(tmpl.main(lp.listDrivers(userInfo.type))).find('input');
 		$btns.click(function(){
 			var $this = $(this);
@@ -22,7 +22,7 @@ fw.main(function(pg){
 		});
 	};
 
-	if(pg.parent.parent.userInfo) {
+	if(lp.backstage.userInfo) {
 		initPage();
 	} else {
 		pg.parent.on('userInfoReady', initPage);
