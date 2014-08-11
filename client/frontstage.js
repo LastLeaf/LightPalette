@@ -13,6 +13,7 @@ fw.main(function(pg){
 	};
 
 	pg.on('render', function(res){
+		if(!res) return;
 		document.title = res.title;
 		document.getElementById('content').innerHTML = res.content;
 	});
@@ -28,7 +29,7 @@ fw.main(function(pg){
 		var post = document.getElementById('post_single');
 		if(post) {
 			// init driver for single post
-			lp.initDriver(post.getAttribute('post-type'), {
+			lp.drivers.init(post.getAttribute('post-type'), {
 				id: post.getAttribute('post-id')
 			});
 		}

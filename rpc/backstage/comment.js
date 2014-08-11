@@ -198,7 +198,7 @@ exports.list = function(conn, res, args){
 		from: 0,
 		count: 0
 	});
-	if(args.count > 50 || args.count < 0 || args.from < 0 || args.depth > 5 || args.depth < 0) return res.err('noPermission');
+	if(args.count > 50 || args.count < 0 || args.from < 0 || args.depth > 4 || args.depth < 0) return res.err('noPermission');
 	if(!args.root && !args.post) return res.err('notFound');
 	var doList = function(){
 		// count

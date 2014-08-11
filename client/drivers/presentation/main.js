@@ -2,7 +2,7 @@
 'use strict';
 
 fw.main(function(pg){
-	lp.initDriver('presentation', function(args){
+	lp.drivers.init('presentation', function(args){
 		var postId = args.id;
 
 		// init structure

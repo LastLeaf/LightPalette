@@ -10,9 +10,11 @@ fw.main(function(pg){
 
 	// forestage drivers
 	var drivers = {};
-	lp.initDriver = function(id, args){
-		if(typeof(args) === 'function') drivers[id] = args;
-		else if(drivers[id]) drivers[id](args);
+	lp.drivers = {
+		init: function(id, args){
+			if(typeof(args) === 'function') drivers[id] = args;
+			else if(drivers[id]) drivers[id](args);
+		}
 	};
 
 	// gravatar helper
@@ -23,44 +25,53 @@ fw.main(function(pg){
 	};
 	
 	// login/out helper
-	lp.register = function(id, password, email, cb){
+	lp.register = function(id, password, email, cb, errCb){
 		cb = cb || function(){};
-		pg.rpc('/backstage/user:register', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password), email: email }, function(err){
-			if(err) cb(err);
-			else {
-				cb();
-			}
-		}, function(){
-			cb({timeout: true});
-		});
+		pg.rpc('/backstage/user:register', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password), email: email }, cb, errCb);
 	};
-	lp.login = function(id, password, cb){
+	lp.login = function(id, password, cb, errCb){
 		cb = cb || function(){};
-		pg.rpc('/backstage/user:login', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password) }, function(err){
-			if(err) cb(err);
-			else {
-				cb();
+		pg.rpc('/backstage/user:login', { id: id, password: CryptoJS.SHA256(id.toLowerCase()+'|'+password) }, function(){
+			if(cb() !== false)
 				setTimeout(function(){
 					location.reload();
 				}, 0);
-			}
-		}, function(){
-			cb({timeout: true});
-		});
+		}, errCb);
 	};
-	lp.logout = function(cb){
+	lp.logout = function(cb, errCb){
 		cb = cb || function(){};
 		pg.rpc('/backstage/user:logout', function(err){
-			if(err) {
-				cb(err);
-			} else {
-				if(cb() !== false)
-					setTimeout(function(){
-						location.reload();
-					}, 0);
+			if(cb() !== false)
+				setTimeout(function(){
+					location.reload();
+				}, 0);
+		}, errCb);
+	};
+
+	// comments helper
+	lp.comments = {
+		list: function(postId, desc, cb, errCb){
+			if(typeof(desc) === 'undefined') {
+				errCb = cb;
+				cb = desc;
 			}
-		}, function(){
-			cb({timeout: true});
-		});
+			fw.getPage().rpc('/backstage/comment:list', {root: '', depth: 4, post: postId, desc: desc?'yes':''}, cb, errCb);
+		},
+		getReplies: function(commentId, desc, cb, errCb){
+			if(typeof(desc) === 'undefined') {
+				errCb = cb;
+				cb = desc;
+			}
+			fw.getPage().rpc('/backstage/comment:list', {root: commentId, depth: 4, post: postId, desc: desc?'yes':''}, cb, errCb);
+		},
+		add: function(args, cb, errCb){
+			fw.getPage().rpc('/backstage/comment:create', args, cb, errCb);
+		},
+		form: function(form, cb, errCb){
+			form.setAttribute('fw', '');
+			form.setAttribute('action', '/backstage/comment');
+			form.setAttribute('method', 'create');
+			fw.getPage().form(form, cb, errCb);
+		}
 	};
 });
