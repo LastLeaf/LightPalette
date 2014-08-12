@@ -9,9 +9,9 @@
 				<label class="comment_new_title">`New Comment by {{userInfo.displayName}}`</label>
 			{{else}}
 				<label class="comment_new_title">`New Comment`</label>
-				<div><label>`Name`</label><input type="text" name="displayName" value="{{displayName}}"></div>
-				<div><label>`Email`</label><input type="email" name="email" value="{{email}}"></div>
-				<div><label>`Website`</label><input type="text" name="url" value="{{url}}"></div>
+				<div><input type="text" name="displayName" value="{{displayName}}"><label>`Name`</label></div>
+				<div><input type="email" name="email" value="{{email}}"><label>`Email`</label></div>
+				<div><input type="text" name="url" value="{{url}}"><label>`Website`</label></div>
 			{{/if}}
 			<div class="comment_new_textarea"><textarea name="content"></textarea></div>
 			<div class="comment_error"></div>
