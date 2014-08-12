@@ -11,6 +11,9 @@ lp.theme = function(pg){
 		document.getElementById('content').innerHTML = '';
 	});
 	pg.on('contentLoaded', function(){
+		// not found
+		var notFound = document.querySelector('.post_not_found');
+		if(notFound) notFound.innerHTML = tmpl.notFound();
 		// single
 		var post = document.querySelector('.post_single');
 		if(post) {
@@ -40,7 +43,7 @@ lp.theme = function(pg){
 				resetForm();
 				reloadComments();
 			}, function(err){
-				comment.querySelector('.comment_error').innerHTML = tmpl.commentError[err || ''];
+				comment.querySelector('.comment_error').innerHTML = tmpl.commentError[err] || tmpl.commentError.system;
 				comment.querySelector('.submit').disabled = false;
 			});
 			post.appendChild(comment);

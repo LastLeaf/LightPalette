@@ -10,6 +10,11 @@
 		"365 days": "365天",
 		"All History": "完整历史"
 	},
-	{},
+	{
+		"Title": "标题",
+		"Author": "作者",
+		"Publish Time": "发布时间",
+		"Visits": "访问次数"
+	},
 	{}
 ]

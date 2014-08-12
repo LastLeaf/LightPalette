@@ -1,0 +1,25 @@
+[
+	{
+		"Comments": "评论",
+		"Loading...": "正在加载……",
+		"New Comment by {{userInfo.displayName}}": "来自 {{userInfo.displayName}} 的新评论",
+		"New Comment": "发表新评论",
+		"Name": "名字",
+		"Email": "电子邮箱",
+		"Website": "网站",
+		"Email Notify when Replied": "收到回复时，向我发送邮件提醒",
+		"Submit": "提交",
+		"Cancel": "取消",
+		"Reply": "回复",
+		"You are not allowed to comment here.": "你不能在这里发表评论。",
+		"Your name should contain 4 to 32 characters, including letters, numbers, underscores and hyphens.": "名字必须由4至32个字母、数字、下划线（_）或减号（-）字符组成。",
+		"The email address is not correct.": "电子邮件地址不正确。",
+		"The website URL is not correct.": "网址不正确。",
+		"The content is empty or too long.": "内容为空，或者太长了。",
+		"Sorry, an error occurred.": "对不起，出错了。",
+		"Timed out. Please check your network": "请求超时，请检查网络连接状况。",
+		"Sorry, no related content was found.": "不好意思，没有找到相关内容。"
+	},
+	{},
+	{}
+]

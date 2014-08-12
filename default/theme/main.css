@@ -24,6 +24,7 @@ body {
 }
 .content {
 	max-width: 700px;
+	min-height: 400px;
 }
 
 .header a {
@@ -54,6 +55,9 @@ body {
 	font-size: 0.8em;
 }
 
+.post_not_found {
+	color: #666;
+}
 .post_item {
 	padding: 0.5em 0;
 	border-bottom: 1px solid #bbb;
@@ -106,4 +110,81 @@ body {
 }
 .post_body p, .post_body ul, .post_body ol {
 	margin: 0.5em 0;
+}
+.post_presentation_content {
+	box-shadow: 0 0 10px #444;
+	margin: 10px 0;
+}
+
+.comment {
+	margin: 20px 0;
+	border-top: 1px solid #444;
+}
+.comment_title {
+	font-size: 1.3em;
+	margin: 0.5em 0;
+	color: #666
+}
+.comment_list {
+	margin: 0.5em 0;
+}
+.comment_list li {
+	margin: 0.5em 0;
+}
+.comment_head {
+	color: #888;
+}
+.comment_time {
+	font-size: 0.85em;
+}
+.comment_body {
+	margin: 0.2em 0;
+}
+.comment_reply {
+	font-size: 0.9em;
+}
+.comment_reply a {
+	color: #888;
+}
+.comment_new {
+	border: 1px solid #888;
+	padding: 10px;
+	margin: 10px 0;
+}
+.comment_new div {
+	margin: 0.2em 0;
+}
+.comment_new label {
+	display: inline-block;
+	min-width: 10em;
+	text-align: center;
+	color: #666;
+}
+.comment_new .comment_new_title {
+	padding: 0.5em 0;
+	font-size: 1.2em;
+	display: block;
+	text-align: left;
+}
+.comment_new textarea {
+	box-sizing: border-box;
+	width: 100%;
+}
+.comment_new_buttons {
+	text-align: right;
+}
+.comment_notify {
+	float: left;
+}
+.comment_new_buttons .submit {
+	font-size: 1em;
+	padding: 0.2em 1.5em;
+}
+.comment_new_buttons .button {
+	font-size: 1em;
+	padding: 0.2em 0.5em;
+}
+.comment_error {
+	color: red;
+	text-align: center;
 }

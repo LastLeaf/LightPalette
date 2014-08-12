@@ -51,27 +51,29 @@ fw.main(function(pg){
 	// comments helper
 	lp.comments = {
 		list: function(postId, desc, cb, errCb){
-			if(typeof(desc) === 'undefined') {
+			if(typeof(desc) === 'function') {
 				errCb = cb;
 				cb = desc;
+				desc = null;
 			}
 			fw.getPage().rpc('/backstage/comment:list', {root: '', depth: 4, post: postId, desc: desc?'yes':''}, cb, errCb);
 		},
 		getReplies: function(commentId, desc, cb, errCb){
-			if(typeof(desc) === 'undefined') {
+			if(typeof(desc) === 'function') {
 				errCb = cb;
 				cb = desc;
+				desc = null;
 			}
 			fw.getPage().rpc('/backstage/comment:list', {root: commentId, depth: 4, post: postId, desc: desc?'yes':''}, cb, errCb);
 		},
 		add: function(args, cb, errCb){
 			fw.getPage().rpc('/backstage/comment:create', args, cb, errCb);
 		},
-		form: function(form, cb, errCb){
+		form: function(form, submitCb, cb, errCb){
 			form.setAttribute('fw', '');
 			form.setAttribute('action', '/backstage/comment');
 			form.setAttribute('method', 'create');
-			fw.getPage().form(form, cb, errCb);
+			fw.getPage().form(form, submitCb, cb, errCb);
 		}
 	};
 });

@@ -11,6 +11,10 @@
 		"All History": "完整历史",
 		"{{visits}} Visits from {{visitors}} Visitors": "来自 {{visitors}} 访问者的 {{visits}} 次访问"
 	},
-	{},
+	{
+		"Time": "时间",
+		"IP Address": "IP地址",
+		"Visitor ID": "访客ID"
+	},
 	{}
 ]

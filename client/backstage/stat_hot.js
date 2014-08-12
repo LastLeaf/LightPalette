@@ -31,7 +31,7 @@ fw.main(function(pg){
 		var table = lp.tableBuilder($table, {idCol: '_id', editMore: true, noRemove: true}, [
 			{ id: 'post.title', name: _('Title'), input: 'add' },
 			{ id: 'post.author.displayName', name: _('Author'), input: 'add' },
-			{ id: 'post.dateTimeString', name: _('Time'), input: 'add' },
+			{ id: 'post.dateTimeString', name: _('Publish Time'), input: 'add' },
 			{ id: 'visits', name: _('Visits'), input: 'add' },
 			{ id: 'extra', type: 'extra', input: 'add' }
 		])

@@ -6,7 +6,7 @@
 			<input type="hidden" name="post" value="{{postId}}">
 			<input type="hidden" name="responseTo">
 			{{#if userInfo._id}}
-				<label class="comment_new_title">`{{userInfo.displayName}} Says:`</label>
+				<label class="comment_new_title">`New Comment by {{userInfo.displayName}}`</label>
 			{{else}}
 				<label class="comment_new_title">`New Comment`</label>
 				<div><label>`Name`</label><input type="text" name="displayName" value="{{displayName}}"></div>
@@ -37,6 +37,11 @@
 	"usernameIllegal": "`Your name should contain 4 to 32 characters, including letters, numbers, underscores and hyphens.`",
 	"emailIllegal": "`The email address is not correct.`",
 	"urlIllegal": "`The website URL is not correct.`",
-	"contentIllegal": "`The content is too long.`",
-	"": "`Sorry, an error occurred.`"
+	"contentIllegal": "`The content is empty or too long.`",
+	"system": "`Sorry, an error occurred.`",
+	"": "`Timed out. Please check your network`"
 }</json>
+
+<tmpl id="notFound">
+	`Sorry, no related content was found.`
+</tmpl>
