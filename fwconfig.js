@@ -16,6 +16,10 @@ if(fs.existsSync('config.js')) {
 	});
 }
 
+// check non-existed dirs
+if(!fs.existsSync('static'))
+	fs.mkdirSync('static');
+
 // check favicon.ico and logo.gif
 if(fs.existsSync('rc/favicon.ico'))
 	var favicon = 'favicon.ico';
