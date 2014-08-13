@@ -117,8 +117,8 @@ exports.create = function(conn, res, args){
 	} else {
 		if(args.displayName.length <= 0 || args.displayName.length > 32) return res.err('usernameIllegal');
 		if(args.email && (args.email.length > 64 || !args.email.match(EMAIL_REGEXP))) return res.err('emailIllegal');
-		if(args.email && !args.url.match(/^https?:\/\//)) args.url = 'http://' + args.url;
-		if(args.email && args.url.length > 1024) return res.err('urlIllegal');
+		if(args.url && !args.url.match(/^https?:\/\//)) args.url = 'http://' + args.url;
+		if(args.url.length > 1024) return res.err('urlIllegal');
 		next();
 	}
 };
