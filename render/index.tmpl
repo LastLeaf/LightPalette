@@ -10,7 +10,7 @@
 				<ul class="post_categories">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul>
 				<ul class="post_tags">{{#each tag}}<li><a fw href="/tag/{{this}}">{{this}}</a></li>{{/each}}</ul>
 			</div>
-			<div class="post_body post_abstract">{{{abstract}}}</div>
+			<div class="post_body post_abstract mathjax">{{{abstract}}}</div>
 		</div>
 	{{/each}}</div>
 	<div class="page">
@@ -29,7 +29,7 @@
 			<ul class="post_categories">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul>
 			<ul class="post_tags">{{#each tag}}<li><a fw href="/tag/{{this}}">{{this}}</a></li>{{/each}}</ul>
 		</div>
-		<div class="post_body">
+		<div class="post_body mathjax">
 			<div class="post_content">{{{content}}}</div>
 			<div class="post_extra">{{{extra}}}</div>
 		</div>

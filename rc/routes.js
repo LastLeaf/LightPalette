@@ -7,9 +7,10 @@ var path = require('path');
 var site = fw.module('db_model').Site;
 
 exports.global = {
-	lib: [
-		'/lib/crypto'
-	],
+	lib: [{
+		src: [ '/lib/crypto.min', '/lib/mathjax_config'],
+		minify: '/lib/global.js'
+	}, '/lib/mathjax/MathJax.js'],
 	main: 'global',
 };
 
