@@ -26,7 +26,9 @@ module.exports = function(conn, args, childRes, next){
 					userInfo: userInfo
 				});
 				childRes.content = content;
-				childRes.extraHead = '<link rel="alternate" type="application/rss+xml" href="/feed" title="' + childRes.siteInfo.siteTitle + '">';
+				childRes.extraHead = tmpl(conn).extraHead({
+					title: childRes.siteInfo.siteTitle
+				});
 				delete childRes.siteInfo;
 				next(childRes);
 			});
