@@ -206,6 +206,7 @@ exports.read = function(conn, res, args){
 		.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
 		.exec(function(err, r){
 			if(err || !r) return res.err('notFound');
+			if(r.status !== 'published' && r.path !== args.path) return res.err('notFound');
 			r.dateString = dateString.date(r.time*1000);
 			r.dateTimeString = dateString.dateTime(r.time*1000);
 			if(!drivers[r.type]) return res.err('system');

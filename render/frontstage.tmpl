@@ -5,7 +5,7 @@
 				<h1 class="title"><a fw href="/">{{title}}</a></h1>
 				<h2 class="subtitle"><a fw href="/">{{subtitle}}</a></h2>
 				<div class="links">
-					<ul class="category">{{#each category}}<li><a fw href="/category/{{this._id}}">{{this.title}}</a></li>{{/each}}</ul><ul class="special">{{#each special}}<li><a fw href="/{{#if this.path}}{{this.path}}{{else}}post/{{this._id}}{{/if}}">{{this.title}}</a></li>{{/each}}</ul>
+					<ul class="category">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul><ul class="special">{{#each special}}<li><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></li>{{/each}}</ul>
 				</div>
 			</div>
 		</div>

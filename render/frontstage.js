@@ -14,7 +14,7 @@ module.exports = function(conn, args, childRes, next){
 		if(err || !userInfo) userInfo = {};
 		Category.find().select('_id title').sort('_id').exec(function(err, category){
 			if(err || !category) category = [];
-			Post.find({status: 'special'}).select('_id title').sort('time').exec(function(err, special){
+			Post.find({status: 'special'}).select('_id path title').sort('time').exec(function(err, special){
 				if(err || !special) special = {};
 				var content = tmpl(conn).main({
 					title: childRes.siteInfo.siteTitle,
@@ -25,8 +25,9 @@ module.exports = function(conn, args, childRes, next){
 					content: childRes.content,
 					userInfo: userInfo
 				});
-				delete childRes.siteInfo;
 				childRes.content = content;
+				childRes.extraHead = '<link rel="alternate" type="application/rss+xml" href="/feed" title="' + childRes.siteInfo.siteTitle + '">';
+				delete childRes.siteInfo;
 				next(childRes);
 			});
 		});

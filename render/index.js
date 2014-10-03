@@ -131,6 +131,7 @@ module.exports = function(conn, args, childRes, next){
 			var title = query;
 			if(type === '404') {
 				childRes.content = tmpl(conn).notFound();
+				childRes.statusCode = 404;
 			} else if(type === 'post') {
 				childRes.content = tmpl(conn).single(data);
 				if(title) childRes.title = title + ' | ' + childRes.title;
