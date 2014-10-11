@@ -215,7 +215,7 @@ exports.read = function(conn, res, args){
 				res(r);
 				// add to stat
 				var time = Math.floor(new Date().getTime() / 1000);
-				new Stat({post: r._id, time: time, sid: conn.session.id, ip: conn.ip }).save();
+				new Stat({post: r._id, time: time, sid: conn.session.id, ip: conn.ips.concat(conn.ip).join(' ') }).save();
 				if(!conn.session.userAgent) {
 					conn.session.userAgent = conn.headers['user-agent'];
 					conn.session.save();
