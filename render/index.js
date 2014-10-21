@@ -19,9 +19,9 @@ var sitePathParser = function(conn, path, cb){
 			count: LIST_LEN
 		};
 		conn.rpc('/backstage/post:list', q, function(r){
-			cb('index', '', 0, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
+			cb('index', '', '', 0, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 		}, function(err){
-			cb('index', '', 0, Math.ceil(r.total/LIST_LEN) || 0, []);
+			cb('index', '', '', 0, Math.ceil(r.total/LIST_LEN) || 0, []);
 		});
 		return;
 	}
@@ -90,7 +90,7 @@ var sitePathParser = function(conn, path, cb){
 		} else if(type === 'post') {
 			conn.rpc('/backstage/post:read', {_id: query}, function(r){
 				if(!r) cb('404');
-				else cb('post', r.title, 0, 0, r);
+				else cb('post', r.title, r.title, 0, 0, r);
 			}, function(err){
 				cb('404');
 			});
@@ -118,7 +118,7 @@ var sitePathParser = function(conn, path, cb){
 	// path
 	conn.rpc('/backstage/post:read', {path: decodeURI(path)}, function(r){
 		if(!r) guess();
-		else cb('post', r.title, 0, 0, r);
+		else cb('post', r.title, r.title, 0, 0, r);
 	}, guess);
 };
 
