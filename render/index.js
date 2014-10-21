@@ -42,7 +42,7 @@ var sitePathParser = function(conn, path, cb){
 			}
 			// get query name
 			var queryNameGot = function(queryName){
-				cb(type, queryName, page, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
+				cb(type, query, queryName, page, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 			};
 			if(type === 'author') {
 				User.findOne({_id: query}).select('displayName').exec(function(err, r){
@@ -127,10 +127,10 @@ module.exports = function(conn, args, childRes, next){
 		if(err || !r) r = {};
 		childRes.siteInfo = r;
 		childRes.title = r.siteTitle || fw.config.app.title;
-		sitePathParser(conn, args['*'], function(type, query, page, totalPages, data){
+		sitePathParser(conn, args['*'], function(type, query, queryName, page, totalPages, data){
 			var title = query;
 			if(type === '404') {
-				childRes.content = tmpl(conn).notFound();
+				childRes.content = tmpl(conn).notFound({ query: query, queryName: queryName });
 				childRes.statusCode = 404;
 			} else if(type === 'post') {
 				childRes.content = tmpl(conn).single(data);
@@ -140,6 +140,7 @@ module.exports = function(conn, args, childRes, next){
 					rows: data,
 					type: type,
 					query: query,
+					queryName: queryName,
 					pagePrev: page,
 					pageNext: (page+2 > totalPages ? 0 : page+2),
 				});
