@@ -11,7 +11,7 @@
 		"nodemailer-smtp-transport": "~0.1.12",
 		"pngjs": "~0.4.0",
 		"sanitize-html": "~1.1.7",
-		"timezone": "~0.0.32",
+		"timezone": "0.0.32",
 		"rss": "~0.3.2",
 		"multiparty": "~3.2.9",
 		"mv": "~2.0.0",
