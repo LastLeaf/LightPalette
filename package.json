@@ -1,12 +1,12 @@
 {
 	"name": "lightpalette",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": { "node": ">=0.10.0" },
 	"homepage": "https://github.com/LastLeaf/LightPalette",
 	"repository": { "type": "git", "url": "https://github.com/LastLeaf/LightPalette.git" },
 	"License": "MIT",
 	"dependencies": {
-		"fw.mpa": "~0.2.16",
+		"fw.mpa": "~0.2.17",
 		"nodemailer": "~1.3.0",
 		"nodemailer-smtp-transport": "~0.1.12",
 		"pngjs": "~0.4.0",

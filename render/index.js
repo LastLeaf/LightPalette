@@ -19,9 +19,9 @@ var sitePathParser = function(conn, path, cb){
 			count: LIST_LEN
 		};
 		conn.rpc('/backstage/post:list', q, function(r){
-			cb('index', '', 0, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
+			cb('index', '', '', 0, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 		}, function(err){
-			cb('index', '', 0, Math.ceil(r.total/LIST_LEN) || 0, []);
+			cb('index', '', '', 0, Math.ceil(r.total/LIST_LEN) || 0, []);
 		});
 		return;
 	}
@@ -42,7 +42,7 @@ var sitePathParser = function(conn, path, cb){
 			}
 			// get query name
 			var queryNameGot = function(queryName){
-				cb(type, queryName, page, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
+				cb(type, query, queryName, page, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 			};
 			if(type === 'author') {
 				User.findOne({_id: query}).select('displayName').exec(function(err, r){
@@ -90,7 +90,7 @@ var sitePathParser = function(conn, path, cb){
 		} else if(type === 'post') {
 			conn.rpc('/backstage/post:read', {_id: query}, function(r){
 				if(!r) cb('404');
-				else cb('post', r.title, 0, 0, r);
+				else cb('post', r.title, r.title, 0, 0, r);
 			}, function(err){
 				cb('404');
 			});
@@ -118,7 +118,7 @@ var sitePathParser = function(conn, path, cb){
 	// path
 	conn.rpc('/backstage/post:read', {path: decodeURI(path)}, function(r){
 		if(!r) guess();
-		else cb('post', r.title, 0, 0, r);
+		else cb('post', r.title, r.title, 0, 0, r);
 	}, guess);
 };
 
@@ -127,10 +127,10 @@ module.exports = function(conn, args, childRes, next){
 		if(err || !r) r = {};
 		childRes.siteInfo = r;
 		childRes.title = r.siteTitle || fw.config.app.title;
-		sitePathParser(conn, args['*'], function(type, query, page, totalPages, data){
+		sitePathParser(conn, args['*'], function(type, query, queryName, page, totalPages, data){
 			var title = query;
 			if(type === '404') {
-				childRes.content = tmpl(conn).notFound();
+				childRes.content = tmpl(conn).notFound({ query: query, queryName: queryName });
 				childRes.statusCode = 404;
 			} else if(type === 'post') {
 				childRes.content = tmpl(conn).single(data);
@@ -140,6 +140,7 @@ module.exports = function(conn, args, childRes, next){
 					rows: data,
 					type: type,
 					query: query,
+					queryName: queryName,
 					pagePrev: page,
 					pageNext: (page+2 > totalPages ? 0 : page+2),
 				});

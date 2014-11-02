@@ -42,7 +42,7 @@ module.exports = function(req, res){
 				var finished = function(){
 					c--;
 					if(c) return;
-					if(lastErr) return res.send(500, lastErr);
+					if(lastErr) return res.status(500).send(tmpl(req.conn).main());
 					res.send(tmpl(req.conn).main());
 				};
 				while(files.length) {

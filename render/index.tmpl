@@ -1,5 +1,5 @@
 <tmpl id="list">
-	{{#if query}}<div class="query query-{{type}}">{{query}}</div>{{/if}}
+	{{#if query}}<div class="query query-{{type}}">{{queryName}}</div>{{/if}}
 	<div id="post_list" class="post_list">{{#each rows}}
 		<div class="post_item post_{{type}}" post-id="{{_id}}" post-type="{{type}}">
 			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
@@ -37,6 +37,6 @@
 </tmpl>
 
 <tmpl id="notFound">
-	{{#if query}}<div class="query query-{{type}}">{{query}}</div>{{/if}}
+	{{#if query}}<div class="query query-{{type}}">{{queryName}}</div>{{/if}}
 	<div id="post_not_found" class="post_not_found"></div>
 </tmpl>

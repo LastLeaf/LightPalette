@@ -66,7 +66,7 @@ fw.main(function(pg){
 	var getAuthorList = function(next){
 		if(lp.backstage.userInfo.type === 'writer') {
 			var obj = {};
-			obj[pg.parent.userInfo._id] = pg.parent.userInfo.displayName;
+			obj[lp.backstage.userInfo._id] = lp.backstage.userInfo.displayName;
 			showPage(obj);
 			return;
 		}
