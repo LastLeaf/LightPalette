@@ -1,0 +1,69 @@
+<tmpl id="main">
+	<div class="edit">
+		<form action="post" method="modify" class="editor">
+			<div class="editor_header">
+				<input type="button" class="editor_save" value="`Save`">
+				<div class="editor_title">
+					<input type="text" name="title" placeholder="`Title`">
+				</div>
+			</div>
+			<div class="sidebar">
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Basic Configuration`</div>
+					<input type="text" name="path" placeholder="A shortcut URL...">
+					<div class="sidebar_row">
+						{{#if edit}}`Author` <select name="author">{{#each authors}}
+							<option value="{{_id}}">{{displayName}}</option>
+						{{/each}}</select>{{/if}}
+					</div>
+					<div class="sidebar_row">
+						`Status` <select name="status">
+							<option value="draft">`draft`</option>
+							<option value="pending">`pending`</option>
+							{{#if write}}<option value="published">`published`</option>{{/if}}
+							{{#if write}}<option value="visible">`visible via link`</option>{{/if}}
+							{{#if edit}}<option value="special">`special page`</option>{{/if}}
+						</select>
+						<input type="button" class="editor_preview button" value="`Preview`">
+					</div>
+					<input type="text" name="timeString" placeholder="`Publish Time XXXX-XX-XX XX:XX:XX`">
+				</div>
+				{{#if write}}<div class="sidebar_item">
+					<div class="sidebar_title">`Series`</div>
+					<input type="hidden" name="series" value="">
+					<select class="sidebar_series">
+						<option value="none">`(Not in Any Series)`</option>
+						<option value="select">`(Select a Series)`</option>
+					</select>
+					<div class="form_row sidebar_series_select"></div>
+				</div>{{/if}}
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Categories`</div>
+					<div class="sidebar_category_list">{{#each categories}}
+						<div>
+							<input type="checkbox" name="category[]" value="{{_id}}" id="sidebar_category_{{_id}}" class="checkbox">
+							<label for="sidebar_category_{{_id}}">{{title}}</label>
+						</div>
+					{{/each}}</div>
+				</div>
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Tags`</div>
+					<textarea name="tag" rows="5" placeholder="`(one per line)`"></textarea>
+				</div>
+			</div>
+			<div class="editor_main">
+				<div class="driver"></div>
+			</div>
+		</form>
+	</div>
+</tmpl>
+
+<tmpl id="seriesSelect">
+	<div class="sidebar_series_list">{{#each rows}}
+		<div><input type="radio" name="seriesRadio" value="{{_id}}" id="sidebar_series_item_{{_id}}" class="radio"> <label for="sidebar_series_item_{{_id}}">{{title}}</label></div>
+	{{/each}}</div>
+	<div class="sidebar_row">
+		{{#if prev}}<input type="button" class="button sidebar_series_prev" value="&lt;">{{/if}}
+		{{#if next}}<input type="button" class="button sidebar_series_next" value="&gt;">{{/if}}
+	</div>
+</tmpl>

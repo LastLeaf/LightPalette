@@ -2,7 +2,7 @@
 	"title":          "THE SITE'S DEFAULT TITLE",
 	"version":        "LEAVE EMPTY IF YOU ARE NOT SURE",
 	"locale":         [],
-	"host":           "localhost",
+	"ip":             "localhost",
 	"port":           1180,
 	"dbHost":         "localhost",
 	"dbPort":         27017,

@@ -1,0 +1,16 @@
+<tmpl id="article">
+	<div class="article">
+		<div class="driver_content">
+			<textarea id="{{tinymceId}}" name="content">{{content}}</textarea>
+		</div>
+		<div class="driver_abstract">
+			<select class="driver_abstract_enable" name="abstractType">
+				<option value="auto">`First Paragraph as Abstract`</option>
+				<option value="manualMarkdown">`Manual Abstract (Markdown)`</option>
+				<option value="manualText">`Manual Abstract (Pure Text)`</option>
+				<option value="manualHtml">`Manual Abstract (HTML)`</option>
+			</select>
+			<textarea class="driver_abstract_manual" name="abstractManual" placeholder="`Abstract...`">{{abstractManual}}</textarea>
+		</div>
+	</div>
+</tmpl>

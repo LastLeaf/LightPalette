@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>LightPalette</title>
+	<link href="fw/favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body>
+	<div fw style="position:fixed;z-index:10000;left:0;right:0;top:0;bottom:0;background:#fff;display:none">
+		<img src="fw/loading.gif" alt="" style="display:block;position:absolute;left:0;right:0;top:0;bottom:0;margin:auto">
+	</div>
+	<script fw type="text/javascript">
+		window.fw = { mode:'app', debug:0, version:'1412342570492', timeout:'20000', language:'zh_CN', cacheServer:'', workingServer:''.match(/\S+/g) };
+		for(fw._logo=document.body.childNodes[0]; fw._logo; fw._logo=fw._logo.nextSibling)
+			if(fw._logo.getAttribute && fw._logo.getAttribute('fw') === '') break;
+		if(fw._logo) fw._logo.style.display = 'block';
+	</script>
+	<script fw type="text/javascript" src="fw/init.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+fw._tmpls({i18n:{Title:"标题","Short Name":"短名字","Main Author":"主要作者"},main:function(i,e,n,t,r){return this.compilerInfo=[4,">= 1.0.0"],n=this.merge(n,i.helpers),r=r||{},'\n	<div class="table"></div>\n'}});
