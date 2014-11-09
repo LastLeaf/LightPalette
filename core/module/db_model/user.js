@@ -13,9 +13,9 @@ var TYPEVAL = {
 	disabled: -1
 };
 
-module.exports = function(model, cb){
+module.exports = function(app, model, cb){
 	// define schema
-	var Schema = fw.db.Schema;
+	var Schema = app.db.Schema;
 	var schemaObj = {
 		_id: { type: String, index: { unique: true } },
 		type: { type: String, index: true, enum: [
@@ -55,7 +55,7 @@ module.exports = function(model, cb){
 	};
 
 	// create models
-	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);
+	var col = app.db.model(app.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
 	col.ensureIndexes(cb);
 };

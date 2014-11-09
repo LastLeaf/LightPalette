@@ -1,7 +1,7 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-module.exports = function(next){
+module.exports = function(app, next){
 	// formFilter: filter args to match pattern, including the data type, pattern value as default.
 	next(function(args, pattern){
 		var res = {};

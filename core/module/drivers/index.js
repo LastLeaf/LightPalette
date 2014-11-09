@@ -6,7 +6,7 @@ var path = require('path');
 
 var drivers = {};
 
-module.exports = function(next){
+module.exports = function(app, next){
 	fs.readdir(__dirname, function(err, files){
 		while(!err && files.length) {
 			var file = files.shift();

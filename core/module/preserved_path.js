@@ -3,7 +3,7 @@
 
 var fs = require('fs');
 
-module.exports = function(cb){
+module.exports = function(app, cb){
 	// make static dirs
 	if(!fs.existsSync('static/avatar'))
 		fs.mkdir('static/avatar');

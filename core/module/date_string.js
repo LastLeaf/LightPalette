@@ -1,7 +1,7 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-module.exports = function(next){
+module.exports = function(app, next){
 	// dateString: convert a unix timestamp or js time to date string
 	var tzZones = require('timezone/zones.js');
 	var tz = require('timezone');

@@ -11,13 +11,13 @@ var models = [
 	'stat.js'
 ];
 
-module.exports = function(next){
+module.exports = function(app, next){
 	var model = {};
 	var nextModel = function(){
 		if(!models.length) {
 			next(model);
 		} else {
-			require('./'+models.shift())(model, nextModel);
+			require('./'+models.shift())(app, model, nextModel);
 		}
 	};
 	nextModel();

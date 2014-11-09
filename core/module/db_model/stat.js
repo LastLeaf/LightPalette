@@ -4,11 +4,11 @@
 var COLLECTION_NAME = 'stat';
 var MODEL_NAME = 'Stat';
 
-module.exports = function(model, cb){
+module.exports = function(app, model, cb){
 	// define schema
-	var Schema = fw.db.Schema;
+	var Schema = app.db.Schema;
 	var schemaObj = {
-		post: { type: Schema.Types.ObjectId, ref: fw.config.db.prefix + 'post' },
+		post: { type: Schema.Types.ObjectId, ref: app.config.db.prefix + 'post' },
 		time: { type: Number },
 		dateTimeString: String,
 		sid: { type: String },
@@ -21,7 +21,7 @@ module.exports = function(model, cb){
 	schema.index({ ip: 1, time: -1 });
 
 	// create model
-	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);
+	var col = app.db.model(app.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
 	col.ensureIndexes(cb);
 };

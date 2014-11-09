@@ -5,7 +5,7 @@ var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 
 // send a email through SMTP, { name, addr, host, [port], user, password, [ssl] } in options
-module.exports = function(next){
+module.exports = function(app, next){
 	var mailer = function(options, name, addr, subject, html, text, cb){
 		var transport = nodemailer.createTransport(smtpTransport({
 			host: options.host,

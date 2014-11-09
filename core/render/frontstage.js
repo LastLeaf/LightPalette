@@ -5,7 +5,6 @@ var Settings = fw.module('db_model').Settings;
 var User = fw.module('db_model').User;
 var Category = fw.module('db_model').Category;
 var Post = fw.module('db_model').Post;
-var sitePathParser = fw.module('site_path_parser.js');
 
 var tmpl = fw.tmpl('frontstage.tmpl');
 

@@ -4,9 +4,9 @@
 var COLLECTION_NAME = 'settings';
 var MODEL_NAME = 'Settings';
 
-module.exports = function(model, cb){
+module.exports = function(app, model, cb){
 	// define schema
-	var Schema = fw.db.Schema;
+	var Schema = app.db.Schema;
 	var schemaObj = {
 		v: Schema.Types.Mixed,
 		_id: { type: String, index: { unique: true } },
@@ -38,7 +38,7 @@ module.exports = function(model, cb){
 	};
 
 	// create model
-	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);
+	var col = app.db.model(app.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
 	col.ensureIndexes(cb);
 };

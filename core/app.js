@@ -24,11 +24,10 @@ module.exports = function(app){
 		['rpc', '/', 'core/rpc'],
 		['static', '/', 'static'],
 	];
-	async.each(dirs, function(dir, cb){
+	dirs.forEach(function(dir, cb){
 		app.bindDir.apply(app, dir.concat(cb));
-	}, function(){
-		app.route.setList(routes);
-		app.route.setList('/backstage', backstageRoutes);
-		app.start();
 	});
+	app.route.setList(routes);
+	app.route.setList('/backstage', backstageRoutes);
+	app.start();
 };

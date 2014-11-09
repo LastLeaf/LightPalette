@@ -4,9 +4,9 @@
 var COLLECTION_NAME = 'post';
 var MODEL_NAME = 'Post';
 
-module.exports = function(model, cb){
+module.exports = function(app, model, cb){
 	// define schema
-	var Schema = fw.db.Schema;
+	var Schema = app.db.Schema;
 	var schemaObj = {
 		type: String,
 		path: { type: String, index: true, default: '' },
@@ -14,13 +14,13 @@ module.exports = function(model, cb){
 		status: { type: String, default: 'draft', enum: [
 			'draft', 'pending', 'published', 'visible', 'special'
 		] },
-		author: { type: String, ref: fw.config.db.prefix + 'user' },
+		author: { type: String, ref: app.config.db.prefix + 'user' },
 		time: { type: Number },
 		dateString: String,
 		dateTimeString: String,
-		category: [{ type: String, ref: fw.config.db.prefix + 'category' }],
+		category: [{ type: String, ref: app.config.db.prefix + 'category' }],
 		tag: { type: [String], default: [] },
-		series: { type: String, ref: fw.config.db.prefix + 'series' },
+		series: { type: String, ref: app.config.db.prefix + 'series' },
 		acceptComment: { type: Boolean, default: true },
 		content: { type: String, default: '' },
 		abstract: { type: String, default: '' },
@@ -37,11 +37,11 @@ module.exports = function(model, cb){
 	schema.index({ series: 1, time: -1 });
 
 	// create model
-	var col = fw.db.model(fw.config.db.prefix + COLLECTION_NAME, schema);
+	var col = app.db.model(app.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
 
 	// full text search for mongodb >= 2.6.0
-	fw.db.connection.db.collection(col.collection.name, function(err, mongoCol){
+	app.db.connection.db.collection(col.collection.name, function(err, mongoCol){
 		mongoCol.ensureIndex({title: 'text', tag: 'text', abstract: 'text', content: 'text'}, {name: 'fulltext', default_language: 'none', language_override: 'search_language'}, function(err){
 			col.ensureIndexes(cb);
 		});

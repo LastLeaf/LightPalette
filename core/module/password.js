@@ -3,7 +3,7 @@
 
 var crypto = require('crypto');
 
-module.exports = function(next){
+module.exports = function(app, next){
 	next({
 		// hash: generate auth string for str, cb(err, auth)
 		hash: function(str, cb){
