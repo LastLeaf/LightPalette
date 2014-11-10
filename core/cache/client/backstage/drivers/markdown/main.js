@@ -1,2 +1,0 @@
-// Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
-"use strict";fw.main(function(r){var t=r.tmpl,e=t.i18n;lp.registerDriver("markdown",{name:e("Markdown Doc"),priority:3e3,editor:function(r,e,n){$(r).html(t.markdown({driver:e.driver,admin:"admin"===n.type}));return{get:function(){return{driver:{enableHtml:$(".markdown .driver_use_html input").prop("checked"),"abstract":$(".markdown .driver_abstract textarea").val(),content:$(".markdown .driver_content textarea").val()}}}}}})});

@@ -1,1 +1,0 @@
-fw._tmpls({i18n:{User:"名字",Email:"电子邮箱",URL:"网址",Post:"博文",Time:"时间",Blocked:"屏蔽状态",no:"否",yes:"是"},main:function(e,i,n,s,l){return this.compilerInfo=[4,">= 1.0.0"],n=this.merge(n,e.helpers),l=l||{},'\n	<div class="table"></div>\n'}});

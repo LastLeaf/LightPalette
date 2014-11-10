@@ -1,1 +1,0 @@
-fw._tmpls({i18n:{Title:"标题",Type:"类型",Author:"作者",Status:"状态",draft:"草稿",pending:"待审",published:"已发布",visible:"仅链接访问",special:"特殊页面"},main:function(i,e,t,n,s){return this.compilerInfo=[4,">= 1.0.0"],t=this.merge(t,i.helpers),s=s||{},'\n	<div class="table"></div>\n'}});
