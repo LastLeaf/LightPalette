@@ -14,9 +14,13 @@ else if(fs.existsSync('config.json'))
 else
 	throw('You need a config.json file to start LightPalette.');
 
+// read lp's version in package.json
+var lpVersion = JSON.parse(fs.readFileSync('package.json').toString('utf8')).version;
+
 // start fw.mpa
 fw({
 	ip: config.ip || '::',
 	port: config.port || 80,
-	app: 'core/app.js'
+	app: 'core/app.js',
+	lpVersion: lpVersion
 });

@@ -1,0 +1,49 @@
+/* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
+
+body {
+	margin: 0;
+}
+.reveal {
+	font-size: 2em;
+}
+.reveal .progress span {
+	background: #000;
+	opacity: 0.5;
+}
+.reveal .controls div.navigate-left,
+.reveal .controls div.navigate-left.enabled {
+	border-right-color: #000;
+}
+.reveal .controls div.navigate-right,
+.reveal .controls div.navigate-right.enabled {
+	border-left-color: #000;
+}
+.reveal .controls div.navigate-up,
+.reveal .controls div.navigate-up.enabled {
+	border-bottom-color: #000;
+}
+.reveal .controls div.navigate-down,
+.reveal .controls div.navigate-down.enabled {
+	border-top-color: #000;
+}
+.full-screen-button {
+	background: #000;
+	border-radius: 100px;
+	opacity: 0.25;
+	cursor: pointer;
+	z-index: 30;
+}
+.slide-sync {
+	position: absolute;
+	bottom: 15px;
+	left: 15px;
+	z-index: 1000;
+	font-size: 14px;
+	opacity: 0.5;
+}
+.slide-sync:hover {
+	opacity: 1;
+}
+.slide-sync input {
+	vertical-align: middle;
+}

@@ -35,7 +35,7 @@ fw.main(function(pg){
 					{title: 'Blockquote', block: 'blockquote'},
 					{title: 'Pre', block: 'pre'},
 				],
-				content_css: '/~/backstage/drivers/article/skins/tinymce.css',
+				content_css: '/~client/backstage/drivers/article/skins/tinymce.css',
 				language: fw.language,
 				paste_as_text: true,
 				paste_word_valid_elements: ([ 'h1', 'h2', 'h3', 'img', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'pre', 'sup', 'sub', 'div', 'span' ]).join(',')

@@ -1,0 +1,12 @@
+{
+	"title": "LightPalette's Default",
+	"version": "0.3.0",
+	"author": "LastLeaf",
+	"url": "http://lastleaf.me",
+	"lightpalette": "~0.3.0",
+	"routes": {
+		"main": "main.js",
+		"style": "main.css",
+		"tmpl": "main.tmpl"
+	}
+}
