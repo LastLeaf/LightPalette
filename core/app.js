@@ -56,13 +56,21 @@ module.exports = function(app){
 			if(err) files = [];
 			async.each(files, function(file, cb){
 				var path = 'plugins/' + file;
-				try {
-					require(process.cwd() + '/' + path + '/index.js')(app, {path: path}, cb);
-				} catch(e) {
-					console.error('Failed Loading Plugin: ' + file);
-					console.log(e.stack);
-					cb();
-				}
+				fs.readFile(path + '/plugin.json', function(err, buf){
+					if(err) return cb();
+					try {
+						// load and check config
+						var pluginConfig = JSON.parse(buf.toString('utf8'));
+						if(!pluginConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, pluginConfig.lightpalette.toString())) {
+							throw(new Error('Plugin is not suitable for current version of LightPalette.'));
+						}
+						require(process.cwd() + '/' + path + '/index.js')(app, {plugin: pluginConfig, path: path}, cb);
+					} catch(e) {
+						console.error('Failed Loading Plugin: ' + file);
+						console.log(e.stack);
+						cb();
+					}
+				});
 			}, cb);
 		});
 	}, function(cb){
@@ -73,8 +81,8 @@ module.exports = function(app){
 			try {
 				// load and check config
 				var themeConfig = JSON.parse(buf.toString('utf8'));
-				if(!themeConfig.lightpalette || semver.satisfies(fw.lpVersion, themeConfig.lightpalette.toString())) {
-					throw('Theme is not suitable for current version of LightPalette.');
+				if(!themeConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, themeConfig.lightpalette.toString())) {
+					throw(new Error('Theme is not suitable for current version of LightPalette.'));
 				}
 				// build routes
 				var routes = themeConfig.routes;
@@ -83,13 +91,13 @@ module.exports = function(app){
 					var arr = routes[type] || [];
 					if(arr.constructor !== Array) arr = [arr];
 					for(var i=0; i<arr.length; i++) {
-						arr[i] = 'client/theme/' + arr[i];
+						arr[i] = 'theme/' + arr[i];
 					}
 					filteredRoutes[type] = arr;
 				});
 				app.route.add('theme', filteredRoutes);
 				// bind dirs
-				app.bindDir('client', '/client/theme', path + '/theme');
+				app.bindDir('client', '/theme', path + '/theme');
 				async.waterfall([function(cb){
 					fs.stat(path + '/drivers', function(err, stat){
 						if(err || !stat.isDirectory()) return cb();

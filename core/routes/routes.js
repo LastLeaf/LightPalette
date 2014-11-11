@@ -55,11 +55,11 @@ for(var i=dirs.length-1; i>=0; i--) {
 // frontstage
 exports.theme = {
 	parent: 'drivers',
-	render: 'frontstage',
+	render: 'theme',
 	reload: 'both'
 };
 
 exports['*'] = {
 	parent: 'theme',
-	render: 'index',
+	render: 'content',
 };

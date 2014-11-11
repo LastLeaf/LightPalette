@@ -7,7 +7,7 @@ var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
 var preservedPath = fw.module('preserved_path.js');
 
-var tmpl = fw.tmpl('index.tmpl');
+var tmpl = fw.tmpl('content.tmpl');
 
 var LIST_LEN = 5;
 
@@ -21,7 +21,7 @@ var sitePathParser = function(conn, path, cb){
 		conn.rpc('/backstage/post:list', q, function(r){
 			cb('index', '', '', 0, Math.ceil(r.total/LIST_LEN) || 0, r.rows);
 		}, function(err){
-			cb('index', '', '', 0, Math.ceil(r.total/LIST_LEN) || 0, []);
+			cb('index', '', '', 0, 0, []);
 		});
 		return;
 	}

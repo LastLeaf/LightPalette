@@ -6,7 +6,7 @@ var User = fw.module('db_model').User;
 var Category = fw.module('db_model').Category;
 var Post = fw.module('db_model').Post;
 
-var tmpl = fw.tmpl('frontstage.tmpl');
+var tmpl = fw.tmpl('theme.tmpl');
 
 module.exports = function(conn, args, childRes, next){
 	User.findOne({_id: conn.session.userId}, function(err, userInfo){

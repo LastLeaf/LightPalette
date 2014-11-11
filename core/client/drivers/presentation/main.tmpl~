@@ -1,4 +1,4 @@
-<tmpl id="presentation" minify><!DOCTYPE html>
+<tmpl id="presentation"><!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">

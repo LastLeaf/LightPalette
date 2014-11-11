@@ -1,4 +1,4 @@
-<tmpl id="list">
+<tmpl id="list" minify>
 	{{#if query}}<div class="query query-{{type}}">{{queryName}}</div>{{/if}}
 	<div id="post_list" class="post_list">{{#each rows}}
 		<div class="post_item post_{{type}}" post-id="{{_id}}" post-type="{{type}}">
@@ -19,7 +19,7 @@
 	</div>
 </tmpl>
 
-<tmpl id="single">
+<tmpl id="single" minify>
 	<div id="post_single" class="post_single post_{{type}}" post-id="{{_id}}" post-type="{{type}}">
 		<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
 		<div class="post_head">
@@ -36,7 +36,7 @@
 	</div>
 </tmpl>
 
-<tmpl id="notFound">
+<tmpl id="notFound" minify>
 	{{#if query}}<div class="query query-{{type}}">{{queryName}}</div>{{/if}}
 	<div id="post_not_found" class="post_not_found"></div>
 </tmpl>

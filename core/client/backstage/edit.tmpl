@@ -1,4 +1,4 @@
-<tmpl id="main">
+<tmpl id="main" minify>
 	<div class="edit">
 		<form action="post" method="modify" class="editor">
 			<div class="editor_header">
@@ -12,12 +12,12 @@
 					<div class="sidebar_title">`Basic Configuration`</div>
 					<input type="text" name="path" placeholder="A shortcut URL...">
 					<div class="sidebar_row">
-						{{#if edit}}`Author` <select name="author">{{#each authors}}
+						{{#if edit}}`Author`&nbsp;<select name="author">{{#each authors}}
 							<option value="{{_id}}">{{displayName}}</option>
 						{{/each}}</select>{{/if}}
 					</div>
 					<div class="sidebar_row">
-						`Status` <select name="status">
+						`Status`&nbsp;<select name="status">
 							<option value="draft">`draft`</option>
 							<option value="pending">`pending`</option>
 							{{#if write}}<option value="published">`published`</option>{{/if}}

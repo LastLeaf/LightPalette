@@ -21,7 +21,6 @@ exports.visitor = function(conn, res, args){
 	// check permission
 	User.checkPermission(conn, 'admin', function(r){
 		if(!r) return res.err('noPermission');
-		console.info(args.visitor);
 		Stat.count({sid: args.visitor}).where('time').gt(fromTime).exec(function(err, total){
 			if(err) return res.err('system');
 			Stat.find({sid: args.visitor}).where('time').gt(fromTime).populate('post', '_id title').sort('-time').limit(args.count).skip(args.from).exec(function(err, r){
@@ -56,7 +55,7 @@ exports.post = function(conn, res, args){
 			Stat.count({post: args.post}).where('time').gt(fromTime).exec(function(err, visits){
 				if(err) return res.err('system');
 				Stat.aggregate()
-					.match({ post: fw.db.Types.ObjectId(args.post), time: { $gt: fromTime } })
+					.match({ post: conn.app.db.Types.ObjectId(args.post), time: { $gt: fromTime } })
 					.group({ _id: '$sid', visitsPerSid: { $sum: 1 } })
 					.append()
 					.group({ _id: null, count: { $sum: 1 } })
