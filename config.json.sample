@@ -1,14 +1,11 @@
 {
-	"title":          "THE SITE'S DEFAULT TITLE",
-	"version":        "LEAVE EMPTY IF YOU ARE NOT SURE",
-	"locale":         [],
-	"ip":             "localhost",
+	"ip":             "0.0.0.0",
 	"port":           1180,
 	"dbHost":         "localhost",
 	"dbPort":         27017,
 	"dbName":         "THIS IS DATABASE NAME",
 	"dbUser":         "THIS IS DATABASE USERNAME",
 	"dbPassword":     "THIS IS DATABASE PASSWORD",
-	"dbPrefix":       "lp.",
+	"dbPrefix":       "lp",
 	"secret":         "THIS IS A LONG AND SECRET BASE64 STRING"
 }

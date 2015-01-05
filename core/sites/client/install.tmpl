@@ -1,0 +1,70 @@
+<tmpl id="init" minify>
+	<h1>`LightPalette Installation`</h1>
+	<div class="installGuide" id="installGuide">
+		<form fw action="install" method="checkStatus">
+			<p>`This guide will help you install LightPalette. Do you want to continue?`</p>
+			<input type="submit" value="`Continue`">
+		</form>
+	</div>
+</tmpl>
+
+<tmpl id="checkSettings" minify>
+	<form fw action="install" method="checkSettings">
+		<div class="error"></div>
+		<p>`Please provide your database information.`</p>
+		<div>
+			<label>`Database Host`</label>
+			<input type="text" name="host" value="localhost">
+		</div>
+		<div>
+			<label>`Database Port`</label>
+			<input type="text" name="port" value="27017">
+		</div>
+		<div>
+			<label>`Database Name`</label>
+			<input type="text" name="name">
+		</div>
+		<div>
+			<label>`Database Username`</label>
+			<input type="text" name="user">
+		</div>
+		<div>
+			<label>`Database Password`</label>
+			<input type="password" name="password">
+		</div>
+		<div>
+			<label>`Collection Prefix`</label>
+			<input type="text" name="prefix" value="lp">
+		</div>
+		<input type="submit" value="`Continue`">
+	</form>
+</tmpl>
+
+<tmpl id="writeSettings" minify>
+	<form fw action="install" method="writeSettings">
+		<p>`The database information is correct. Do you want to continue installation now?`</p>
+		<input type="submit" value="`OK, please install.`">
+	</form>
+</tmpl>
+
+<tmpl id="writeManually" minify>
+	<div class="error"></div>
+	<form fw action="install" method="writeManually">
+		<p>`It seems that it's not allowed to write configurations. Please paste the text below into a "config.json" file. This file should be put in the LightPalette project directory on the server.`</p>
+		<pre>{{text}}</pre>
+		<input type="submit" value="`OK, I have written it.`">
+	</form>
+</tmpl>
+
+<tmpl id="success" minify>
+	<form fw action="install" method="checkStatus">
+		<p>`Installation success! Please wait a moment...`</p>
+	</form>
+</tmpl>
+
+<json id="error">{
+	"": "`Sorry, request timed out.`",
+	"configFileNotFound": "`\"Config.json\" file is not found.`",
+	"installed": "`LightPalette is installed.`",
+	"dbNotConnected": "`Failed connecting to database. Please check the database information.`"
+}</json>

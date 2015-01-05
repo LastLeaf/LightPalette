@@ -6,9 +6,8 @@ var async = require('async');
 var semver = require('semver');
 
 // loading appconfig and routes
-var appconfig = require('./appconfig.js');
-var routes = require('./routes/routes.js');
-var backstageRoutes = require('./routes/backstage/routes.js');
+var routes = require('./routes_main.js');
+var backstageRoutes = require('./routes_backstage.js');
 
 // walk file tree, call cb when meet a file
 var walkFileTree = exports.walkFileTree = function(root, cb, doneCb, curPath){
@@ -32,7 +31,7 @@ var walkFileTree = exports.walkFileTree = function(root, cb, doneCb, curPath){
 	});
 };
 
-module.exports = function(app){
+module.exports = function(app, appconfig){
 	async.waterfall([function(cb){
 		// set up core
 		app.setConfig(appconfig);

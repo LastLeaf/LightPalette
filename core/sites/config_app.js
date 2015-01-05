@@ -3,19 +3,6 @@
 
 var fs = require('fs');
 
-// read and watch config file
-if(fs.existsSync('config.js')) {
-	var config = require('../config.js')();
-	fs.watch('config.js', function(){
-		try { fw.restart(); } catch(e) {}
-	});
-} else {
-	var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
-	fs.watch('config.json', function(){
-		try { fw.restart(); } catch(e) {}
-	});
-}
-
 // check favicon.ico and loading.gif
 if(fs.existsSync('favicon.ico'))
 	var favicon = 'favicon.ico';
