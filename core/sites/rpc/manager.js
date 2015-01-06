@@ -3,6 +3,6 @@
 
 // restart sites manager
 exports.restart = function(conn, res, args){
-	// TODO broken
+	// TODO check permission
 	conn.app.restart();
 };

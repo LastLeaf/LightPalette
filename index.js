@@ -5,7 +5,6 @@ var fs = require('fs');
 var fw = require('fw.mpa');
 
 // read config
-process.chdir(__dirname);
 var config = {};
 try {
 	config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
@@ -15,9 +14,11 @@ try {
 var lpVersion = JSON.parse(fs.readFileSync('package.json').toString('utf8')).version;
 
 // start fw.mpa
+var lpCoreRoot = __dirname + '/core';
 fw({
 	ip: config.ip || '0.0.0.0',
 	port: config.port || 1180,
-	app: 'core/sites/sites.js',
-	lpVersion: lpVersion
+	app: lpCoreRoot + '/sites/app.js',
+	lpCoreRoot: lpCoreRoot,
+	lpVersion: lpVersion,
 });

@@ -2,6 +2,8 @@
 'use strict';
 
 fw.main(function(pg){
-	$('body').html(pg.tmpl.init());
-	//pg.rpc('server:passwordExists', function(exists){});
+	pg.rpc('install:checkStatus', function(result){
+		if(result === 'success') fw.go('/sites');
+		else fw.go('/install');
+	});
 });

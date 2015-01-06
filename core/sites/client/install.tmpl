@@ -3,14 +3,13 @@
 	<div class="installGuide" id="installGuide">
 		<form fw action="install" method="checkStatus">
 			<p>`This guide will help you install LightPalette. Do you want to continue?`</p>
-			<input type="submit" value="`Continue`">
+			<input type="submit" class="submit" value="`Continue`">
 		</form>
 	</div>
 </tmpl>
 
 <tmpl id="checkSettings" minify>
 	<form fw action="install" method="checkSettings">
-		<div class="error"></div>
 		<p>`Please provide your database information.`</p>
 		<div>
 			<label>`Database Host`</label>
@@ -36,23 +35,24 @@
 			<label>`Collection Prefix`</label>
 			<input type="text" name="prefix" value="lp">
 		</div>
-		<input type="submit" value="`Continue`">
+		<div class="error"></div>
+		<input type="submit" class="submit" value="`Continue`">
 	</form>
 </tmpl>
 
 <tmpl id="writeSettings" minify>
 	<form fw action="install" method="writeSettings">
 		<p>`The database information is correct. Do you want to continue installation now?`</p>
-		<input type="submit" value="`OK, please install.`">
+		<input type="submit" class="submit" value="`OK, please install.`">
 	</form>
 </tmpl>
 
 <tmpl id="writeManually" minify>
-	<div class="error"></div>
 	<form fw action="install" method="writeManually">
-		<p>`It seems that it's not allowed to write configurations. Please paste the text below into a "config.json" file. This file should be put in the LightPalette project directory on the server.`</p>
+		<p>`It seems that it's not allowed to write configurations. Please paste the text below into a "config.json" file. This file should be put in the working directory on the server.`</p>
 		<pre>{{text}}</pre>
-		<input type="submit" value="`OK, I have written it.`">
+		<div class="error"></div>
+		<input type="submit" class="submit" value="`OK, I have written it.`">
 	</form>
 </tmpl>
 

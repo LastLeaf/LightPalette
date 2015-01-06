@@ -21,9 +21,12 @@ module.exports = {
 	},
 	"/": {
 		parent: 'global',
-		lib: '/lib/crypto.min.js',
-		main: 'index.js',
-		tmpl: 'index.tmpl',
+		main: 'index.js'
+	},
+	"/sites": {
+		parent: 'global',
+		main: 'sites.js',
+		tmpl: 'sites.tmpl'
 	},
 	"/install": {
 		parent: 'global',

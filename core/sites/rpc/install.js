@@ -67,7 +67,7 @@ exports.writeSettings = function(conn, res, args){
 		if(exists) return res.err('installed');
 		if(!conn.session.settingsObj) return res('checkSettings');
 		fs.writeFile('config.json', JSON.stringify(conn.session.settingsObj), function(err){
-			if(1 || err) res('writeManually', {text: JSON.stringify(conn.session.settingsObj, null, '  ')});
+			if(err) res('writeManually', {text: JSON.stringify(conn.session.settingsObj, null, '  ')});
 			else res('success');
 		});
 	});

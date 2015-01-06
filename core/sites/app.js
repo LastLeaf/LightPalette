@@ -17,7 +17,5 @@ module.exports = function(app){
 		app.bindDir.apply(app, dir.concat(cb));
 	});
 	app.route.setList(require('./routes.js'));
-	if(config.db.type === 'none') app.route.set('/', {redirect: '/install'});
-	else app.route.set('/install', {redirect: '/'});
 	app.start();
 };

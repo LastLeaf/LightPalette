@@ -2,14 +2,14 @@
 'use strict';
 
 var fs = require('fs');
-var locales = JSON.parse(fs.readFileSync('core/sites/locales.json').toString('utf8'));
+var locales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/sites/locales.json').toString('utf8'));
 
 // read and watch config file
 var config = null;
 try {
 	var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
 	fs.watch('config.json', function(){
-		app.restart();
+		try { fw.restart(); } catch(e) {}
 	});
 } catch(e) {}
 
@@ -23,9 +23,9 @@ if(config) {
 			locale: locales,
 		},
 		client: {
-			cache: 'core/sites/cache',
-			favicon: 'core/images/favicon.ico',
-			loadingLogo: 'core/images/logo.gif',
+			cache: 'cache/~sites',
+			favicon: fw.config.lpCoreRoot + 'images/favicon.ico',
+			loadingLogo: fw.config.lpCoreRoot + 'images/logo.gif',
 			loadingLogoBackground: '#fff',
 			meta: {
 				viewport: 'width=device-width, initial-scale=1'
@@ -53,9 +53,9 @@ if(config) {
 			locale: locales,
 		},
 		client: {
-			cache: 'core/sites/cache',
-			favicon: 'core/images/favicon.ico',
-			loadingLogo: 'core/images/logo.gif',
+			cache: 'cache/~sites',
+			favicon: fw.config.lpCoreRoot + 'images/favicon.ico',
+			loadingLogo: fw.config.lpCoreRoot + 'images/logo.gif',
 			loadingLogoBackground: '#fff',
 			meta: {
 				viewport: 'width=device-width, initial-scale=1'
