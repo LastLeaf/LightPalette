@@ -14,6 +14,7 @@ module.exports = {
 				src: '/lib/jquery-2.1.1',
 				userAgent: '^.*(?!MSIE (6|7|8)\.)'
 			}],
+		main: 'global.js',
 		style: 'main.css',
 	},
 	"*": {
@@ -21,12 +22,9 @@ module.exports = {
 	},
 	"/": {
 		parent: 'global',
-		main: 'index.js'
-	},
-	"/sites": {
-		parent: 'global',
-		main: 'sites.js',
-		tmpl: 'sites.tmpl'
+		lib: ['/lib/crypto.min.js', '/backstage/lib/table_builder.js'],
+		main: 'index.js',
+		tmpl: 'index.tmpl'
 	},
 	"/install": {
 		parent: 'global',

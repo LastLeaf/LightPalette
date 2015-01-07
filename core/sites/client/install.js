@@ -11,7 +11,9 @@ fw.main(function(pg){
 		}, function(nextStep, obj){
 			$('#installGuide').html(pg.tmpl[nextStep](obj));
 			if(nextStep === 'success') {
-				pg.rpc('manager:restart');
+				pg.rpc('manager:restart', function(){}, function(err){
+					if(err) location.href = '/';
+				});
 				fw.onserverchanged = function(){};
 				pg.on('socketConnect', function(){
 					location.href = '/';

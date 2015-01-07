@@ -24,8 +24,8 @@ if(config) {
 		},
 		client: {
 			cache: 'cache/~sites',
-			favicon: fw.config.lpCoreRoot + 'images/favicon.ico',
-			loadingLogo: fw.config.lpCoreRoot + 'images/logo.gif',
+			favicon: fw.config.lpCoreRoot + '/images/favicon.ico',
+			loadingLogo: fw.config.lpCoreRoot + '/images/logo.gif',
 			loadingLogoBackground: '#fff',
 			meta: {
 				viewport: 'width=device-width, initial-scale=1'

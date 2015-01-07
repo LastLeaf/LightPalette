@@ -1,17 +1,16 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-// site properties: id title version
-
 var config = require('./config_sites.js');
 
 module.exports = function(app){
 	app.setConfig(config);
 	var dirs = [
-		['client', '/', 'core/sites/client'],
-		['client', '/lib', 'core/client/lib'],
-		['module', '/', 'core/client/module'],
-		['rpc', '/', 'core/sites/rpc']
+		['client', '/', fw.config.lpCoreRoot + '/sites/client'],
+		['client', '/lib', fw.config.lpCoreRoot + '/client/lib'],
+		['client', '/backstage/lib', fw.config.lpCoreRoot + '/client/backstage/lib'],
+		['module', '/', fw.config.lpCoreRoot + '/sites/module'],
+		['rpc', '/', fw.config.lpCoreRoot + '/sites/rpc']
 	];
 	dirs.forEach(function(dir, cb){
 		app.bindDir.apply(app, dir.concat(cb));
