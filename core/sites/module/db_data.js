@@ -22,19 +22,30 @@ module.exports = function(app, next){
 			else cb(null, res.v);
 		});
 	};
-	schema.statics.getByType = function(type, cb){
-		this.find({t: type}).select('v').exec(function(err, res){
+	schema.statics.getByType = function(type, from, count, cb){
+		var model = this;
+		model.count({t: type}, function(err, count){
 			if(err) return cb(err);
-			var arr = [];
-			for(var i=0; i<res.length; i++) {
-				arr.push(res[i].v);
-			}
-			cb(null, arr);
+			var q = model.find({t: type}).select('v').sort('_id').skip(from);
+			if(count) q.limit(count);
+			q.exec(function(err, res){
+				if(err) return cb(err);
+				var arr = [];
+				for(var i=0; i<res.length; i++) {
+					arr.push(res[i].v);
+				}
+				cb(null, arr, count);
+			});
 		});
 	};
 	schema.statics.set = function(key, type, value, cb){
-		this.update({_id: key}, {t: type, v: value}, {upsert: true}, function(){
-			cb();
+		this.update({_id: key}, {t: type, v: value}, {upsert: true}, function(err){
+			cb(err);
+		});
+	};
+	schema.statics.del = function(key, cb){
+		this.remove({_id: key}, function(err){
+			cb(err);
 		});
 	};
 

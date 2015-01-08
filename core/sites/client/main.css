@@ -7,12 +7,14 @@ h1 {
 	margin: 0;
 	padding: 0.5em 1em;
 	font-size: 1.5em;
+	box-shadow: 0 0 5px #444;
 }
 p {
 	color: #444;
 }
+
 .installGuide {
-	margin: 1.5em;
+	margin: 1.5em 3em;
 }
 .installGuide input {
 	margin: 0.5em 0;
@@ -30,6 +32,7 @@ p {
 	border: 1px solid #444;
 	border-radius: 100em;
 	padding: 0.25em 1em;
+	margin: 0;
 	font-size: 1.1em;
 }
 .installGuide .submit:hover {
@@ -41,6 +44,43 @@ p {
 .installGuide .error {
 	margin: 1em 0;
 	color: red;
+}
+
+.managerOpts {
+	margin: 0 1.5em;
+}
+.managerOpts a {
+	float: right;
+	display: block;
+	background: #444;
+	padding: 0.5em 0.5em 0.25em;
+	text-decoration: none;
+	color: #fff;
+	box-shadow: 0 0 5px #444;
+	margin-left: 0.5em;
+	border-bottom-left-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	position: relative;
+	top: -0.5em;
+}
+.managerOpts a:hover {
+	top: -0.25em;
+}
+.sitesTableError {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0.5em 1.5em;
+	border-bottom: 2px solid red;
+	background: #FC9292;
+	text-align: center;
+	cursor: pointer;
+	display: none;
+}
+.sitesTable {
+	clear: both;
+	margin: 0 1.5em;
 }
 
 /* table */

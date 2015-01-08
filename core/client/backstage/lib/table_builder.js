@@ -89,6 +89,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		$tr.children('td').each(function(){
 			var colId = this.lpTableColId;
 			var type = this.lpTableInput;
+			var placeholder = this.lpTablePlaceholder || '';
 			if(typeof(type) === 'object') {
 				// select
 				var $input = $('<select name="'+colId+'"></select>');
@@ -112,7 +113,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 				var $input = $('<span></span>').text(this.lpTableData);
 			} else {
 				// text
-				var $input = $('<input type="text" name="'+colId+'">').val(this.lpTableData);
+				var $input = $('<input type="text" name="'+colId+'" placeholder="'+placeholder+'">').val(this.lpTableData);
 			}
 			$(this).html('').append($input);
 		});
@@ -237,7 +238,7 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 				var $td = $('<td></td>').text(d || '').appendTo($tr[0]);
 				if(col.type === 'hidden') $td.hide();
 			}
-			$td.prop('lpTableColId', col.id).prop('lpTableInput', col.input).prop('lpTableData', d || '');
+			$td.prop('lpTableColId', col.id).prop('lpTableInput', col.input).prop('lpTablePlaceholder', col.placeholder).prop('lpTableData', d || '');
 		}
 		$tr[0].lpTableEditing = false;
 		return $tr;

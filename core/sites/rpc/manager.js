@@ -73,3 +73,53 @@ exports.restartFw = function(conn, res, args){
 };
 
 // get sites information
+exports.listSites = function(conn, res, args){
+	if(!loginStatus(conn)) return res.err('noPermission');
+	dbData.getByType('site', Number(args.from) || 0, Number(args.count) || 0, function(err, rows, total){
+		if(err) return res.err('system');
+		res({
+			rows: rows,
+			total: total
+		});
+	});
+};
+
+// create a new site
+exports.updateSite = function(conn, res, args, add){
+	if(!loginStatus(conn)) return res.err('noPermission');
+	var id = String(args._id);
+	var title = String(args.title) || '';
+	var permission = String(args.permission) || '';
+	var status = String(args.status);
+	var hosts = String(args.hosts).match(/\S+/g) || [];
+	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
+	if(status !== 'enabled') status = 'disabled';
+	var obj = {_id: id, title: title, permission: permission, status: status, hosts: hosts};
+	var setObj = function(){
+		dbData.set(id, 'site', obj, function(err){
+			if(err) res.err('system');
+			res(obj);
+			// TODO start/stop site if needed
+		});
+	};
+	if(add) {
+		dbData.get(id, function(err, site){
+			if(err || site) res.err('siteExists');
+			setObj();
+		});
+	} else {
+		setObj();
+	}
+};
+
+// create a new site
+exports.deleteSite = function(conn, res, args){
+	if(!loginStatus(conn)) return res.err('noPermission');
+	var id = String(args._id);
+	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
+	dbData.del(id, function(err){
+		if(err) return res.err('system');
+		res();
+		// TODO remove site data
+	});
+};

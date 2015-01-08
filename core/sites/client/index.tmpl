@@ -23,6 +23,10 @@
 	<div class="installGuide">
 		<form fw action="manager" method="setPassword">
 			<p>`Please set the manager password. Do NOT forget it!`</p>
+			{{#if modify}}<div>
+				<label>`Old Password`</label>
+				<input type="password" id="oldPassword" required>
+			</div>{{/if}}
 			<div>
 				<label>`Password`</label>
 				<input type="password" id="password" required>
@@ -32,6 +36,7 @@
 				<input type="password" id="passwordRetype" required>
 			</div>
 			<div class="error"></div>
+			<input type="hidden" name="oldPassword">
 			<input type="hidden" name="password">
 			<input type="submit" class="submit" value="`Continue`">
 		</form>
@@ -40,15 +45,18 @@
 
 <tmpl id="sitesTable">
 	<div class="managerOpts">
-		<a fw id="restart">Restart Framework</a>
-		<a fw id="modifyPassword">Modify Password</a>
-		<a fw href="/">Logout</a>
+		<a fw href="#" id="logout">Logout</a>
+		<a fw href="#" id="modifyPassword">Modify Password</a>
+		<a fw href="#" id="restart">Restart Framework</a>
 	</div>
-	<div id="sitesTable"></div>
+	<div class="sitesTableError" id="sitesTableError"></div>
+	<div class="sitesTable" id="sitesTable"></div>
 </tmpl>
 
 <json id="error">{
 	"": "`Sorry, request timed out.`",
 	"system": "Sorry, there is an internal server error.",
-	"passwordIncorrect": "The password is incorrect."
+	"passwordIncorrect": "The password is incorrect.",
+	"siteIdIllegal": "`The site ID can only contain letters, numbers, \"_\" and \"_\"`",
+	"siteExists": "The site ID already exists."
 }</json>

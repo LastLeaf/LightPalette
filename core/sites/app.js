@@ -16,5 +16,7 @@ module.exports = function(app){
 		app.bindDir.apply(app, dir.concat(cb));
 	});
 	app.route.setList(require('./routes.js'));
-	app.start();
+	app.start(function(){
+		// TODO start enabled sites
+	});
 };
