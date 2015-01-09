@@ -3,6 +3,18 @@
 
 var config = require('./config_sites.js');
 
+var startSites = function(app){
+	if(!app.db) return;
+	var dbData = app.loadedModules['/db_data.js'];
+	var siteController = app.loadedModules['/site_controller.js'];
+	dbData.getByType('site', 0, 0, function(err, sites){
+		if(err) return;
+		for(var i=0; i<sites.length; i++) {
+			if(sites[i].status === 'enabled') siteController.start(sites[i]);
+		}
+	});
+};
+
 module.exports = function(app){
 	app.setConfig(config);
 	var dirs = [
@@ -17,6 +29,6 @@ module.exports = function(app){
 	});
 	app.route.setList(require('./routes.js'));
 	app.start(function(){
-		// TODO start enabled sites
+		startSites(app);
 	});
 };

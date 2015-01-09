@@ -23,7 +23,7 @@ if(config) {
 			locale: locales,
 		},
 		client: {
-			cache: 'cache/~sites',
+			cache: 'cache',
 			favicon: fw.config.lpCoreRoot + '/images/favicon.ico',
 			loadingLogo: fw.config.lpCoreRoot + '/images/logo.gif',
 			loadingLogoBackground: '#fff',

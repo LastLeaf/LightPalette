@@ -1,8 +1,10 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
+var crypto = require('crypto');
 var dbData = fw.module('db_data.js');
 var password = fw.module('password.js');
+var siteController = fw.module('site_controller.js');
 
 // check login status
 var loginStatus = function(conn){
@@ -77,6 +79,7 @@ exports.listSites = function(conn, res, args){
 	if(!loginStatus(conn)) return res.err('noPermission');
 	dbData.getByType('site', Number(args.from) || 0, Number(args.count) || 0, function(err, rows, total){
 		if(err) return res.err('system');
+		for(var i=0; i<rows.length; i++) delete rows[i].secret;
 		res({
 			rows: rows,
 			total: total
@@ -95,20 +98,31 @@ exports.updateSite = function(conn, res, args, add){
 	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
 	if(status !== 'enabled') status = 'disabled';
 	var obj = {_id: id, title: title, permission: permission, status: status, hosts: hosts};
-	var setObj = function(){
+	var setObj = function(oldObj){
 		dbData.set(id, 'site', obj, function(err){
 			if(err) res.err('system');
 			res(obj);
-			// TODO start/stop site if needed
+			if(!oldObj || oldObj.status === obj.status) return;
+			if(obj.status === 'enabled') siteController.start(obj);
+			else siteController.stop(id);
+			// TODO fix routing problem when stop a site
 		});
 	};
 	if(add) {
 		dbData.get(id, function(err, site){
 			if(err || site) res.err('siteExists');
-			setObj();
+			crypto.randomBytes(24, function(err, buf){
+				if(err) return res.err('system');
+				obj.secret = buf.toString('base64');
+				setObj();
+			});
 		});
 	} else {
-		setObj();
+		dbData.get(id, function(err, site){
+			if(err || !site) res.err('noPermission');
+			obj.secret = site.secret;
+			setObj(site);
+		});
 	}
 };
 
@@ -120,6 +134,7 @@ exports.deleteSite = function(conn, res, args){
 	dbData.del(id, function(err){
 		if(err) return res.err('system');
 		res();
+		siteController.stop(id);
 		// TODO remove site data
 	});
 };

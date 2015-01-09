@@ -31,7 +31,7 @@ var walkFileTree = exports.walkFileTree = function(root, cb, doneCb, curPath){
 	});
 };
 
-module.exports = function(app, appconfig){
+module.exports = function(app, siteId, appconfig){
 	async.waterfall([function(cb){
 		// set up core
 		app.setConfig(appconfig);

@@ -2,43 +2,59 @@
 'use strict';
 
 var fs = require('fs');
-
-// check favicon.ico and loading.gif
-if(fs.existsSync('favicon.ico'))
-	var favicon = 'favicon.ico';
-else
-	var favicon = '';
-if(fs.existsSync('loading.gif'))
-	var loadingLogo = 'loading.gif';
-else
-	var loadingLogo = '';
+var async = require('async');
+var defaultLocales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/sites/locales.json').toString('utf8'));
 
 // generate config
-module.exports = {
-	app: {
-		title: config.title || 'LightPalette',
-		version: config.version || String(new Date().getTime()),
-		locale: config.locale || [],
-	},
-	client: {
-		cache: 'cache',
-		favicon: favicon,
-		loadingLogo: loadingLogo,
-		loadingLogoBackground: '#fff',
-		meta: {
-			viewport: 'width=device-width, initial-scale=1'
-		}
-	},
-	db: {
-		type: 'mongoose',
-		host: config.dbHost || 'localhost',
-		port: config.dbPort || 27017,
-		user: config.dbUser,
-		password: config.dbPassword,
-		name: config.dbName,
-		prefix: config.dbPrefix,
-	},
-	secret: {
-		cookie: config.secret,
-	},
+module.exports = function(app, siteInfo, cb){
+	var id = siteInfo._id;
+	var siteRoot = 'sites/' + id;
+	var locales = siteInfo.locales || defaultLocales;
+
+	// check favicon.ico and loading.gif
+	var favicon = '';
+	var loadingLogo = '';
+	async.parallel([function(cb){
+		fs.exists(siteRoot + '/favicon.ico', function(exists){
+			if(exists) favicon = siteRoot + '/favicon.ico';
+			cb();
+		});
+	}, function(cb){
+		fs.exists(siteRoot + '/loading.gif', function(exists){
+			if(exists) loadingLogo = siteRoot + '/loading.gif';
+			cb();
+		});
+	}], function(){
+		// build config object
+		var config = {
+			app: {
+				host: siteInfo.hosts,
+				title: siteInfo.title || 'LightPalette',
+				version: String(Date.now()),
+				locale: locales,
+			},
+			client: {
+				cache: siteRoot + '/cache',
+				favicon: favicon,
+				loadingLogo: loadingLogo,
+				loadingLogoBackground: '#fff',
+				meta: {
+					viewport: 'width=device-width, initial-scale=1'
+				}
+			},
+			db: {
+				type: 'mongoose',
+				host: app.config.db.host,
+				port: app.config.db.port,
+				user: app.config.db.user,
+				password: app.config.db.password,
+				name: app.config.db.name,
+				prefix: app.config.db.prefix + '.' + id,
+			},
+			secret: {
+				cookie: siteInfo.secret || '',
+			}
+		};
+		cb(config);
+	});
 };
