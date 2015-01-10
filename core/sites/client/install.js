@@ -14,9 +14,8 @@ fw.main(function(pg){
 				pg.rpc('manager:restart', function(){}, function(err){
 					if(err) location.href = '/';
 				});
-				fw.onserverchanged = function(){};
 				pg.on('socketConnect', function(){
-					location.href = '/';
+					fw.reload();
 				});
 				setTimeout(function(){
 					pg.rpc('install:checkStatus');
@@ -28,5 +27,12 @@ fw.main(function(pg){
 			$('#installGuide .error').text(pg.tmpl.error[err || '']).fadeTo(0, 0).fadeTo(250, 1);
 		});
 	};
-	addFormEvent();
+
+	pg.rpc('install:checkStatus', function(status){
+		if(status === 'success') {
+			fw.go('/');
+		} else {
+			addFormEvent();
+		}
+	});
 });

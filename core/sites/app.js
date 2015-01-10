@@ -1,7 +1,7 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var config = require('./config_sites.js');
+var sitesConfig = require('./config_sites.js');
 
 var startSites = function(app){
 	if(!app.db) return;
@@ -16,7 +16,7 @@ var startSites = function(app){
 };
 
 module.exports = function(app){
-	app.setConfig(config);
+	app.setConfig(sitesConfig());
 	var dirs = [
 		['client', '/', fw.config.lpCoreRoot + '/sites/client'],
 		['client', '/lib', fw.config.lpCoreRoot + '/client/lib'],

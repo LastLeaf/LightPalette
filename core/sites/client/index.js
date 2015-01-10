@@ -55,7 +55,7 @@ fw.main(function(pg){
 			{ id: 'title', name: _('Site Title') },
 			{ id: 'permission', name: _('Permission'), input: {
 				'': _('None'),
-				plugins: _('Install Plugins')
+				all: _('As Sites Manager')
 			} },
 			{ id: 'status', name: _('Status'), input: {
 				disabled: _('Disabled'),
@@ -139,7 +139,7 @@ fw.main(function(pg){
 					$form.find('[name=password]').val( CryptoJS.SHA256(str + ' | LightPalette') );
 					$form.find('.submit').attr('disabled', true);
 				}, function(){
-					$('#content').html(tmpl.requirePassword());
+					fw.reload(1);
 				}, function(err){
 					$form.find('.submit').removeAttr('disabled');
 					$form.find('.error').text(tmpl.error[err || '']).fadeTo(0, 0).fadeTo(250, 1);

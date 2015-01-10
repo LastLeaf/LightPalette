@@ -13,15 +13,15 @@
 		<p>`Please provide your database information.`</p>
 		<div>
 			<label>`Database Host`</label>
-			<input type="text" name="host" value="localhost">
+			<input type="text" name="host" value="localhost" required>
 		</div>
 		<div>
 			<label>`Database Port`</label>
-			<input type="text" name="port" value="27017">
+			<input type="text" name="port" value="27017" required>
 		</div>
 		<div>
 			<label>`Database Name`</label>
-			<input type="text" name="name">
+			<input type="text" name="name" required>
 		</div>
 		<div>
 			<label>`Database Username`</label>
@@ -33,7 +33,7 @@
 		</div>
 		<div>
 			<label>`Collection Prefix`</label>
-			<input type="text" name="prefix" value="lp">
+			<input type="text" name="prefix" value="lp" required>
 		</div>
 		<div class="error"></div>
 		<input type="submit" class="submit" value="`Continue`">
