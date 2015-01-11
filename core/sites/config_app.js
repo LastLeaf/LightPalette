@@ -50,6 +50,7 @@ module.exports = function(app, siteInfo, cb){
 				password: app.config.db.password,
 				name: app.config.db.name,
 				prefix: app.config.db.prefix + '.' + id,
+				sessionCollection: app.config.db.prefix + '.' + id + '.~sessions'
 			},
 			secret: {
 				cookie: siteInfo.secret || '',

@@ -81,7 +81,7 @@ exports.listSites = function(conn, res, args){
 	if(!loginStatus(conn)) return res.err('noPermission');
 	dbData.getByType('site', Number(args.from) || 0, Number(args.count) || 0, function(err, rows, total){
 		if(err) return res.err('system');
-		for(var i=0; i<rows.length; i++) delete rows[i].secret;
+		for(var i=0; i<rows.length; i++) rows[i].secret = '';
 		res({
 			rows: rows,
 			total: total
@@ -103,11 +103,13 @@ exports.updateSite = function(conn, res, args, add){
 	var setObj = function(oldObj){
 		dbData.set(id, 'site', obj, function(err){
 			if(err) res.err('system');
+			var secret = obj.secret;
+			obj.secret = '';
 			res(obj);
+			obj.secret = secret;
 			if(!oldObj || oldObj.status === obj.status) return;
 			if(obj.status === 'enabled') siteController.start(obj);
 			else siteController.stop(id);
-			// TODO fix routing problem when stop a site
 		});
 	};
 	if(add) {

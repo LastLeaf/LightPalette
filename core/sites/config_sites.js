@@ -37,6 +37,7 @@ module.exports = function(){
 				password: config.dbPassword,
 				name: config.dbName,
 				prefix: config.dbPrefix,
+				sessionCollection: config.dbPrefix + '.~sessions'
 			},
 			secret: {
 				cookie: config.secret,
