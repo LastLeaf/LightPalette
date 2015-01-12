@@ -18,13 +18,18 @@ module.exports = {
 		style: 'main.css',
 	},
 	"*": {
-		redirect: "/",
+		//parent: 'global',
+		main: 'index.js',
+		render: 'index.js',
 	},
-	"/": {
+	"/backstage": {
+		redirect: '/backstage/sites',
+	},
+	"/backstage/sites": {
 		parent: 'global',
 		lib: ['/lib/crypto.min.js', '/backstage/lib/table_builder.js'],
-		main: 'index.js',
-		tmpl: 'index.tmpl'
+		main: 'sites.js',
+		tmpl: 'sites.tmpl'
 	},
 	"/install": {
 		parent: 'global',

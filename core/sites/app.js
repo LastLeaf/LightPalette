@@ -22,6 +22,7 @@ module.exports = function(app){
 		['client', '/lib', fw.config.lpCoreRoot + '/client/lib'],
 		['client', '/backstage/lib', fw.config.lpCoreRoot + '/client/backstage/lib'],
 		['module', '/', fw.config.lpCoreRoot + '/sites/module'],
+		['render', '/', fw.config.lpCoreRoot + '/sites/render'],
 		['rpc', '/', fw.config.lpCoreRoot + '/sites/rpc']
 	];
 	dirs.forEach(function(dir, cb){
