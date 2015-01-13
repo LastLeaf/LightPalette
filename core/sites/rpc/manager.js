@@ -107,7 +107,7 @@ exports.updateSite = function(conn, res, args, add){
 			obj.secret = '';
 			res(obj);
 			obj.secret = secret;
-			if(!oldObj || oldObj.status === obj.status) return;
+			if((!oldObj && obj.status !== 'enabled') || oldObj.status === obj.status) return;
 			if(obj.status === 'enabled') siteController.start(obj);
 			else siteController.stop(id);
 		});
