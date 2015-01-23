@@ -215,7 +215,7 @@ exports.avatar = function(conn, res, dataUrl){
 			// delete avatar
 			User.update({_id: conn.session.userId}, {avatar: ''}, function(err){
 				if(err) return res.err('system');
-				var dir = 'static/avatar/' + conn.session.userId;
+				var dir = app.config.app.siteRoot + '/static/avatar/' + conn.session.userId;
 				res();
 				var c = 3;
 				var cb = function(){
@@ -233,7 +233,7 @@ exports.avatar = function(conn, res, dataUrl){
 		try {
 			var buf = new Buffer(data[1], 'base64');
 			// save original image
-			var dir = 'static/avatar/' + conn.session.userId;
+			var dir = app.config.app.siteRoot + '/static/avatar/' + conn.session.userId;
 			fs.mkdir(dir, function(err){
 				var file = dir + '/128.png';
 				fs.writeFile(file, buf, function(err){

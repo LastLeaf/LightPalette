@@ -1,0 +1,25 @@
+[
+	{
+		"LightPalette Installation": "LightPalette 安装",
+		"This guide will help you install LightPalette. Do you want to continue?": "这个向导将引导您安装LightPalette。继续吗？",
+		"Continue": "继续",
+		"Please provide your database information.": "请提供您的数据库信息。",
+		"Database Host": "数据库主机",
+		"Database Port": "数据库主机端口",
+		"Database Name": "数据库名字",
+		"Database Username": "数据库用户名",
+		"Database Password": "数据库密码",
+		"Collection Prefix": "数据集前缀",
+		"The database information is correct. Do you want to continue installation now?": "数据库信息正确。您想要继续安装吗？",
+		"OK, please install.": "好的，请安装。",
+		"It seems that it's not allowed to write configurations. Please paste the text below into a \"config.json\" file. This file should be put in the working directory on the server.": "似乎服务器不允许写入配置文件。请将下面的文字粘贴入“config.json”文件中。这个文件需要放置在服务器端程序的工作目录内。",
+		"OK, I have written it.": "好的，我已经写入这个文件了。",
+		"Installation success! Please wait a moment...": "安装成功！请稍等……",
+		"Sorry, request timed out.": "对不起，请求超时了。",
+		"\\\"Config.json\\\" file is not found.": "“Config.json”文件不存在。",
+		"LightPalette is installed.": "LightPalette已安装。",
+		"Failed connecting to database. Please check the database information.": "连接数据库失败。请检查您的数据库连接信息。"
+	},
+	{},
+	{}
+]

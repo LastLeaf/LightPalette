@@ -16,6 +16,7 @@ var startSites = function(app){
 };
 
 module.exports = function(app){
+	// init app
 	app.setConfig(sitesConfig());
 	var dirs = [
 		['client', '/', fw.config.lpCoreRoot + '/sites/client'],

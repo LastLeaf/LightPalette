@@ -2,6 +2,6 @@
 'use strict';
 
 module.exports = function(conn, res, args){
-	console.log('Hello World! A new RPC to "post"...');
+	// do something here...
 	res.next();
 };

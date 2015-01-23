@@ -24,8 +24,8 @@ module.exports = function(req, res){
 		}
 		// accept files
 		var form = new multiparty.Form({
-			maxFieldsSize: fw.config.server.bodySizeLimit,
-			maxFilesSize: fw.config.server.bodySizeLimit,
+			maxFieldsSize: req.app.config.server.bodySizeLimit,
+			maxFilesSize: req.app.config.server.bodySizeLimit,
 			autoFields: true,
 			autoFiles: true,
 		});
@@ -47,7 +47,7 @@ module.exports = function(req, res){
 				};
 				while(files.length) {
 					var file = files.shift();
-					mv(file.path, 'static/files/'+user+path+file.originalFilename, function(err){
+					mv(file.path, req.app.config.app.siteRoot + '/static/files/'+user+path+file.originalFilename, function(err){
 						if(err) lastErr = err;
 						finished();
 					});

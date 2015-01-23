@@ -36,12 +36,12 @@ module.exports = function(app, siteId, appconfig){
 		// set up core
 		app.setConfig(appconfig);
 		var dirs = [
-			['client', '/', 'core/client'],
-			['module', '/', 'core/module'],
-			['page', '/', 'core/page'],
-			['render', '/', 'core/render'],
-			['rpc', '/', 'core/rpc'],
-			['static', '/', 'static']
+			['client', '/', fw.config.lpCoreRoot + '/client'],
+			['module', '/', fw.config.lpCoreRoot + '/module'],
+			['page', '/', fw.config.lpCoreRoot + '/page'],
+			['render', '/', fw.config.lpCoreRoot + '/render'],
+			['rpc', '/', fw.config.lpCoreRoot + '/rpc'],
+			['static', '/', app.config.app.siteRoot + '/static']
 		];
 		dirs.forEach(function(dir, cb){
 			app.bindDir.apply(app, dir.concat(cb));
@@ -128,9 +128,9 @@ module.exports = function(app, siteId, appconfig){
 		});
 	}, function(cb){
 		// prepare dirs
-		fs.exists('static', function(exists){
+		fs.exists(app.config.app.siteRoot + '/static', function(exists){
 			if(exists) return cb();
-			fs.mkdir('static', cb);
+			fs.mkdir(app.config.app.siteRoot + '/static', cb);
 		});
 	}], function(){
 		app.start();

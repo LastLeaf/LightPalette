@@ -32,12 +32,12 @@ exports = module.exports = function(conn, res, args){
 	var next = function(){
 		if(args.path.charAt(0) !== '/') return res.err('notFound');
 		if(args.path.slice(-1) !== '/') args.path += '/';
-		args.serverPath = 'static/files/' + args.user + args.path;
+		args.serverPath = conn.app.config.app.siteRoot + '/static/files/' + args.user + args.path;
 		// create user folder if needed
-		fs.exists('static/files/' + args.user, function(exists){
+		fs.exists(conn.app.config.app.siteRoot + '/static/files/' + args.user, function(exists){
 			if(exists)
 				return res.next();
-			fs.mkdir('static/files/' + args.user, function(err){
+			fs.mkdir(conn.app.config.app.siteRoot + '/static/files/' + args.user, function(err){
 				if(err) return res.err('system');
 				res.next();
 			});

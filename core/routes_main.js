@@ -22,12 +22,12 @@ var drivers = exports.drivers = {
 		src: [],
 	},
 };
-var dirs = fs.readdirSync('core/client/drivers');
+var dirs = fs.readdirSync(fw.config.lpCoreRoot + '/client/drivers');
 for(var i=dirs.length-1; i>=0; i--) {
 	var dir = dirs[i];
-	if(!fs.statSync('core/client/drivers/' + dir).isDirectory())
+	if(!fs.statSync(fw.config.lpCoreRoot + '/client/drivers/' + dir).isDirectory())
 		continue;
-	var files = fs.readdirSync('core/client/drivers/' + dir);
+	var files = fs.readdirSync(fw.config.lpCoreRoot + '/client/drivers/' + dir);
 	for(var j=files.length-1; j>=0; j--) {
 		var file = files[j];
 		var ext = path.extname(file);

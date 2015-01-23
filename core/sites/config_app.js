@@ -28,6 +28,8 @@ module.exports = function(app, siteInfo, cb){
 		// build config object
 		var config = {
 			app: {
+				siteId: id,
+				siteRoot: siteRoot,
 				host: siteInfo.hosts,
 				title: siteInfo.title || 'LightPalette',
 				version: String(Date.now()),
