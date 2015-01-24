@@ -2,14 +2,15 @@
 'use strict';
 
 var crypto = require('crypto');
-var dbData = fw.module('db_data.js');
+var dbSettings = fw.module('db_settings.js');
+var dbSites = fw.module('db_sites.js');
 var password = fw.module('password.js');
 var siteController = fw.module('site_controller.js');
 var sitesConfig = require('../config_sites.js');
 
 // check login status
 var loginStatus = function(conn){
-	if(!dbData) return;
+	if(!dbSettings) return;
 	return conn.loggedIn || false;
 };
 
@@ -18,7 +19,7 @@ exports.checkStatus = function(conn, res, args){
 	var status = loginStatus(conn);
 	if(status === false) {
 		// check whether password is set
-		dbData.get('~password', function(err, pwd){
+		dbSettings.get('password', function(err, pwd){
 			if(err || !pwd) return res.err('passwordNotSet');
 			res.err('noPermission');
 		});
@@ -31,8 +32,8 @@ exports.checkStatus = function(conn, res, args){
 
 // login
 exports.login = function(conn, res, args){
-	if(!dbData) return res.err('notInstalled');
-	dbData.get('~password', function(err, pwd){
+	if(!dbSettings) return res.err('notInstalled');
+	dbSettings.get('password', function(err, pwd){
 		if(err || !pwd) return res.err('passwordNotSet');
 		if(password.check(String(args.password), pwd)) {
 			conn.loggedIn = true;
@@ -45,13 +46,13 @@ exports.login = function(conn, res, args){
 
 // set password
 exports.setPassword = function(conn, res, args){
-	if(!dbData) return res.err('notInstalled');
-	dbData.get('~password', function(err, pwd){
+	if(!dbSettings) return res.err('notInstalled');
+	dbSettings.get('password', function(err, pwd){
 		if(err) return res.err('system');
 		if(pwd && !password.check(String(args.oldPassword), pwd)) return res.err('passwordIncorrect');
 		password.hash(String(args.password), function(err, str){
 			if(err) return res.err('system');
-			dbData.set('~password', '', str, function(err){
+			dbSettings.set('password', str, function(err){
 				if(err) return res.err('system');
 				res();
 			});
@@ -79,12 +80,15 @@ exports.restartFw = function(conn, res, args){
 // get sites information
 exports.listSites = function(conn, res, args){
 	if(!loginStatus(conn)) return res.err('noPermission');
-	dbData.getByType('site', Number(args.from) || 0, Number(args.count) || 0, function(err, rows, total){
+	dbSites.count(function(err, total){
 		if(err) return res.err('system');
-		for(var i=0; i<rows.length; i++) rows[i].secret = '';
-		res({
-			rows: rows,
-			total: total
+		dbSites.find().sort('_id').skip(Number(args.from) || 0).limit(Number(args.count) || 0).exec(function(err, rows){
+			if(err) return res.err('system');
+			for(var i=0; i<rows.length; i++) rows[i].secret = '';
+			res({
+				rows: rows,
+				total: total
+			});
 		});
 	});
 };
@@ -99,12 +103,13 @@ exports.updateSite = function(conn, res, args, add){
 	var hosts = String(args.hosts).match(/\S+/g) || [];
 	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
 	if(status !== 'enabled') status = 'disabled';
-	var obj = {_id: id, title: title, permission: permission, status: status, hosts: hosts};
+	var obj = {title: title, permission: permission, status: status, hosts: hosts};
 	var setObj = function(oldObj){
-		dbData.set(id, 'site', obj, function(err){
+		dbSites.update({_id: id}, obj, {upsert: true}, function(err){
 			if(err) res.err('system');
 			var secret = obj.secret;
 			obj.secret = '';
+			obj._id = id;
 			res(obj);
 			obj.secret = secret;
 			if((!oldObj && obj.status !== 'enabled') || oldObj.status === obj.status) return;
@@ -113,7 +118,7 @@ exports.updateSite = function(conn, res, args, add){
 		});
 	};
 	if(add) {
-		dbData.get(id, function(err, site){
+		dbSites.findById(id, function(err, site){
 			if(err || site) res.err('siteExists');
 			crypto.randomBytes(24, function(err, buf){
 				if(err) return res.err('system');
@@ -122,9 +127,8 @@ exports.updateSite = function(conn, res, args, add){
 			});
 		});
 	} else {
-		dbData.get(id, function(err, site){
+		dbSites.findById(id, function(err, site){
 			if(err || !site) res.err('noPermission');
-			obj.secret = site.secret;
 			setObj(site);
 		});
 	}
@@ -135,7 +139,7 @@ exports.deleteSite = function(conn, res, args){
 	if(!loginStatus(conn)) return res.err('noPermission');
 	var id = String(args._id);
 	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
-	dbData.del(id, function(err){
+	dbSites.remove({_id: id}, function(err){
 		if(err) return res.err('system');
 		res();
 		siteController.stop(id);

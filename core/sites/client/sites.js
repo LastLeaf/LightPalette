@@ -61,7 +61,7 @@ fw.main(function(pg){
 				disabled: _('Disabled'),
 				enabled: _('Enabled')
 			} },
-			{ id: 'hosts', placeholder: 'Domain Names', type: 'extra' }
+			{ id: 'hosts', placeholder: _('Domain Names'), type: 'extra' }
 		], {
 			status: 'disabled'
 		})

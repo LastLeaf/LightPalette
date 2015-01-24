@@ -5,12 +5,12 @@ var sitesConfig = require('./config_sites.js');
 
 var startSites = function(app){
 	if(!app.db) return;
-	var dbData = app.loadedModules['/db_data.js'];
+	var dbSites = app.loadedModules['/db_sites.js'];
 	var siteController = app.loadedModules['/site_controller.js'];
-	dbData.getByType('site', 0, 0, function(err, sites){
+	dbSites.find({}, function(err, sites){
 		if(err) return;
 		for(var i=0; i<sites.length; i++) {
-			if(sites[i].status === 'enabled') siteController.start(sites[i]);
+			if(sites[i].status === 'enabled') siteController.start(sites[i].toObject());
 		}
 	});
 };
