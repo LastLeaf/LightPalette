@@ -1,4 +1,4 @@
-<tmpl id="comment">
+<tmpl id="comment" minify>
 	<div class="comment_title">`Comments`</div>
 	<div class="comment_list">`Loading...`</div>
 	<div class="comment_new">
@@ -25,8 +25,8 @@
 	</div>
 </tmpl>
 
-<tmpl id="commentItem">
-	<div class="comment_head"><a {{#if url}}href="{{url}}" {{/if}}class="comment_user">{{displayName}}</a> <span class="comment_time">{{dateTimeString}}</span></div>
+<tmpl id="commentItem" minify>
+	<div class="comment_head"><a {{#if url}}href="{{url}}"{{/if}} class="comment_user">{{displayName}}</a> <span class="comment_time">{{dateTimeString}}</span></div>
 	<div class="comment_body">{{content}}</div>
 	{{#if depth}}<div class="comment_reply"><a href="javascript:void(0)">`Reply`</a></div>{{/if}}
 	<div class="comment_response"></div>
@@ -42,6 +42,6 @@
 	"": "`Timed out. Please check your network`"
 }</json>
 
-<tmpl id="notFound">
+<tmpl id="notFound" minify>
 	`Sorry, no related content was found.`
 </tmpl>

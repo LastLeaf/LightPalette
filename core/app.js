@@ -75,9 +75,20 @@ module.exports = function(app, siteId, appconfig){
 	}, function(cb){
 		// loading theme
 		var themeId = 'default';
-		var path = 'themes/' + themeId;
-		fs.readFile(path + '/theme.json', function(err, buf){
-			try {
+		var path = app.config.app.siteRoot + '/themes/' + themeId;
+		async.waterfall([function(cb){
+			fs.exists(path + '/theme.json', cb);
+		}, function(cb){
+			path = 'themes/' + themeId;
+			fs.exists(path + '/theme.json', cb);
+		}, function(cb){
+			themeId = 'default';
+			path = 'themes/' + themeId;
+			fs.exists(path + '/theme.json', cb);
+		}], function(exists){
+			if(!exists) cb();
+			fs.readFile(path + '/theme.json', function(err, buf){
+				if(err) throw(err);
 				// load and check config
 				var themeConfig = JSON.parse(buf.toString('utf8'));
 				if(!themeConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, themeConfig.lightpalette.toString())) {
@@ -120,11 +131,7 @@ module.exports = function(app, siteId, appconfig){
 						});
 					});
 				}], cb);
-			} catch(e) {
-				console.error('Failed Loading Theme: ' + themeId);
-				console.log(e.stack);
-				cb();
-			}
+			});
 		});
 	}, function(cb){
 		// prepare dirs
