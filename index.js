@@ -11,7 +11,7 @@ try {
 } catch(e) {}
 
 // read lp's version in package.json
-var lpVersion = JSON.parse(fs.readFileSync('package.json').toString('utf8')).version;
+var lpVersion = JSON.parse(fs.readFileSync(__dirname + '/package.json').toString('utf8')).version;
 
 // start fw.mpa
 var lpCoreRoot = __dirname + '/core';
