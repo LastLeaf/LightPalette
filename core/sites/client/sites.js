@@ -59,7 +59,9 @@ fw.main(function(pg){
 			} },
 			{ id: 'status', name: _('Status'), input: {
 				disabled: _('Disabled'),
-				enabled: _('Enabled')
+				enabled: _('Enabled'),
+				safeMode: _('Safe Mode'),
+				safeModeTheme: _('Safe Mode (with Theme)')
 			} },
 			{ id: 'hosts', placeholder: _('Domain Names'), type: 'extra' }
 		], {

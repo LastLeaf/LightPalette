@@ -3,5 +3,7 @@
 	"version": "0.0.1",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
+	"thumbnail": "",
+	"description": "Add MathJax support to display mathematics content.",
 	"lightpalette": "~0.3.0"
 }

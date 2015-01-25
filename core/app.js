@@ -31,7 +31,7 @@ var walkFileTree = exports.walkFileTree = function(root, cb, doneCb, curPath){
 	});
 };
 
-module.exports = function(app, siteId, appconfig){
+module.exports = function(app, siteId, appconfig, cb){
 	async.waterfall([function(cb){
 		// set up core
 		app.setConfig(appconfig);
@@ -51,30 +51,40 @@ module.exports = function(app, siteId, appconfig){
 		cb();
 	}, function(cb){
 		// loading plugins
-		fs.readdir('plugins', function(err, files){
-			if(err) files = [];
-			async.each(files, function(file, cb){
-				var path = 'plugins/' + file;
-				fs.readFile(path + '/plugin.json', function(err, buf){
-					if(err) return cb();
-					try {
+		if(!app.config.app.enablePlugins) return cb();
+		async.eachSeries(app.config.app.plugins, function(plugin, cb){
+			if(fw.debug) console.log('Loading plugin: ' + plugin);
+			errorCatcher(function(){
+				var path = app.config.app.siteRoot + '/plugins/' + plugin;
+				async.waterfall([function(cb){
+					fs.exists(path + '/plugin.json', cb);
+				}, function(cb){
+					path = 'plugins/' + plugin;
+					fs.exists(path + '/plugin.json', cb);
+				}], function(exists){
+					if(!exists) throw(new Error('Plugin files are not found.'));
+					fs.readFile(path + '/plugin.json', function(err, buf){
+						if(err) throw(err);
 						// load and check config
 						var pluginConfig = JSON.parse(buf.toString('utf8'));
 						if(!pluginConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, pluginConfig.lightpalette.toString())) {
 							throw(new Error('Plugin is not suitable for current version of LightPalette.'));
-						}
-						require(process.cwd() + '/' + path + '/index.js')(app, {plugin: pluginConfig, path: path}, cb);
-					} catch(e) {
-						console.error('Failed Loading Plugin: ' + file);
-						console.log(e.stack);
-						cb();
-					}
+							require(process.cwd() + '/' + path + '/index.js')(app, {plugin: pluginConfig, path: path}, cb);
+						};
+					});
 				});
-			}, cb);
-		});
+			}, function(err){
+				console.error('Loading plugin "' + plugin + '" failed.');
+				console.error('Error: ' + err.message);
+				console.log(err.stack);
+				if(fw.debug) process.exit();
+			});
+			cb();
+		}, cb);
 	}, function(cb){
 		// loading theme
-		var themeId = 'default';
+		var themeId = app.config.app.theme;
+		if(!app.config.app.enableTheme) themeId = 'default';
 		var path = app.config.app.siteRoot + '/themes/' + themeId;
 		async.waterfall([function(cb){
 			fs.exists(path + '/theme.json', cb);
@@ -86,7 +96,8 @@ module.exports = function(app, siteId, appconfig){
 			path = 'themes/' + themeId;
 			fs.exists(path + '/theme.json', cb);
 		}], function(exists){
-			if(!exists) cb();
+			if(!exists) throw(new Error('Theme files are not found.'));
+			if(fw.debug) console.log('Loading theme: ' + themeId);
 			fs.readFile(path + '/theme.json', function(err, buf){
 				if(err) throw(err);
 				// load and check config
@@ -140,6 +151,6 @@ module.exports = function(app, siteId, appconfig){
 			fs.mkdir(app.config.app.siteRoot + '/static', cb);
 		});
 	}], function(){
-		app.start();
+		app.start(cb);
 	});
 };

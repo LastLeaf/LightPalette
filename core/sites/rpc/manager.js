@@ -102,28 +102,32 @@ exports.updateSite = function(conn, res, args, add){
 	var status = String(args.status);
 	var hosts = String(args.hosts).match(/\S+/g) || [];
 	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
-	if(status !== 'enabled') status = 'disabled';
-	var obj = {title: title, permission: permission, status: status, hosts: hosts};
-	var setObj = function(oldObj){
-		dbSites.update({_id: id}, obj, {upsert: true}, function(err){
+	var setObj = function(site){
+		site.title = title;
+		site.permission = permission;
+		var oldStatus = site.status;
+		site.status = status;
+		site.hosts = hosts;
+		site.save(function(err){
 			if(err) res.err('system');
-			var secret = obj.secret;
-			obj.secret = '';
-			obj._id = id;
-			res(obj);
-			obj.secret = secret;
-			if((!oldObj && obj.status !== 'enabled') || oldObj.status === obj.status) return;
-			if(obj.status === 'enabled') siteController.start(obj);
+			var secret = site.secret;
+			site.secret = '';
+			res(site.toObject());
+			site.secret = secret;
+			if(site.status === oldStatus) return;
+			if(site.status !== 'disabled') siteController.start(site.toObject());
 			else siteController.stop(id);
 		});
 	};
 	if(add) {
 		dbSites.findById(id, function(err, site){
 			if(err || site) res.err('siteExists');
+			site = new dbSites({_id: id});
 			crypto.randomBytes(24, function(err, buf){
 				if(err) return res.err('system');
-				obj.secret = buf.toString('base64');
-				setObj();
+				site.secret = buf.toString('base64');
+				site.status = 'disabled';
+				setObj(site);
 			});
 		});
 	} else {

@@ -30,10 +30,15 @@ module.exports = function(app, siteInfo, cb){
 			app: {
 				siteId: id,
 				siteRoot: siteRoot,
+				safeMode: (siteInfo.status !== 'enabled'),
+				enablePlugins: (siteInfo.status !== 'safeMode' && siteInfo.status !== 'safeModeTheme'),
+				enableTheme: (siteInfo.status !== 'safeMode'),
+				plugins: siteInfo.plugins,
+				theme: siteInfo.theme,
 				host: siteInfo.hosts,
 				title: siteInfo.title || 'LightPalette',
 				version: String(Date.now()),
-				locale: locales,
+				locale: locales
 			},
 			client: {
 				cache: siteRoot + '/cache',

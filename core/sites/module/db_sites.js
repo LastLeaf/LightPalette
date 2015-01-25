@@ -13,7 +13,9 @@ module.exports = function(app, next){
 		permission: String,
 		status: String,
 		secret: String,
-		hosts: [String]
+		hosts: [String],
+		plugins: { type: [String], default: [] },
+		theme: { type: String, default: 'default' }
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false, collection: app.config.db.prefix + '.~sites'});
 

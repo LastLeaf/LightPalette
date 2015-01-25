@@ -1,17 +1,21 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
+var async = require('async');
 var sitesConfig = require('./config_sites.js');
 
 var startSites = function(app){
 	if(!app.db) return;
 	var dbSites = app.loadedModules['/db_sites.js'];
 	var siteController = app.loadedModules['/site_controller.js'];
-	dbSites.find({}, function(err, sites){
+	dbSites.find().sort('_id').exec(function(err, sites){
 		if(err) return;
-		for(var i=0; i<sites.length; i++) {
-			if(sites[i].status === 'enabled') siteController.start(sites[i].toObject());
-		}
+		async.eachSeries(sites, function(site, cb){
+			if(site.status !== 'disabled') siteController.start(site.toObject(), function(){ cb() });
+			else cb();
+		}, function(){
+			console.log('LightPalette started.');
+		});
 	});
 };
 

@@ -18,7 +18,7 @@ var lpCoreRoot = __dirname + '/core';
 fw({
 	ip: config.ip || '0.0.0.0',
 	port: config.port || 1180,
-	app: lpCoreRoot + '/sites/app.js',
+	app: lpCoreRoot + '/sites/sites.js',
 	lpCoreRoot: lpCoreRoot,
 	lpVersion: lpVersion,
 });

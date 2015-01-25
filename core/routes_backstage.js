@@ -65,6 +65,9 @@ module.exports = {
 	'./': {
 		redirect: 'home',
 	},
+	'./*': {
+		redirect: 'home',
+	},
 	'./home': {
 		parent: 'backstage',
 		main: 'home',
@@ -123,6 +126,12 @@ module.exports = {
 		parent: 'backstage',
 		main: 'comments',
 		tmpl: 'comments',
+	},
+	'./addons': {
+		parent: 'backstage',
+		main: 'addons',
+		tmpl: 'addons',
+		style: 'addons.css',
 	},
 	'./users': {
 		parent: 'backstage',

@@ -1,0 +1,29 @@
+<tmpl id="main" minify>
+	<div class="addons_tabs">
+		<span class="addons_tab_plugins">`Plugins`</span>
+		<span class="addons_tab_themes">`Themes`</span>
+	</div>
+	<div class="addons_list"></div>
+</tmpl>
+
+<tmpl id="list" minify>
+	{{#if blocked}}<div class="addons_blocked">`This site is in safe mode. Items below are temporarily blocked.`</div>{{/if}}
+	{{#each rows}}
+	<div class="addons_item">
+		{{#if incompatible}}
+			<div class="addons_status">`Incompatible`</div>
+		{{else}}{{#if enabled}}
+			<div class="addons_status addons_status-enabled">`Enabled`</div>
+		{{else}}
+			<div class="addons_status addons_status-disabled">`Disabled`</div>
+		{{/if}}{{/if}}
+		<img class="addons_thumb" src="{{thumbnail}}">
+		<div class="addons_head">
+			<span class="addons_title">{{title}}</span>
+			<span class="addons_version">{{version}}</span>
+			<a {{#if url}}href="{{url}}"{{/if}} class="addons_author">{{author}}</a>
+		</div>
+		<div class="addons_description">{{description}}</div>
+	</div>
+	{{/each}}
+</tmpl>

@@ -13,7 +13,10 @@
 		"Modify Password": "修改站点管理器密码",
 		"Restart Framework": "完全重启框架",
 		"Sorry, request timed out.": "对不起，请求超时了。",
-		"The site ID can only contain letters, numbers, \\\"_\\\" and \\\"_\\\"": "站点ID仅能包含英文字母、数字、“_”、“-”"
+		"Sorry, there is an internal server error.": "不好意思，发生了一个服务器内部错误。",
+		"The password is incorrect.": "密码不正确。",
+		"The site ID can only contain letters, numbers, \\\"_\\\" and \\\"_\\\"": "站点ID仅能包含英文字母、数字、“_”、“-”",
+		"The site ID already exists.": "站点ID已存在。"
 	},
 	{
 		"Site ID": "站点ID",
@@ -30,6 +33,8 @@
 		"As Sites Manager": "有站点管理员权限",
 		"Disabled": "禁用",
 		"Enabled": "启用",
+		"Safe Mode": "安全模式",
+		"Safe Mode (with Theme)": "安全模式（启用主题）",
 		"Domain Names": "域名列表"
 	},
 	{}

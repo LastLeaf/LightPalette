@@ -9,6 +9,7 @@
 		"Categories": "分类",
 		"Comments": "评论",
 		"Users": "用户",
+		"Addons": "组件",
 		"Settings": "设置",
 		"Hello {{displayName}}! You can <a fw href=\"/backstage/home\">modify your infomation</a>, or <a fw href=\"#\" class=\"logout\">logout</a>.": "您好，{{displayName}}！您可以<a fw href=\"/backstage/home\">修改个人信息</a>，或者<a fw href=\"#\" class=\"logout\">登出</a>。",
 		"Timed out. Please check your network.": "请求超时，请检查您的网络状况。",
