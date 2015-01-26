@@ -1,12 +1,19 @@
 [
 	{
+		"Apply": "应用更改",
 		"Plugins": "插件",
 		"Themes": "主题",
 		"This site is in safe mode. Items below are temporarily blocked.": "站点处于安全模式。以下项目已被暂时屏蔽。",
 		"Incompatible": "不兼容",
-		"Enabled": "启用",
-		"Disabled": "禁用"
+		"Enabled": "已启用",
+		"Disabled": "已禁用",
+		"by": "作者"
 	},
-	{},
+	{
+		"Enabled": "已启用",
+		"Disabled": "已禁用",
+		"Will Enable": "将被启用",
+		"Will Disable": "将被禁用"
+	},
 	{}
 ]

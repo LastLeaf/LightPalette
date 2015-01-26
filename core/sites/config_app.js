@@ -56,6 +56,7 @@ module.exports = function(app, siteInfo, cb){
 				user: app.config.db.user,
 				password: app.config.db.password,
 				name: app.config.db.name,
+				globalPrefix: app.config.db.prefix,
 				prefix: app.config.db.prefix + '.' + id + '.',
 				sessionCollection: app.config.db.prefix + '.' + id + '.~sessions'
 			},

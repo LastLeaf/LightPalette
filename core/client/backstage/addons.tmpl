@@ -1,7 +1,10 @@
 <tmpl id="main" minify>
+	<div class="addons_opt">
+		<input type="button" value="`Apply`" class="submit addons_apply">
+	</div>
 	<div class="addons_tabs">
-		<span class="addons_tab_plugins">`Plugins`</span>
-		<span class="addons_tab_themes">`Themes`</span>
+		<span class="addons_tab addons_tab_plugins">`Plugins`</span>
+		<span class="addons_tab addons_tab_themes">`Themes`</span>
 	</div>
 	<div class="addons_list"></div>
 </tmpl>
@@ -11,19 +14,20 @@
 	{{#each rows}}
 	<div class="addons_item">
 		{{#if incompatible}}
-			<div class="addons_status">`Incompatible`</div>
+			<div addonId="{{id}}" class="addons_status">`Incompatible`</div>
 		{{else}}{{#if enabled}}
-			<div class="addons_status addons_status-enabled">`Enabled`</div>
+			<div addonId="{{id}}" class="addons_status addons_status-enabled">`Enabled`</div>
 		{{else}}
-			<div class="addons_status addons_status-disabled">`Disabled`</div>
+			<div addonId="{{id}}" class="addons_status addons_status-disabled">`Disabled`</div>
 		{{/if}}{{/if}}
-		<img class="addons_thumb" src="{{thumbnail}}">
-		<div class="addons_head">
-			<span class="addons_title">{{title}}</span>
-			<span class="addons_version">{{version}}</span>
-			<a {{#if url}}href="{{url}}"{{/if}} class="addons_author">{{author}}</a>
+		<div class="addons_content">
+			<div class="addons_head">
+				<a {{#if url}}href="{{url}}"{{/if}} class="addons_title">{{title}}</a>
+				<span class="addons_version">{{version}}</span>
+				<span class="addons_author">`by` {{author}}</span>
+			</div>
+			<div class="addons_description">{{description}}</div>
 		</div>
-		<div class="addons_description">{{description}}</div>
 	</div>
 	{{/each}}
 </tmpl>
