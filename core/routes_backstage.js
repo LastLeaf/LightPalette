@@ -127,11 +127,29 @@ module.exports = {
 		main: 'comments',
 		tmpl: 'comments',
 	},
-	'./addons': {
+	addons: {
 		parent: 'backstage',
 		main: 'addons',
 		tmpl: 'addons',
 		style: 'addons.css',
+	},
+	'./addons/': {
+		redirect: 'addons/plugins'
+	},
+	'./addons/plugins': {
+		parent: 'addons'
+	},
+	'./addons/themes': {
+		parent: 'addons'
+	},
+	addonsSettings: {
+		parent: 'backstage',
+		main: 'addons_settings',
+		tmpl: 'addons_settings',
+		style: 'addons.css'
+	},
+	'./addons/:type/:id': {
+		redirect: 'addons'
 	},
 	'./users': {
 		parent: 'backstage',

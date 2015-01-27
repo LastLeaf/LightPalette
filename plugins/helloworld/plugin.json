@@ -3,5 +3,8 @@
 	"version": "0.0.1",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
-	"lightpalette": "~0.3.0"
+	"lightpalette": "~0.3.0",
+	"settings": {
+		"main": "main"
+	}
 }

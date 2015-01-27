@@ -15,7 +15,8 @@ module.exports = function(conn, args, childRes, next){
 			if(err || !category) category = [];
 			Post.find({status: 'special'}).select('_id path title').sort('time').exec(function(err, special){
 				if(err || !special) special = {};
-				var content = tmpl(conn).main({
+				var data = {
+					themeSettings: childRes.themeSettings,
 					title: childRes.siteInfo.siteTitle,
 					subtitle: childRes.siteInfo.siteSubtitle,
 					copyright: childRes.siteInfo.siteCopyright,
@@ -23,12 +24,12 @@ module.exports = function(conn, args, childRes, next){
 					special: special,
 					content: childRes.content,
 					userInfo: userInfo
-				});
+				};
+				var content = tmpl(conn).main(data);
 				childRes.content = content;
-				childRes.extraHead = tmpl(conn).extraHead({
-					title: childRes.siteInfo.siteTitle
-				});
+				childRes.extraHead = tmpl(conn).extraHead(data);
 				delete childRes.siteInfo;
+				delete childRes.themeSettings;
 				next(childRes);
 			});
 		});

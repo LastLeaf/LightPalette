@@ -1,8 +1,6 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var LIST_LEN = 20;
-
 fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
@@ -34,13 +32,20 @@ fw.main(function(pg){
 			if($status.hasClass('addons_status-disabled') || $status.hasClass('addons_status-disable')) {
 				$list.find('.addons_status-enable').removeClass('addons_status-enable').addClass('addons_status-disabled').text(_('Disabled'));
 				$list.find('.addons_status-enabled').removeClass('addons_status-enabled').addClass('addons_status-disable').text(_('Will Disable'));
-				$status.removeClass('addons_status-disabled').removeClass('addons_status-disable').addClass('addons_status-enable').text(_('Will Enable'));
+				if($status.hasClass('addons_status-disabled')) $status.removeClass('addons_status-disabled').removeClass('addons_status-disable').addClass('addons_status-enable').text(_('Will Enable'));
+				else $status.removeClass('addons_status-disable').addClass('addons_status-enabled').text(_('Enabled'));
 			}
 		}
 	});
 
+	// settings button
+	$content.find('.addons_list').on('click', '.addons_settings', function(){
+		var path = '/backstage/addons/' + curTab.slice(0, -1) + '/' + $(this).attr('addonId');
+		fw.go(path);
+	});
+
 	// apply button
-	$list.find('.addons_apply').click(function(){
+	$content.find('.addons_apply').click(function(){
 		if(tabsLocked) return;
 		var $apply = $(this).attr('disabled', true);
 		if(curTab === 'plugins') var method = 'addons:alterPlugins';
@@ -61,6 +66,9 @@ fw.main(function(pg){
 			pg.rpc('user:current');
 		}, 3000);
 	});
+	pg.on('socketConnect', function(){
+		if($content.find('.addons_apply').attr('disabled')) fw.reload();
+	});
 
 	// show list content
 	var curTab = '';
@@ -69,6 +77,7 @@ fw.main(function(pg){
 		if(tabsLocked) return;
 		tabsLocked = true;
 		curTab = tab;
+		multiSelect = (tab !== 'themes');
 		$list.html('');
 		$tabs.children().removeClass('addons_tab_current');
 		$tabs.children('.addons_tab_'+tab).addClass('addons_tab_current');
@@ -82,15 +91,11 @@ fw.main(function(pg){
 			tabsLocked = false;
 		});
 	};
-	$tabs.find('.addons_tab').click(function(){
-		var $tab = $(this);
-		var tab = 'plugins';
-		multiSelect = true;
-		if($tab.hasClass('addons_tab_themes')) {
-			tab = 'themes';
-			multiSelect = false;
-		}
-		showList(tab);
+
+	// check current page
+	pg.on('childLoadEnd', function(){
+		var path = fw.getPath();
+		path = path.slice(path.lastIndexOf('/') + 1);
+		showList(path);
 	});
-	showList('plugins');
 });

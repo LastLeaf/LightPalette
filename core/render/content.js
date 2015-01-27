@@ -2,6 +2,7 @@
 'use strict';
 
 var Settings = fw.module('db_model').Settings;
+var ThemeSettings = fw.module('db_model').ThemeSettings;
 var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
@@ -127,26 +128,31 @@ module.exports = function(conn, args, childRes, next){
 		if(err || !r) r = {};
 		childRes.siteInfo = r;
 		childRes.title = r.siteTitle || fw.config.app.title;
-		sitePathParser(conn, args['*'], function(type, query, queryName, page, totalPages, data){
-			var title = query;
-			if(type === '404') {
-				childRes.content = tmpl(conn).notFound({ query: query, queryName: queryName });
-				childRes.statusCode = 404;
-			} else if(type === 'post') {
-				childRes.content = tmpl(conn).single(data);
-				if(title) childRes.title = title + ' | ' + childRes.title;
-			} else {
-				childRes.content = tmpl(conn).list({
-					rows: data,
-					type: type,
-					query: query,
-					queryName: queryName,
-					pagePrev: page,
-					pageNext: (page+2 > totalPages ? 0 : page+2),
-				});
-				if(title) childRes.title = title + ' | ' + childRes.title;
-			}
-			next(childRes);
+		ThemeSettings.get(conn.app.config.app.theme, function(err, themeSettings){
+			childRes.themeSettings = themeSettings;
+			sitePathParser(conn, args['*'], function(type, query, queryName, page, totalPages, data){
+				var title = query;
+				if(type === '404') {
+					childRes.content = tmpl(conn).notFound({ themeSettings: themeSettings, query: query, queryName: queryName });
+					childRes.statusCode = 404;
+				} else if(type === 'post') {
+					data.themeSettings = themeSettings;
+					childRes.content = tmpl(conn).single(data);
+					if(title) childRes.title = title + ' | ' + childRes.title;
+				} else {
+					childRes.content = tmpl(conn).list({
+						themeSettings: themeSettings,
+						rows: data,
+						type: type,
+						query: query,
+						queryName: queryName,
+						pagePrev: page,
+						pageNext: (page+2 > totalPages ? 0 : page+2),
+					});
+					if(title) childRes.title = title + ' | ' + childRes.title;
+				}
+				next(childRes);
+			});
 		});
 	});
 };

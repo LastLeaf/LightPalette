@@ -6,6 +6,8 @@ var async = require('async');
 var semver = require('semver');
 var formFilter = fw.module('form_filter');
 var User = fw.module('db_model').User;
+var PluginSettings = fw.module('db_model').PluginSettings;
+var ThemeSettings = fw.module('db_model').ThemeSettings;
 var dbSites = fw.module('db_sites.js');
 
 // get whole plugins list
@@ -44,6 +46,7 @@ exports.listPlugins = function(conn, res, args){
 			for(var k in pluginsInfo) {
 				pluginsInfo[k].id = k;
 				pluginsInfo[k].enabled = (enabledPlugins.indexOf(k) >= 0);
+				pluginsInfo[k].settings = !!pluginsInfo[k].settings;
 				if(!pluginsInfo[k].lightpalette || !semver.satisfies(fw.config.lpVersion, pluginsInfo[k].lightpalette.toString()))
 					pluginsInfo[k].incompatible = true;
 				rows.push(pluginsInfo[k]);
@@ -92,6 +95,7 @@ exports.listThemes = function(conn, res, args){
 			for(var k in themesInfo) {
 				themesInfo[k].id = k;
 				themesInfo[k].enabled = (k === enabledTheme);
+				themesInfo[k].settings = !!themesInfo[k].settings;
 				if(!themesInfo[k].lightpalette || !semver.satisfies(fw.config.lpVersion, themesInfo[k].lightpalette.toString()))
 					themesInfo[k].incompatible = true;
 				rows.push(themesInfo[k]);
@@ -105,13 +109,36 @@ exports.listThemes = function(conn, res, args){
 };
 
 // enable/disable plugins
-exports.alterPlugins = function(conn, res, args){};
-
-// enable/disable plugins
-exports.alterThemes = function(conn, res, args){
+exports.alterPlugins = function(conn, res, args){
 	var args = formFilter(args, {
 		enable: [String, /\S([\S ]*\S)?/g],
 		disable: [String, /\S([\S ]*\S)?/g],
+		restart: ''
+	});
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		var siteId = conn.app.config.app.siteId;
+		dbSites.findById(siteId, function(err, site){
+			if(err || !site) return res.err('system');
+			var plugins = site.plugins;
+			for(var i=plugins.length-1; i>=0; i--) {
+				if(args.disable.indexOf(plugins[i]) >= 0) plugins.splice(i, 1);
+			}
+			site.plugins = plugins.concat(args.enable);
+			site.save(function(){
+				conn.app.config.app.plugins = site.plugins;
+				conn.app.config.app.version = String(Date.now());
+				if(args.restart) conn.app.restart();
+				else res();
+			});
+		});
+	});
+};
+
+// enable/disable themes
+exports.alterThemes = function(conn, res, args){
+	var args = formFilter(args, {
+		enable: [String, /\S([\S ]*\S)?/g],
 		restart: ''
 	});
 	if(!args.enable[0]) res.err('system');
@@ -122,9 +149,53 @@ exports.alterThemes = function(conn, res, args){
 			if(err || !site) return res.err('system');
 			site.theme = args.enable[0];
 			site.save(function(){
+				conn.app.config.app.theme = site.theme;
+				conn.app.config.app.version = String(Date.now());
 				if(args.restart) conn.app.restart();
 				else res();
 			});
 		});
+	});
+};
+
+// set plugin settings
+exports.pluginSettings = function(conn, res, id, newSettings){
+	var id = String(id);
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		if(typeof(newSettings) === 'undefined') {
+			// get settings
+			PluginSettings.get(id, function(err, v){
+				if(err) return res.err('system');
+				res(v);
+			});
+		} else {
+			// set settings
+			PluginSettings.set(id, newSettings, function(err){
+				if(err) return res.err('system');
+				res();
+			});
+		}
+	});
+};
+
+// set theme settings
+exports.themeSettings = function(conn, res, id, newSettings){
+	var id = String(id);
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		if(typeof(newSettings) === 'undefined') {
+			// get settings
+			ThemeSettings.get(id, function(err, v){
+				if(err) return res.err('system');
+				res(v);
+			});
+		} else {
+			// set settings
+			ThemeSettings.set(id, newSettings, function(err){
+				if(err) return res.err('system');
+				res();
+			});
+		}
 	});
 };

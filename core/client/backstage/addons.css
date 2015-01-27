@@ -7,18 +7,19 @@
 .addons_tabs {
   font-size: 1.4em;
 }
-.addons_tab {
+#content a.addons_tab {
   display: inline-block;
   color: #666;
   margin: 0 0.25em 0.25em 0;
   padding: 0.1em 0.5em;
   border-bottom: 2px solid transparent;
   cursor: pointer;
+  text-decoration: none;
 }
-.addons_tab:hover {
+#content a.addons_tab:hover {
   border-bottom-color: #666;
 }
-.addons_tab_current {
+#content a.addons_tab_current {
   color: #444;
   border-bottom-color: #444;
 }
@@ -37,7 +38,7 @@
   float: right;
   background: #bbb;
   color: #888;
-  padding: 6px;
+  padding: 6px 6px 4px;
 }
 .addons_content {
   border: 2px solid #bbb;
@@ -51,7 +52,7 @@
   background: #999;
   color: #222;
 }
-.addons_status-disable:hover + div, .addons_status-disabled:hover + div {
+.addons_status-disable:hover + .addons_content, .addons_status-disabled:hover + .addons_content {
   border-color: #999;
 }
 .addons_status-enable, .addons_status-enabled {
@@ -59,13 +60,13 @@
   background: #666;
   color: #fff;
 }
-.addons_status-enable + div, .addons_status-enabled + div {
+.addons_status-enable + .addons_content, .addons_status-enabled + .addons_content {
   border-color: #666;
 }
 .addons_status-enable:hover, .addons_status-enabled:hover {
   background: #444;
 }
-.addons_status-enable:hover + div, .addons_status-enabled:hover + div {
+.addons_status-enable:hover + .addons_content, .addons_status-enabled:hover + .addons_content {
   border-color: #444;
 }
 #content a.addons_title {
@@ -78,4 +79,20 @@
 }
 .addons_version {
   margin-right: 0.5em;
+}
+.addons_settings {
+  float: right;
+  margin-right: 8px;
+  background: #666;
+  color: #fff;
+  padding: 4px 6px;
+  margin-top: -4px;
+  cursor: pointer;
+  display: none;
+}
+.addons_settings:hover {
+  background: #444;
+}
+.addons_status-enabled + .addons_content .addons_settings {
+  display: block;
 }

@@ -3,8 +3,8 @@
 		<input type="button" value="`Apply`" class="submit addons_apply">
 	</div>
 	<div class="addons_tabs">
-		<span class="addons_tab addons_tab_plugins">`Plugins`</span>
-		<span class="addons_tab addons_tab_themes">`Themes`</span>
+		<a fw href="plugins" class="addons_tab addons_tab_plugins">`Plugins`</a>
+		<a fw href="themes" class="addons_tab addons_tab_themes">`Themes`</a>
 	</div>
 	<div class="addons_list"></div>
 </tmpl>
@@ -21,6 +21,7 @@
 			<div addonId="{{id}}" class="addons_status addons_status-disabled">`Disabled`</div>
 		{{/if}}{{/if}}
 		<div class="addons_content">
+			{{#if settings}}<div addonId="{{id}}" class="addons_settings">`Settings`</div>{{/if}}
 			<div class="addons_head">
 				<a {{#if url}}href="{{url}}"{{/if}} class="addons_title">{{title}}</a>
 				<span class="addons_version">{{version}}</span>

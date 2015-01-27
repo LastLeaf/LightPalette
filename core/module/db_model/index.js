@@ -4,6 +4,8 @@
 var models = [
 	'user.js',
 	'settings.js',
+	'settings_plugins.js',
+	'settings_themes.js',
 	'series.js',
 	'category.js',
 	'post.js',
