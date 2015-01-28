@@ -5,9 +5,8 @@ fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
 
-	lp.registerDriver('presentation', {
+	lp.backstage.driver('presentation', {
 		name: _('Presentation'),
-		priority: 6000,
 		editor: function(div, data, userInfo){
 
 			var $div = $(div).html(tmpl.presentation({

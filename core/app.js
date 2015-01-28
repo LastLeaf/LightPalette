@@ -83,6 +83,9 @@ var reconfig = function(app, cb){
 					try {
 						if(err) throw(err);
 						var pluginConfig = JSON.parse(buf.toString('utf8'));
+						if(pluginConfig.id && pluginConfig.id !== plugin) {
+							throw(new Error('Plugin is not placed at the right position.'));
+						}
 						if(!pluginConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, pluginConfig.lightpalette.toString())) {
 							throw(new Error('Plugin is not suitable for current version of LightPalette.'));
 						}
@@ -135,6 +138,9 @@ var reconfig = function(app, cb){
 				if(err) throw(err);
 				// load and check config
 				var themeConfig = JSON.parse(buf.toString('utf8'));
+				if(themeConfig.id && themeConfig.id !== themeId) {
+					throw(new Error('Theme is not placed at the right position.'));
+				}
 				if(!themeConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, themeConfig.lightpalette.toString())) {
 					throw(new Error('Theme is not suitable for current version of LightPalette.'));
 				}

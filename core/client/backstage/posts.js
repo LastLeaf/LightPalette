@@ -33,7 +33,7 @@ fw.main(function(pg){
 				var rows = r.rows;
 				for(var i=0; i<r.rows.length; i++) {
 					var row = r.rows[i];
-					row.type = lp.driverName(row.type);
+					row.type = lp.backstage.driverName(row.type);
 					row.status = _(row.status);
 					var extra = [];
 					extra.push(row.dateTimeString);

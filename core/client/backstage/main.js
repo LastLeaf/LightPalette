@@ -6,6 +6,41 @@ fw.main(function(pg){
 	lp.tableBuilder.i18n = tmpl.i18n;
 	lp.backstage = {};
 
+	// driver manager
+	(function(){
+		var drivers = {};
+		lp.backstage.driver = function(id, options){
+			drivers[id] = options;
+		};
+		lp.backstage.driverList = function(userType){
+			var r = [];
+			for(var k in drivers) {
+				if(drivers[k].permission) {
+					var permission = drivers[k].permission;
+					if(permission === 'admin' && userType !== 'admin')
+						continue;
+					if(permission === 'editor' && userType !== 'admin' && userType !== 'editor')
+						continue;
+					if(permission === 'writer' && userType !== 'admin' && userType !== 'editor' && userType !== 'writer')
+						continue;
+				}
+				r.push({
+					id: k,
+					name: drivers[k].name
+				});
+			}
+			return r;
+		};
+		lp.backstage.driverName = function(id){
+			if(drivers[id]) return drivers[id].name;
+			return '';
+		};
+		lp.backstage.driverEditor = function(id, div, data, userInfo){
+			if(drivers[id] && drivers[id].editor)
+				return drivers[id].editor(div, data, userInfo);
+		};
+	})();
+
 	// create div structure
 	var lpVersion = fw.version;
 	if(lpVersion.indexOf('~') >= 0) lpVersion = lpVersion.slice(0, lpVersion.indexOf('~'));

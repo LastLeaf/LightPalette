@@ -1,48 +1,6 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-
-// list drivers
-var drivers = {
-	parent: 'backstage',
-	lib: [],
-	main: ['drivers'],
-	tmpl: [],
-	style: []
-};
-var dirs = fs.readdirSync(fw.config.lpCoreRoot + '/client/backstage/drivers');
-for(var i=dirs.length-1; i>=0; i--) {
-	var dir = dirs[i];
-	if(!fs.statSync(fw.config.lpCoreRoot + '/client/backstage/drivers/' + dir).isDirectory())
-		continue;
-	var files = fs.readdirSync(fw.config.lpCoreRoot + '/client/backstage/drivers/' + dir);
-	for(var j=files.length-1; j>=0; j--) {
-		var file = files[j];
-		var ext = path.extname(file);
-		if(ext === '.js' && file.slice(-7) !== '.min.js') {
-			if(file === 'main.js')
-				drivers.main.unshift('drivers/' + dir + '/' + file);
-			else
-				drivers.lib.unshift('drivers/' + dir + '/' + file);
-		}
-		if(ext === '.stylus' || (ext === '.css' && file.slice(-8) !== '.min.css')) {
-			if(file === 'main.stylus' || file === 'main.css')
-				drivers.style.push('drivers/' + dir + '/' + file);
-			else
-				drivers.style.unshift('drivers/' + dir + '/' + file);
-		}
-		if(ext === '.tmpl') {
-			if(file === 'main.tmpl')
-				drivers.tmpl.push('drivers/' + dir + '/' + file);
-			else
-				drivers.tmpl.unshift('drivers/' + dir + '/' + file);
-		}
-	}
-}
-
-// generate routes
 module.exports = {
 	backstage: {
 		parent: 'global',
@@ -54,14 +12,17 @@ module.exports = {
 				src: '/lib/jquery-2.1.1',
 				userAgent: '^.*(?!MSIE (6|7|8)\.)'
 			}, {
-				src: ['lib/table_builder', 'lib/driver_manager'],
+				src: ['lib/table_builder'],
 				minify: 'libs'
 			}],
 		main: 'main',
 		tmpl: 'main',
 		style: 'main.css',
 	},
-	drivers: drivers,
+	drivers: {
+		parent: 'backstage',
+		main: 'drivers'
+	},
 	'./': {
 		redirect: 'home',
 	},
@@ -169,7 +130,7 @@ module.exports = {
 		style: 'files.css',
 	},
 	'./preview/*': {
-		parent: 'forestage',
+		parent: 'theme',
 		render: '/backstage/preview',
 	}
 };

@@ -45,6 +45,7 @@ exports.listPlugins = function(conn, res, args){
 			var rows = [];
 			for(var k in pluginsInfo) {
 				var info = pluginsInfo[k];
+				if(info.id && info.id !== k) continue;
 				info.id = k;
 				if(typeof(info.title) === 'object') {
 					info.title = info.title[conn.language] || info.title[''] || '';
@@ -101,6 +102,7 @@ exports.listThemes = function(conn, res, args){
 			var rows = [];
 			for(var k in themesInfo) {
 				var info = themesInfo[k];
+				if(info.id && info.id !== k) continue;
 				info.id = k;
 				if(typeof(info.title) === 'object') {
 					info.title = info.title[conn.language] || info.title[''] || '';

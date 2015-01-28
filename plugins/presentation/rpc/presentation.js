@@ -1,8 +1,9 @@
+// Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var formFilter = fw.module('form_filter');
-var Post = fw.module('db_model').Post;
-var User = fw.module('db_model').User;
+var formFilter = fw.module('/form_filter.js');
+var Post = fw.module('/db_model').Post;
+var User = fw.module('/db_model').User;
 
 var currentSlides = {};
 currentSlides.init = function(id){

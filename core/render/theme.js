@@ -16,6 +16,7 @@ module.exports = function(conn, args, childRes, next){
 			Post.find({status: 'special'}).select('_id path title').sort('time').exec(function(err, special){
 				if(err || !special) special = {};
 				var data = {
+					siteInfo: childRes.siteInfo,
 					themeSettings: childRes.themeSettings,
 					title: childRes.siteInfo.siteTitle,
 					subtitle: childRes.siteInfo.siteSubtitle,

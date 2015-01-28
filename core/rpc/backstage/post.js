@@ -10,7 +10,7 @@ var Category = fw.module('db_model').Category;
 var Comment = fw.module('db_model').Comment;
 var preservedPath = fw.module('preserved_path.js');
 var dateString = fw.module('date_string.js');
-var drivers = fw.module('drivers');
+var driver = fw.module('driver.js');
 
 // create a new post and return its id
 exports.create = function(conn, res, args){
@@ -18,7 +18,7 @@ exports.create = function(conn, res, args){
 		type: ''
 	});
 	if(!args.type) return res.err('system');
-	if(!drivers[args.type]) return res.err('system');
+	if(!driver.get(args.type)) return res.err('system');
 	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin){
 		if(!contributor) return res.err('noPermission');
 		var postArgs = {
@@ -27,7 +27,7 @@ exports.create = function(conn, res, args){
 			time: Math.floor(new Date().getTime() / 1000),
 			driver: {}
 		};
-		var writePermission = drivers[args.type].writePermission;
+		var writePermission = driver.get(args.type).writePermission;
 		if(typeof(writePermission) === 'function') {
 			writePermission = writePermission(postArgs);
 		}
@@ -94,15 +94,15 @@ exports.modify = function(conn, res, args){
 						return res.err('noPermission');
 					var next = function(){
 						// call driver's filter
-						if(!drivers[r.type]) return res.err('system');
-						var writePermission = drivers[r.type].writePermission;
+						if(!driver.get(r.type)) return res.err('system');
+						var writePermission = driver.get(r.type).writePermission;
 						if(typeof(writePermission) === 'function') {
 							writePermission = writePermission(args);
 						}
 						if(writePermission === 'admin' && !admin) return res.err('noPermission');
 						if(writePermission === 'editor' && !editor) return res.err('noPermission');
 						if(writePermission === 'writer' && !writer) return res.err('noPermission');
-						drivers[r.type].writeFilter(args, function(err){
+						driver.get(r.type).writeFilter(args, function(err){
 							if(err) return res.err(err);
 							// save
 							var id = args._id;
@@ -185,8 +185,8 @@ exports.get = function(conn, res, args){
 					r.dateString = dateString.date(r.time*1000);
 					r.dateTimeString = dateString.dateTime(r.time*1000);
 				}
-				if(!drivers[r.type]) return res.err('system');
-				drivers[r.type].readEditFilter(r, function(err){
+				if(!driver.get(r.type)) return res.err('system');
+				driver.get(r.type).readEditFilter(r, function(err){
 					if(err) return res.err('system');
 					res(r);
 				});
@@ -209,8 +209,8 @@ exports.read = function(conn, res, args){
 			if(r.status !== 'published' && r.path !== args.path) return res.err('notFound');
 			r.dateString = dateString.date(r.time*1000);
 			r.dateTimeString = dateString.dateTime(r.time*1000);
-			if(!drivers[r.type]) return res.err('system');
-			drivers[r.type].readFilter(r, function(err){
+			if(!driver.get(r.type)) return res.err('system');
+			driver.get(r.type).readFilter(r, function(err){
 				if(err) return res.err(err);
 				res(r);
 				// add to stat

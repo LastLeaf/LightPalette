@@ -10,11 +10,9 @@ fw.main(function(pg){
 
 	// forestage drivers
 	var drivers = {};
-	lp.drivers = {
-		init: function(id, args){
-			if(typeof(args) === 'function') drivers[id] = args;
-			else if(drivers[id]) drivers[id](args);
-		}
+	lp.driver = function(id, args){
+		if(typeof(args) === 'function') drivers[id] = args;
+		else if(drivers[id]) drivers[id](args);
 	};
 
 	// gravatar helper

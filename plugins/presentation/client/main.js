@@ -1,8 +1,10 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
+// TODO fix reveal.js loading, rpc, theme css path, etc
+
 fw.main(function(pg){
-	lp.drivers.init('presentation', function(args){
+	lp.drivers('presentation', function(args){
 		var postId = args.id;
 
 		// init structure

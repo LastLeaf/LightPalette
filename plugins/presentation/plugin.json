@@ -1,0 +1,16 @@
+{
+	"id": "presentation",
+	"title": {
+		"": "Post Driver: Presentation",
+		"zh_CN": "博文驱动：演示"
+	},
+	"version": "0.0.1",
+	"author": "LastLeaf",
+	"url": "http://lastleaf.me",
+	"thumbnail": "",
+	"description": {
+		"": "Create, edit, and display presentation-type posts, based on reveal.js.",
+		"zh_CN": "创建、编辑、显示“演示”类型文章，基于reveal.js。"
+	},
+	"lightpalette": "~0.3.0"
+}

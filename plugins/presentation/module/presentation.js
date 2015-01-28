@@ -1,7 +1,7 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var drivers = fw.module('/drivers.js');
+var driver = fw.module('/driver.js');
 
 var marked = require('marked');
 marked.setOptions({
@@ -52,6 +52,6 @@ handlers.readFilter = function(args, cb){
 };
 
 module.exports = function(app, cb){
-	drivers.set('presentation', handlers);
+	driver.set('presentation', handlers);
 	cb();
 };

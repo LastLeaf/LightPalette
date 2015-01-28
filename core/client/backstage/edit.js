@@ -33,7 +33,7 @@ fw.main(function(pg){
 		});
 		// tags
 		$form.find('[name=tag]').val(post.tag.join('\r\n'));
-		var editor = lp.driverEditor(post.type, $content.find('.driver')[0], post, userInfo);
+		var editor = lp.backstage.driverEditor(post.type, $content.find('.driver')[0], post, userInfo);
 
 		// series
 		var $series = $form.find('.sidebar_series');

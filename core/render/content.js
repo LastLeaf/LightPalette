@@ -124,33 +124,49 @@ var sitePathParser = function(conn, path, cb){
 };
 
 module.exports = function(conn, args, childRes, next){
-	Settings.get('basic', function(err, r){
-		if(err || !r) r = {};
-		childRes.siteInfo = r;
-		childRes.title = r.siteTitle || fw.config.app.title;
+	Settings.get('basic', function(err, siteInfo){
 		ThemeSettings.get(conn.app.config.app.theme, function(err, themeSettings){
+			if(!siteInfo) siteInfo = {};
+			childRes.siteInfo = siteInfo;
 			childRes.themeSettings = themeSettings;
 			sitePathParser(conn, args['*'], function(type, query, queryName, page, totalPages, data){
-				var title = query;
 				if(type === '404') {
-					childRes.content = tmpl(conn).notFound({ themeSettings: themeSettings, query: query, queryName: queryName });
-					childRes.statusCode = 404;
-				} else if(type === 'post') {
-					data.themeSettings = themeSettings;
-					childRes.content = tmpl(conn).single(data);
-					if(title) childRes.title = title + ' | ' + childRes.title;
-				} else {
-					childRes.content = tmpl(conn).list({
+					// not found
+					var renderData = {
+						siteInfo: siteInfo,
 						themeSettings: themeSettings,
-						rows: data,
+						query: query,
+						queryName: queryName,
+						notFound: true
+					};
+					childRes.statusCode = 404;
+					childRes.content = tmpl(conn).notFound(renderData);
+				} else if(type === 'post') {
+					// single post
+					var renderData = {
+						siteInfo: siteInfo,
+						themeSettings: themeSettings,
+						query: query,
+						queryName: queryName,
+						post: data
+					};
+					childRes.content = tmpl(conn).single(renderData);
+				} else {
+					// post list
+					var renderData = {
+						siteInfo: siteInfo,
+						themeSettings: themeSettings,
+						posts: data,
 						type: type,
 						query: query,
 						queryName: queryName,
 						pagePrev: page,
 						pageNext: (page+2 > totalPages ? 0 : page+2),
-					});
-					if(title) childRes.title = title + ' | ' + childRes.title;
+					};
+					childRes.content = tmpl(conn).list(renderData);
 				}
+				if(tmpl(conn).title) childRes.title = tmpl(conn).title(renderData);
+				if(!childRes.title || !childRes.title.match(/\S/)) childRes.title = siteInfo.siteTitle || conn.app.config.app.title;
 				next(childRes);
 			});
 		});
