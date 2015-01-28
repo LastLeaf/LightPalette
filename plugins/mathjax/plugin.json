@@ -1,9 +1,14 @@
 {
-	"title": "MathJax for LightPalette",
+	"title": {
+		"": "MathJax for LightPalette"
+	},
 	"version": "0.0.1",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
 	"thumbnail": "",
-	"description": "Add MathJax support to display mathematics content.",
+	"description": {
+		"": "Add MathJax support to display mathematics content.",
+		"zh_CN": "添加MathJax支持，用于显示数学公式等内容"
+	},
 	"lightpalette": "~0.3.0"
 }

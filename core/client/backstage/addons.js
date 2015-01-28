@@ -84,6 +84,9 @@ fw.main(function(pg){
 		if(tab === 'plugins') var method = 'addons:listPlugins';
 		else var method = 'addons:listThemes';
 		pg.rpc(method, function(res){
+			res.rows.sort(function(a, b){
+				return ( a.title <= b.title ? -1 : 1 );
+			});
 			$list.html(tmpl.list(res));
 			tabsLocked = false;
 		}, function(err){

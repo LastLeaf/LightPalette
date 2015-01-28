@@ -44,12 +44,19 @@ exports.listPlugins = function(conn, res, args){
 			// processing plugin infos
 			var rows = [];
 			for(var k in pluginsInfo) {
-				pluginsInfo[k].id = k;
-				pluginsInfo[k].enabled = (enabledPlugins.indexOf(k) >= 0);
-				pluginsInfo[k].settings = !!pluginsInfo[k].settings;
-				if(!pluginsInfo[k].lightpalette || !semver.satisfies(fw.config.lpVersion, pluginsInfo[k].lightpalette.toString()))
-					pluginsInfo[k].incompatible = true;
-				rows.push(pluginsInfo[k]);
+				var info = pluginsInfo[k];
+				info.id = k;
+				if(typeof(info.title) === 'object') {
+					info.title = info.title[conn.language] || info.title[''] || '';
+				}
+				if(typeof(info.description) === 'object') {
+					info.description = info.description[conn.language] || info.description[''] || '';
+				}
+				info.enabled = (enabledPlugins.indexOf(k) >= 0);
+				info.settings = !!info.settings;
+				if(!info.lightpalette || !semver.satisfies(fw.config.lpVersion, info.lightpalette.toString()))
+					info.incompatible = true;
+				rows.push(info);
 			}
 			rows.sort(function(a, b){
 				return ( a.title <= b.title ? -1 : 1 );
@@ -93,16 +100,20 @@ exports.listThemes = function(conn, res, args){
 			// processing theme infos
 			var rows = [];
 			for(var k in themesInfo) {
-				themesInfo[k].id = k;
-				themesInfo[k].enabled = (k === enabledTheme);
-				themesInfo[k].settings = !!themesInfo[k].settings;
-				if(!themesInfo[k].lightpalette || !semver.satisfies(fw.config.lpVersion, themesInfo[k].lightpalette.toString()))
-					themesInfo[k].incompatible = true;
-				rows.push(themesInfo[k]);
+				var info = themesInfo[k];
+				info.id = k;
+				if(typeof(info.title) === 'object') {
+					info.title = info.title[conn.language] || info.title[''] || '';
+				}
+				if(typeof(info.description) === 'object') {
+					info.description = info.description[conn.language] || info.description[''] || '';
+				}
+				info.enabled = (k === enabledTheme);
+				info.settings = !!info.settings;
+				if(!info.lightpalette || !semver.satisfies(fw.config.lpVersion, info.lightpalette.toString()))
+					info.incompatible = true;
+				rows.push(info);
 			}
-			rows.sort(function(a, b){
-				return ( a.title <= b.title ? -1 : 1 );
-			});
 			res({blocked: blocked, rows: rows});
 		});
 	});
