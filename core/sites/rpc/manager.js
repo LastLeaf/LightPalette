@@ -147,6 +147,5 @@ exports.deleteSite = function(conn, res, args){
 		if(err) return res.err('system');
 		res();
 		siteController.stop(id);
-		// TODO remove site data
 	});
 };

@@ -58,8 +58,7 @@ fw.main(function(pg){
 				email: userInfo.email,
 				url: userInfo.url,
 				description: userInfo.description,
-				avatar: (userInfo.avatar ? userInfo.avatar+'/128.png' : lp.gravatarUrl(userInfo.email, 128)),
-				avatarDel: !!userInfo.avatar,
+				avatar: lp.avatarUrl(userInfo, 128),
 				posts: posts,
 				comments: comments,
 			}));
@@ -69,39 +68,6 @@ fw.main(function(pg){
 			});
 			// user settings
 			var $user = $content.children('.home_user');
-			$user.find('.avatar_file input').change(function(){
-				// read, convert and send image
-				var file = this.files[0];
-				var url = URL.createObjectURL(file);
-				var img = document.createElement('img');
-				img.onload = function(){
-					URL.revokeObjectURL(url);
-					var canvas = document.createElement('canvas');
-					canvas.width = canvas.height = 128;
-					canvas.getContext('2d').drawImage(img, 0, 0, 128, 128);
-					$user.find('.avatar_error').html('');
-					$('.avatar').fadeTo(200, 0.5);
-					pg.rpc('user:avatar', canvas.toDataURL('image/png'), function(){
-						location.reload();
-					}, function(err){
-						lp.backstage.showError(err);
-					});
-				};
-				img.src = url;
-			});
-			$user.find('.avatar_del a').click(function(e){
-				e.preventDefault();
-				$(this).hide();
-				$('.avatar').fadeTo(200, 0.5);
-				pg.rpc('user:avatar', '', function(){
-					location.reload();
-				}, function(err){
-					lp.backstage.showError(err);
-				});
-			});
-			$user.find('.avatar').click(function(){
-				$user.find('.avatar_file input').click();
-			});
 			var $form = $user.find('.user_info').on('click', '.info', function(){
 				$form.find('.info').hide();
 				$form.find('input, textarea').css('display', 'block');

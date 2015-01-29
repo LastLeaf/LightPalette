@@ -1,0 +1,16 @@
+{
+	"id": "gravatar",
+	"title": "Gravatar",
+	"version": "0.0.1",
+	"author": "LastLeaf",
+	"url": "http://lastleaf.me",
+	"lightpalette": "~0.3.0",
+	"description": {
+		"": "Add gravatar support to display user avatars.",
+		"zh_CN": "添加Gravatar支持，用于显示用户头像。"
+	},
+	"settings": {
+		"tmpl": "main",
+		"main": "main"
+	}
+}

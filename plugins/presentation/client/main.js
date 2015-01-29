@@ -1,10 +1,8 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-// TODO fix reveal.js loading, rpc, theme css path, etc
-
 fw.main(function(pg){
-	lp.drivers('presentation', function(args){
+	lp.driver('presentation', function(args){
 		var postId = args.id;
 
 		// init structure
@@ -74,7 +72,7 @@ fw.main(function(pg){
 		}
 		iframeCancelFullScreen();
 		iframe.contentWindow.document.open();
-		iframe.contentWindow.document.write(pg.tmpl.presentation(div.outerHTML));
+		iframe.contentWindow.document.write(pg.tmpl.presentation({ bindPath: '/plugins/presentation', html: div.outerHTML }));
 		iframe.contentWindow.pg = fw.getPage();
 		iframe.contentWindow.postId = postId;
 		iframe.contentWindow.toggleFullScreen = function(){

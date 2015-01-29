@@ -5,7 +5,6 @@ var EMAIL_REGEXP = /[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\\\.[a-z0-9!#$%&'*+\/=?^_`{|
 
 var fs = require('fs');
 var crypto = require('crypto');
-var PNG = require('pngjs').PNG;
 var password = fw.module('password');
 var formFilter = fw.module('form_filter');
 var Settings = fw.module('db_model').Settings;
@@ -203,89 +202,6 @@ exports.modifyPassword = function(conn, res, args){
 				});
 			});
 		});
-	});
-};
-
-// set current user's custom avatar
-exports.avatar = function(conn, res, dataUrl){
-	if(typeof(dataUrl) !== 'string' || dataUrl.length >= 100000) return res.err('system');
-	User.checkPermission(conn, 'reader', function(r){
-		if(!r) return res.err('noPermission');
-		if(!dataUrl) {
-			// delete avatar
-			User.update({_id: conn.session.userId}, {avatar: ''}, function(err){
-				if(err) return res.err('system');
-				var dir = app.config.app.siteRoot + '/static/avatar/' + conn.session.userId;
-				res();
-				var c = 3;
-				var cb = function(){
-					c--;
-					if(!c) fs.rmdir(dir);
-				};
-				fs.unlink(dir + '/128.png', cb);
-				fs.unlink(dir + '/64.png', cb);
-				fs.unlink(dir + '/32.png', cb);
-			});
-			return;
-		}
-		var data = dataUrl.split(',', 2);
-		if(data[0] !== 'data:image/png;base64') return res.err('system');
-		try {
-			var buf = new Buffer(data[1], 'base64');
-			// save original image
-			var dir = app.config.app.siteRoot + '/static/avatar/' + conn.session.userId;
-			fs.mkdir(dir, function(err){
-				var file = dir + '/128.png';
-				fs.writeFile(file, buf, function(err){
-					if(err) return res.err('system');
-					// resize
-					avatarResizer(dir, function(err){
-						if(err) return res.err('system');
-						// save to db
-						User.update({_id: conn.session.userId}, {avatar: dir.slice(dir.indexOf('/', 2))}, function(err){
-							if(err) return res.err('system');
-							res();
-						});
-					});
-				});
-			});
-		} catch(e) {
-			res.err('system');
-		}
-	});
-};
-
-// avatar resizer
-var avatarResizer = function(dir, cb){
-	var smaller = function(img, size){
-		var width = size/2;
-		var small = new PNG({ width: width, height: width });
-		for(var i=0; i<width; i++)
-			for(var j=0; j<width; j++) {
-				var p = (width * i + j) * 4;
-				var q = (size * i + j) * 8;
-				var a0 = img.data[q+3];
-				var a1 = img.data[q+7];
-				var a2 = img.data[q+size*4+3];
-				var a3 = img.data[q+size*4+7];
-				var a = a0 + a1 + a2 + a3;
-				small.data[p+0] = (img.data[q+0]*a0 + img.data[q+4]*a1 + img.data[q+size*4+0]*a2 + img.data[q+size*4+4]*a3) / a;
-				small.data[p+1] = (img.data[q+1]*a0 + img.data[q+5]*a1 + img.data[q+size*4+1]*a2 + img.data[q+size*4+5]*a3) / a;
-				small.data[p+2] = (img.data[q+2]*a0 + img.data[q+6]*a1 + img.data[q+size*4+2]*a2 + img.data[q+size*4+6]*a3) / a;
-				small.data[p+3] = a / 4;
-			}
-		return small;
-	};
-	fs.createReadStream(dir + '/128.png').pipe(new PNG()).on('parsed', function(){
-		var img64 = smaller(this, 128);
-		var stream = fs.createWriteStream(dir + '/64.png');
-		stream.on('finish', function(){
-			var img32 = smaller(img64, 64);
-			var stream = fs.createWriteStream(dir + '/32.png');
-			stream.on('finish', cb);
-			img32.pack().pipe(stream);
-		});
-		img64.pack().pipe(stream);
 	});
 };
 

@@ -15,11 +15,9 @@ fw.main(function(pg){
 		else if(drivers[id]) drivers[id](args);
 	};
 
-	// gravatar helper
-	lp.gravatarUrl = function(email, size, def){
-		var url = 'http://www.gravatar.com/avatar/' + CryptoJS.MD5(email) + '?d=' + encodeURIComponent(def || 'mm');
-		if(size) url += '&s=' + size;
-		return url;
+	// default no avatar support
+	lp.avatarUrl = function(userInfo, size){
+		return '';
 	};
 
 	// login/out helper

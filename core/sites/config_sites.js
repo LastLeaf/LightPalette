@@ -8,7 +8,8 @@ module.exports = function(){
 	// read config file
 	var config = null;
 	try {
-		var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
+		if(fs.existsSync('config.js')) var config = require(process.cwd() + '/config.js');
+		else var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
 	} catch(e) {}
 
 	// generate config

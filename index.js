@@ -7,7 +7,8 @@ var fw = require('fw.mpa');
 // read config
 var config = {};
 try {
-	config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
+	if(fs.existsSync('config.js')) var config = require(process.cwd() + '/config.js');
+	else var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
 } catch(e) {}
 
 // read lp's version in package.json
@@ -16,6 +17,7 @@ var lpVersion = JSON.parse(fs.readFileSync(__dirname + '/package.json').toString
 // start fw.mpa
 var lpCoreRoot = __dirname + '/core';
 fw({
+	defaultMode: 'cache',
 	ip: config.ip || '0.0.0.0',
 	port: config.port || 1180,
 	app: lpCoreRoot + '/sites/sites.js',

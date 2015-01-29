@@ -1,8 +1,6 @@
 <tmpl id="main" minify>
 	<div class="home_user">
 		<img class="avatar" src="{{avatar}}">
-		<div class="avatar_file"><input type="file" accept="image/*"></div>
-		{{#if avatarDel}}<div class="avatar_del"><a href="#">`Delete`</a></div>{{/if}}
 		<form action="user" method="modify" class="user_info">
 			<div class="display_name info">{{displayName}}</div>
 			<input type="text" class="display_name" name="displayName" value="{{displayName}}" required>

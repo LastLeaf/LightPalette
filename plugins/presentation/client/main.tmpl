@@ -2,13 +2,14 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href="/~client/drivers/presentation/lib/reveal.js/css/reveal.min.css">
-		<link rel="stylesheet" href="/~client/drivers/presentation/main.css" id="theme">
-		<script src="/~client/drivers/presentation/lib/reveal.js/lib/js/head.min.js"></script>
-		<script src="/~client/drivers/presentation/lib/reveal.js/js/reveal.js"></script>
+		<link rel="stylesheet" href="/~client{{bindPath}}/lib/reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="/~client{{bindPath}}/main.css">
+		<link rel="stylesheet" href="/~client{{bindPath}}/theme.css" id="theme">
+		<script src="/~client{{bindPath}}/lib/reveal.js/lib/js/head.min.js"></script>
+		<script src="/~client{{bindPath}}/lib/reveal.js/js/reveal.js"></script>
 	</head>
 	<body>
-{{{this}}}
+{{{html}}}
 		<div class="slide-sync">
 			<div id="slide_sender" style="display:none">
 				<input type="checkbox" id="slide_sender_checkbox"> <label for="slide_sender_checkbox">`Send current progress to online readers.`</label>
@@ -32,8 +33,8 @@
 		center: true,
 		transition: 'default',
 		dependencies: [
-			{ src: '/~client/drivers/presentation/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-			{ src: '/~client/drivers/presentation/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
+			{ src: '/~client{{bindPath}}/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+			{ src: '/~client{{bindPath}}/lib/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } }
 		]
 	});
 	// add full screen button
@@ -55,7 +56,7 @@
 		that.disabled = true;
 		var status = Reveal.getIndices();
 		if(that.checked)
-			pg.rpc('/drivers/presentation:currentSlide.send', {id: postId, col: status.h, row: status.v}, function(){
+			pg.rpc('{{bindPath}}/sync:currentSlide.send', {id: postId, col: status.h, row: status.v}, function(){
 				that.checked = true;
 				that.disabled = false;
 			}, function(err){
@@ -63,7 +64,7 @@
 				that.disabled = false;
 			});
 		else
-			pg.rpc('/drivers/presentation:currentSlide.sendEnd', postId, function(){
+			pg.rpc('{{bindPath}}/sync:currentSlide.sendEnd', postId, function(){
 				that.checked = false;
 				that.disabled = false;
 			}, function(err){
@@ -74,7 +75,7 @@
 	Reveal.addEventListener('slidechanged', function(e) {
 		if(!document.getElementById('slide_sender_checkbox').checked) return;
 		var status = Reveal.getIndices();
-		pg.rpc('/drivers/presentation:currentSlide.progress', {id: postId, col: status.h, row: status.v});
+		pg.rpc('{{bindPath}}/sync:currentSlide.progress', {id: postId, col: status.h, row: status.v});
 	});
 	var prevStatus = null;
 	document.getElementById('slide_reader_checkbox').onchange = function(){
@@ -105,9 +106,9 @@
 			document.getElementById('slide_sender_checkbox').checked = false;
 		}
 	};
-	pg.msg('drivers.presentation.'+postId, syncStatus);
+	pg.msg('{{bindPath}}/sync:'+postId, syncStatus);
 	var listenCurrentSlide = function(){
-		pg.rpc('/drivers/presentation:currentSlide.listen', postId, syncStatus);
+		pg.rpc('{{bindPath}}/sync:currentSlide.listen', postId, syncStatus);
 	};
 	listenCurrentSlide();
 	pg.on('socketConnect', listenCurrentSlide);

@@ -55,12 +55,12 @@ currentSlides.checkEmpty = function(id){
 currentSlides.enable = function(id){
 	var readers = currentSlides[id].readers;
 	for(var i=0; i<readers.length; i++)
-		readers[i].msg('drivers.presentation.'+id, { type: 'reader' });
+		readers[i].msg('/plugins/presentation/sync:'+id, { type: 'reader' });
 };
 currentSlides.disable = function(id){
 	var readers = currentSlides[id].readers;
 	for(var i=0; i<readers.length; i++)
-		readers[i].msg('drivers.presentation.'+id, { type: 'none' });
+		readers[i].msg('/plugins/presentation/sync:'+id, { type: 'none' });
 };
 currentSlides.send = function(id, col, row){
 	if(!currentSlides[id]) return;
@@ -68,22 +68,22 @@ currentSlides.send = function(id, col, row){
 	currentSlides[id].col = col;
 	currentSlides[id].row = row;
 	for(var i=0; i<readers.length; i++)
-		readers[i].msg('drivers.presentation.'+id, { type: 'progress', col: col, row: row });
+		readers[i].msg('/plugins/presentation/sync:'+id, { type: 'progress', col: col, row: row });
 };
 
 exports.currentSlide = {
 	listen: function(conn, res, postId){
 		if(!postId || postId.length !== 24) return res.err('system');
-		if(conn['drivers.presentation.'+postId]) return res.err('system');
+		if(conn['/plugins/presentation/sync:'+postId]) return res.err('system');
 		Post.findOne({_id: String(postId)}).select('_id type author').exec(function(err, r){
 			if(err || r.type !== 'presentation') return res.err('system');
 			postId = r._id;
 			if(conn.session.userId === r.author) {
-				conn['drivers.presentation.'+postId] = 'senderReady';
+				conn['/plugins/presentation/sync:'+postId] = 'senderReady';
 				res({ type: 'sender' });
 			} else {
 				currentSlides.addReader(postId, conn);
-				conn['drivers.presentation.'+postId] = 'reader';
+				conn['/plugins/presentation/sync:'+postId] = 'reader';
 				if(currentSlides[postId].senders.length)
 					res({ type: 'reader', col: currentSlides[postId].col, row: currentSlides[postId].row });
 				else
@@ -93,21 +93,21 @@ exports.currentSlide = {
 	},
 	send: function(conn, res, args){
 		if(!args || !args.id || args.id.length !== 24) return res.err('system');
-		if(conn['drivers.presentation.'+args.id] !== 'senderReady') return res.err('system');
-		conn['drivers.presentation.'+args.id] = 'sender';
+		if(conn['/plugins/presentation/sync:'+args.id] !== 'senderReady') return res.err('system');
+		conn['/plugins/presentation/sync:'+args.id] = 'sender';
 		currentSlides.addSender(args.id, conn);
 		res();
 		currentSlides.send(args.id, Number(args.col) || 0, Number(args.row) || 0);
 	},
 	progress: function(conn, res, args){
 		if(!args || !args.id || args.id.length !== 24) return res.err('system');
-		if(conn['drivers.presentation.'+args.id] !== 'sender') return;
+		if(conn['/plugins/presentation/sync:'+args.id] !== 'sender') return;
 		currentSlides.send(args.id, Number(args.col) || 0, Number(args.row) || 0);
 	},
 	sendEnd: function(conn, res, postId){
 		if(!postId || postId.length !== 24) return res.err('system');
-		if(conn['drivers.presentation.'+postId] !== 'sender') return res.err('system');
-		conn['drivers.presentation.'+postId] = 'senderReady';
+		if(conn['/plugins/presentation/sync:'+postId] !== 'sender') return res.err('system');
+		conn['/plugins/presentation/sync:'+postId] = 'senderReady';
 		currentSlides.removeSender(postId, conn);
 		res();
 	}

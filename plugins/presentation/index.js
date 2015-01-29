@@ -6,10 +6,8 @@ module.exports = function(app, args, cb){
 	app.bindDir('rpc', args.bindPath, args.pluginPath + '/rpc');
 	app.bindDir('client', args.bindPath, args.pluginPath + '/client');
 	app.route.add('drivers', {
-		//lib: args.bindPath + '/lib/reveal.js/js/reveal.js',
-		main: args.bindPath + '/main',
 		tmpl: args.bindPath + '/main',
-		style: args.bindPath + '/main'
+		main: args.bindPath + '/main',
 	});
 	app.route.add('backstage', 'drivers', {
 		main: args.bindPath + '/backstage/main',

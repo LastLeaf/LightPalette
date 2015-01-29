@@ -78,16 +78,6 @@
     margin: 0 15px 15px;
     display: block;
 }
-.home_user .avatar:hover {
-    box-shadow: 0 0 10px #888;
-}
-.home_user .avatar:hover {
-    cursor: pointer;
-}
-.home_user .avatar_file {
-    height: 0;
-    overflow: hidden;
-}
 .home_user .email, .home_user .url, .home_user .description {
     font-size: 0.9em;
     color: #888;
@@ -137,12 +127,6 @@
     width: auto;
     padding: 0.25em 1em;
     border-radius: 10em;
-}
-.home_user .avatar_del {
-    text-align: right;
-    font-size: 0.8em;
-    margin-top: -15px;
-    margin-bottom: 10px;
 }
 
 .home_main {

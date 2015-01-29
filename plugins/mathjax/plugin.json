@@ -9,7 +9,7 @@
 	"thumbnail": "",
 	"description": {
 		"": "Add MathJax support to display mathematics content.",
-		"zh_CN": "添加MathJax支持，用于显示数学公式等内容"
+		"zh_CN": "添加MathJax支持，用于显示数学公式等内容。"
 	},
 	"lightpalette": "~0.3.0"
 }

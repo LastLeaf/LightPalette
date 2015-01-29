@@ -68,22 +68,22 @@ var reconfig = function(app, cb){
 	}, function(cb){
 		// loading plugins
 		if(!app.config.app.enablePlugins) return cb();
-		async.eachSeries(app.config.app.plugins, function(plugin, cb){
-			if(fw.debug) console.log('Loading plugin: ' + plugin);
-			var path = app.config.app.siteRoot + '/plugins/' + plugin;
+		async.eachSeries(app.config.app.plugins, function(pluginId, cb){
+			var path = app.config.app.siteRoot + '/plugins/' + pluginId;
 			async.waterfall([function(cb){
 				fs.exists(path + '/plugin.json', cb);
 			}, function(cb){
-				path = 'plugins/' + plugin;
+				path = 'plugins/' + pluginId;
 				fs.exists(path + '/plugin.json', cb);
 			}], function(exists){
-				if(!exists) return;
+				if(!exists) return cb();
+				if(fw.debug) console.log('Loading plugin: ' + pluginId);
 				fs.readFile(path + '/plugin.json', function(err, buf){
 					// load and check config
 					try {
 						if(err) throw(err);
 						var pluginConfig = JSON.parse(buf.toString('utf8'));
-						if(pluginConfig.id && pluginConfig.id !== plugin) {
+						if(pluginConfig.id && pluginConfig.id !== pluginId) {
 							throw(new Error('Plugin is not placed at the right position.'));
 						}
 						if(!pluginConfig.lightpalette || !semver.satisfies(fw.config.lpVersion, pluginConfig.lightpalette.toString())) {
@@ -91,25 +91,25 @@ var reconfig = function(app, cb){
 						}
 						var pluginArgs = {
 							plugin: pluginConfig,
-							pluginId: plugin,
+							pluginId: pluginId,
 							pluginPath: path,
-							bindPath: '/plugins/' + plugin
+							bindPath: '/plugins/' + pluginId
 						};
 						require(process.cwd() + '/' + path + '/index.js')(app, pluginArgs, function(){
 							// check if settings needed
 							if(typeof(pluginConfig.settings) === 'object') {
-								app.bindDir('client', '/backstage/addons/plugin/' + plugin, path + '/settings');
-								app.route.set('/backstage/addons/plugin', './' + plugin, {
+								app.bindDir('client', '/backstage/addons/plugin/' + pluginId, path + '/settings');
+								app.route.set('/backstage/addons/plugin', './' + pluginId, {
 									parent: 'addonsSettings'
 								});
-								app.route.add('/backstage/addons/plugin', './' + plugin, filterRoutes(pluginConfig.settings, plugin + '/'));
+								app.route.add('/backstage/addons/plugin', './' + pluginId, filterRoutes(pluginConfig.settings, pluginId + '/'));
 								cb();
 							} else {
 								cb();
 							}
 						});
 					} catch(err) {
-						console.error('Loading plugin "' + plugin + '" failed.');
+						console.error('Loading plugin "' + pluginId + '" failed.');
 						console.error(err.stack || 'Error: ' + err.message);
 						if(fw.debug) process.exit();
 						cb();
@@ -156,6 +156,7 @@ var reconfig = function(app, cb){
 						cb();
 					});
 				}, function(cb){
+					// override render tmpls
 					fs.stat(path + '/render', function(err, stat){
 						if(err || !stat.isDirectory()) return cb();
 						// prevent js files in render
@@ -169,6 +170,23 @@ var reconfig = function(app, cb){
 								app.bindDir('render', '/', path + '/render');
 							}
 							cb();
+						});
+					});
+				}, function(cb){
+					// theming plugins
+					fs.stat(path + '/plugins', function(err, stat){
+						if(err || !stat.isDirectory()) return cb();
+						// prevent js files in render
+						fs.readdir(path + '/plugins', function(err, plugins){
+							if(err) return cb();
+							async.each(plugins, function(pluginId, cb){
+								var pluginPath = path + '/plugins/' + pluginId;
+								fs.stat(pluginPath, function(err, stat){
+									if(err || !stat.isDirectory()) return cb();
+									app.bindDir('client', '/plugins/' + pluginId, pluginPath);
+									cb();
+								});
+							}, cb);
 						});
 					});
 				}, function(cb){
