@@ -23,6 +23,9 @@
   color: #444;
   border-bottom-color: #444;
 }
+.addons_tabs_title {
+  color: #888;
+}
 .addons_blocked {
   background: #FC9292;
   color: #444;

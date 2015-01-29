@@ -5,9 +5,8 @@ fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
 
-	lp.registerDriver('markdown', {
+	lp.backstage.driver('markdown', {
 		name: _('Markdown Doc'),
-		priority: 3000,
 		editor: function(div, data, userInfo){
 			var $div = $(div).html(tmpl.markdown({
 				driver: data.driver,

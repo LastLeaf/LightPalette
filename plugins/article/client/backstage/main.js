@@ -5,9 +5,8 @@ fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
 
-	lp.registerDriver('article', {
+	lp.backstage.driver('article', {
 		name: _('Article'),
-		priority: 10000,
 		editor: function(div, data){
 
 			// init editor in div

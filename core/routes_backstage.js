@@ -107,7 +107,7 @@ module.exports = {
 		parent: 'backstage',
 		main: 'addons_settings',
 		tmpl: 'addons_settings',
-		style: 'addons.css'
+		style: ['addons.css', 'settings.css']
 	},
 	'./addons/:type/:id': {
 		redirect: 'addons'

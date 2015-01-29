@@ -21,16 +21,18 @@
     cursor: pointer;
 }
 
-.settings {
+.settings_main {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 20px;
-    color: #444;
     padding-right: 100px;
     overflow: auto;
+}
+.settings {
+    color: #444;
 }
 .settings_section {
     margin-bottom: 3em;
@@ -40,7 +42,7 @@
     font-size: 1.2em;
     margin: 0.5em;
 }
-.settings_form div {
+.settings_form>div {
     margin: 0.75em 1em;
 }
 .settings_form label {
@@ -55,4 +57,9 @@
 .settings_form .submit, .settings_form .button {
     margin: 1.25em 0 1.25em 12em;
     width: auto;
+}
+.settings_form .settings_description {
+    color: #888;
+    font-size: 0.9em;
+    margin: 0.3em 0 0.3em 12.3em;
 }

@@ -67,6 +67,7 @@ var reconfig = function(app, cb){
 		cb();
 	}, function(cb){
 		// loading plugins
+		app.loadedPlugins = {};
 		if(!app.config.app.enablePlugins) return cb();
 		async.eachSeries(app.config.app.plugins, function(pluginId, cb){
 			var path = app.config.app.siteRoot + '/plugins/' + pluginId;
@@ -96,6 +97,8 @@ var reconfig = function(app, cb){
 							bindPath: '/plugins/' + pluginId
 						};
 						require(process.cwd() + '/' + path + '/index.js')(app, pluginArgs, function(){
+							app.loadedPlugins[pluginId] = pluginConfig;
+							app.loadedPlugins[pluginId].id = pluginId;
 							// check if settings needed
 							if(typeof(pluginConfig.settings) === 'object') {
 								app.bindDir('client', '/backstage/addons/plugin/' + pluginId, path + '/settings');
@@ -190,6 +193,8 @@ var reconfig = function(app, cb){
 						});
 					});
 				}, function(cb){
+					app.loadedTheme = themeConfig;
+					app.loadedTheme.id = themeId;
 					// check if settings needed
 					if(typeof(themeConfig.settings) === 'object') {
 						app.bindDir('client', '/backstage/addons/theme/' + themeId, path + '/settings');

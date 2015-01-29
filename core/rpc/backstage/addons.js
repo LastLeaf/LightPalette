@@ -171,6 +171,25 @@ exports.alterThemes = function(conn, res, args){
 	});
 };
 
+// get loaded plugin info
+exports.loadedPluginInfo = function(conn, res, id){
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		if(conn.app.loadedPlugins.hasOwnProperty(id))
+			res(conn.app.loadedPlugins[id]);
+		else
+			res();
+	});
+};
+
+// get loaded theme info
+exports.loadedThemeInfo = function(conn, res){
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		res(conn.app.loadedTheme);
+	});
+};
+
 // set plugin settings
 exports.pluginSettings = function(conn, res, id, newSettings){
 	var id = String(id);

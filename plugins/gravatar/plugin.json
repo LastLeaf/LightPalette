@@ -8,9 +8,5 @@
 	"description": {
 		"": "Add gravatar support to display user avatars.",
 		"zh_CN": "添加Gravatar支持，用于显示用户头像。"
-	},
-	"settings": {
-		"tmpl": "main",
-		"main": "main"
 	}
 }

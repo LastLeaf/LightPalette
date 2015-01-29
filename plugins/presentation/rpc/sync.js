@@ -4,6 +4,7 @@
 var formFilter = fw.module('/form_filter.js');
 var Post = fw.module('/db_model').Post;
 var User = fw.module('/db_model').User;
+var PluginSettings = fw.module('/db_model').PluginSettings;
 
 var currentSlides = {};
 currentSlides.init = function(id){
@@ -75,20 +76,23 @@ exports.currentSlide = {
 	listen: function(conn, res, postId){
 		if(!postId || postId.length !== 24) return res.err('system');
 		if(conn['/plugins/presentation/sync:'+postId]) return res.err('system');
-		Post.findOne({_id: String(postId)}).select('_id type author').exec(function(err, r){
-			if(err || r.type !== 'presentation') return res.err('system');
-			postId = r._id;
-			if(conn.session.userId === r.author) {
-				conn['/plugins/presentation/sync:'+postId] = 'senderReady';
-				res({ type: 'sender' });
-			} else {
-				currentSlides.addReader(postId, conn);
-				conn['/plugins/presentation/sync:'+postId] = 'reader';
-				if(currentSlides[postId].senders.length)
-					res({ type: 'reader', col: currentSlides[postId].col, row: currentSlides[postId].row });
-				else
-					res({ type: 'none' });
-			}
+		PluginSettings.get('presentation', function(err, r){
+			if(err || !r || !r.enableSync) return res.err('noPermission');
+			Post.findOne({_id: String(postId)}).select('_id type author').exec(function(err, r){
+				if(err || r.type !== 'presentation') return res.err('system');
+				postId = r._id;
+				if(conn.session.userId === r.author) {
+					conn['/plugins/presentation/sync:'+postId] = 'senderReady';
+					res({ type: 'sender' });
+				} else {
+					currentSlides.addReader(postId, conn);
+					conn['/plugins/presentation/sync:'+postId] = 'reader';
+					if(currentSlides[postId].senders.length)
+						res({ type: 'reader', col: currentSlides[postId].col, row: currentSlides[postId].row });
+					else
+						res({ type: 'none' });
+				}
+			});
 		});
 	},
 	send: function(conn, res, args){

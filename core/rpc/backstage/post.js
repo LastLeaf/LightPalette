@@ -35,7 +35,7 @@ exports.create = function(conn, res, args){
 		if(writePermission === 'editor' && !editor) return res.err('noPermission');
 		if(writePermission === 'writer' && !writer) return res.err('noPermission');
 		new Post(postArgs).save(function(err, r){
-			if(err) return res.err('system', err);
+			if(err) return res.err('system');
 			res(r._id);
 		});
 	});

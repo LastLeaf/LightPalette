@@ -1,0 +1,16 @@
+{
+	"id": "article",
+	"title": {
+		"": "Post Driver: Article",
+		"zh_CN": "博文驱动：文章"
+	},
+	"version": "0.0.1",
+	"author": "LastLeaf",
+	"url": "http://lastleaf.me",
+	"thumbnail": "",
+	"description": {
+		"": "Create, edit, and display common blog posts, based on TinyMCE.",
+		"zh_CN": "创建、编辑、显示普通博客文章，基于TinyMCE。"
+	},
+	"lightpalette": "~0.3.0"
+}

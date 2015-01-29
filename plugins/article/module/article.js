@@ -1,6 +1,8 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
+var driver = fw.module('/driver.js');
+
 var sanitizeHtml = require('sanitize-html');
 var marked = require('marked');
 marked.setOptions({
@@ -44,7 +46,9 @@ var sanitizeOptions = {
 	}
 };
 
-exports.writeFilter = function(args, cb){
+var handlers = {};
+
+handlers.writeFilter = function(args, cb){
 	args.content = sanitizeHtml(args.content, sanitizeOptions);
 	if(args.driver.abstractType === 'manualMarkdown') {
 		// generate abstract
@@ -65,11 +69,16 @@ exports.writeFilter = function(args, cb){
 	cb();
 };
 
-exports.readEditFilter = function(args, cb){
+handlers.readEditFilter = function(args, cb){
 	cb();
 };
 
-exports.readFilter = function(args, cb){
+handlers.readFilter = function(args, cb){
 	delete args.driver;
+	cb();
+};
+
+module.exports = function(app, cb){
+	driver.set('article', handlers);
 	cb();
 };
