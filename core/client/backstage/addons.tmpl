@@ -21,7 +21,7 @@
 			<div addonId="{{id}}" class="addons_status addons_status-disabled">`Disabled`</div>
 		{{/if}}{{/if}}
 		<div class="addons_content">
-			{{#if settings}}<div addonId="{{id}}" class="addons_settings">`Settings`</div>{{/if}}
+			{{#unless ../blocked}}{{#if settings}}<div addonId="{{id}}" class="addons_settings">`Settings`</div>{{/if}}{{/unless}}
 			<div class="addons_head">
 				<a {{#if url}}href="{{url}}"{{/if}} class="addons_title">{{title}}</a>
 				<span class="addons_version">{{id}} {{version}}</span>

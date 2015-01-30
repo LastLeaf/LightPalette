@@ -22,9 +22,5 @@ fw.main(function(pg){
 		});
 	};
 
-	if(lp.backstage.userInfo) {
-		initPage();
-	} else {
-		pg.parent.on('userInfoReady', initPage);
-	}
+	initPage();
 });

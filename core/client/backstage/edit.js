@@ -155,9 +155,5 @@ fw.main(function(pg){
 		}
 	};
 
-	if(lp.backstage.userInfo) {
-		getInfo();
-	} else {
-		pg.parent.on('userInfoReady', getInfo);
-	}
+	getInfo();
 });

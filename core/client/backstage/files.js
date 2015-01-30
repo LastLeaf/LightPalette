@@ -138,9 +138,5 @@ fw.main(function(pg){
 		}
 	};
 
-	if(lp.backstage.userInfo) {
-		getAuthors();
-	} else {
-		pg.parent.on('userInfoReady', getAuthors);
-	}
+	getAuthors();
 });

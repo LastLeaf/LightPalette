@@ -82,9 +82,5 @@ fw.main(function(pg){
 		});
 	};
 
-	if(lp.backstage.userInfo) {
-		getAuthorList();
-	} else {
-		pg.parent.on('userInfoReady', getAuthorList);
-	}
+	getAuthorList();
 });

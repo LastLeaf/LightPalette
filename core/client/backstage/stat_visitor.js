@@ -64,9 +64,5 @@ fw.main(function(pg){
 		});
 	};
 
-	if(lp.backstage.userInfo) {
-		showPage();
-	} else {
-		pg.parent.on('userInfoReady', showPage);
-	}
+	showPage();
 });

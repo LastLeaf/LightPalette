@@ -1,7 +1,7 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-fw.main(function(pg){
+fw.mainAsync(function(pg, cb){
 	var tmpl = pg.tmpl;
 	lp.tableBuilder.i18n = tmpl.i18n;
 	lp.backstage = {};
@@ -108,8 +108,8 @@ fw.main(function(pg){
 						return false;
 					});
 				});
-		// raise an event to notify child pages
 		lp.backstage.userInfo = info;
-		pg.emit('userInfoReady');
+		if(info._id || fw.getPath() === '/backstage/home') cb();
+		else fw.go('/backstage/home');
 	}, lp.backstage.showError);
 });
