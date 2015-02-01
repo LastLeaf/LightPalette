@@ -5,9 +5,7 @@ module.exports = function(app, args, cb){
 	app.bindDir('module', args.bindPath, args.pluginPath + '/module');
 	app.bindDir('client', args.bindPath, args.pluginPath + '/client');
 	app.route.add('backstage', 'drivers', {
-		main: args.bindPath + '/backstage/main',
-		tmpl: args.bindPath + '/backstage/main',
-		style: args.bindPath + '/backstage/main'
+		subm: args.bindPath + '/backstage'
 	});
 	cb();
 };

@@ -1,7 +1,7 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-fw.mainAsync(function(pg, cb){
+fw.mainAsync(function(pg, subm, cb){
 	var tmpl = pg.tmpl;
 	lp.tableBuilder.i18n = tmpl.i18n;
 	lp.backstage = {};

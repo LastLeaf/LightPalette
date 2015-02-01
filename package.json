@@ -1,6 +1,6 @@
 {
 	"name": "lightpalette",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"engines": { "node": ">=0.10.0" },
 	"homepage": "https://github.com/LastLeaf/LightPalette",
 	"repository": { "type": "git", "url": "https://github.com/LastLeaf/LightPalette.git" },

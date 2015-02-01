@@ -1,7 +1,8 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-fw.main(function(pg){
+fw.main(function(pg, subm){
+	var tmpl = subm.tmpl;
 	lp.driver('presentation', function(args){
 		var postId = args.id;
 
@@ -72,7 +73,7 @@ fw.main(function(pg){
 		}
 		iframeCancelFullScreen();
 		iframe.contentWindow.document.open();
-		iframe.contentWindow.document.write(pg.tmpl.presentation({ bindPath: '/plugins/presentation', html: div.outerHTML }));
+		iframe.contentWindow.document.write(tmpl.presentation({ bindPath: '/plugins/presentation', html: div.outerHTML }));
 		iframe.contentWindow.pg = fw.getPage();
 		iframe.contentWindow.postId = postId;
 		iframe.contentWindow.toggleFullScreen = function(){
