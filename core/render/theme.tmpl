@@ -4,6 +4,12 @@
 			<div id="header" class="header">
 				<h1 class="title"><a fw href="/">{{title}}</a></h1>
 				<h2 class="subtitle"><a fw href="/">{{subtitle}}</a></h2>
+				<div class="search">
+					<form onsubmit="fw.go('/search/'+encodeURIComponent(this.elements[0].value)); return false">
+						<input type="text" class="search_text">
+						<input type="submit" class="search_submit">
+					</form>
+				</div>
 				<div class="links">
 					<ul class="category">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul><ul class="special">{{#each special}}<li><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></li>{{/each}}</ul>
 				</div>

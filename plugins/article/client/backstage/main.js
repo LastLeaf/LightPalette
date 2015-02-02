@@ -9,11 +9,12 @@ fw.main(function(pg, subm){
 		name: _('Article'),
 		editor: function(div, data){
 
+			var tinymceId = 'tinymce-' + new Date().getTime();
+			var $div = null;
 			pg.require('/plugins/article/lib/tinymce.js', function(){
 				// init editor in div
 				if(!data.driver) data.driver = {};
-				var tinymceId = 'tinymce-' + new Date().getTime();
-				var $div = $(div).html(tmpl.article({
+				$div = $(div).html(tmpl.article({
 					tinymceId: tinymceId,
 					content: data.content,
 					abstractManual: data.driver.abstract || ''

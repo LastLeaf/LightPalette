@@ -1,5 +1,5 @@
 <tmpl id="main" minify>
-	<div class="settings">
+	<div class="settings settings_main">
 
 		<div class="settings_section" section="basic">
 			<div class="settings_title">`Basic`</div>
@@ -24,6 +24,18 @@
 				<div>
 					<label>`Site Copyright`</label>
 					<input type="text" name="siteCopyright">
+				</div>
+				<input type="submit" class="submit" value="`Save Settings`">
+			</form>
+		</div>
+
+		<div class="settings_section" section="display">
+			<div class="settings_title">`Display`</div>
+			<form action="settings" method="set" class="settings_form">
+				<input type="hidden" name="_key" value="display">
+				<div>
+					<label>`Post List Length`</label>
+					<input type="number" name="postListLength" placeholder="5" min="1" max="20">
 				</div>
 				<input type="submit" class="submit" value="`Save Settings`">
 			</form>
@@ -109,6 +121,7 @@
 	</div>
 	<ul class="settings_navi">
 		<li for="basic">`Basic`</li>
+		<li for="display">`Display`</li>
 		<li for="date">`Date`</li>
 		<li for="user">`User`</li>
 		<li for="email">`Email`</li>

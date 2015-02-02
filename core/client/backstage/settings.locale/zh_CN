@@ -1,12 +1,14 @@
 [
 	{
-		"Basic": "常规",
+		"Basic": "基本",
 		"Site Domain": "站点域名",
 		"Site Title": "站点标题",
 		"Site Subtitle": "站点副标题",
 		"Site Description": "站点描述",
 		"Site Copyright": "站点版权信息",
 		"Save Settings": "保存设置",
+		"Display": "显示",
+		"Post List Length": "文章列表长度",
 		"Date": "日期",
 		"Timezone": "时区",
 		"Loading...": "正在加载……",

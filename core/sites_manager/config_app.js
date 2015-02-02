@@ -3,7 +3,7 @@
 
 var fs = require('fs');
 var async = require('async');
-var defaultLocales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/sites/locales.json').toString('utf8'));
+var defaultLocales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/locales.json').toString('utf8'));
 
 // generate config
 module.exports = function(app, siteInfo, cb){

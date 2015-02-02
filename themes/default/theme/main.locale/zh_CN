@@ -18,7 +18,8 @@
 		"The content is empty or too long.": "内容为空，或者太长了。",
 		"Sorry, an error occurred.": "对不起，出错了。",
 		"Timed out. Please check your network": "请求超时，请检查网络连接状况。",
-		"Sorry, no related content was found.": "不好意思，没有找到相关内容。"
+		"Sorry, no related content was found.": "不好意思，没有找到相关内容。",
+		"Search...": "搜索……"
 	},
 	{},
 	{}

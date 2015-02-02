@@ -23,12 +23,12 @@ module.exports = function(app){
 	// init app
 	app.setConfig(sitesConfig());
 	var dirs = [
-		['client', '/', fw.config.lpCoreRoot + '/sites/client'],
+		['client', '/', fw.config.lpCoreRoot + '/sites_manager/client'],
 		['client', '/lib', fw.config.lpCoreRoot + '/client/lib'],
 		['client', '/backstage/lib', fw.config.lpCoreRoot + '/client/backstage/lib'],
-		['module', '/', fw.config.lpCoreRoot + '/sites/module'],
-		['render', '/', fw.config.lpCoreRoot + '/sites/render'],
-		['rpc', '/', fw.config.lpCoreRoot + '/sites/rpc']
+		['module', '/', fw.config.lpCoreRoot + '/sites_manager/module'],
+		['render', '/', fw.config.lpCoreRoot + '/sites_manager/render'],
+		['rpc', '/', fw.config.lpCoreRoot + '/sites_manager/rpc']
 	];
 	dirs.forEach(function(dir, cb){
 		app.bindDir.apply(app, dir.concat(cb));

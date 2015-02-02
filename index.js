@@ -20,7 +20,7 @@ fw({
 	defaultMode: 'cache',
 	ip: config.ip || '0.0.0.0',
 	port: config.port || 1180,
-	app: lpCoreRoot + '/sites/sites.js',
+	app: lpCoreRoot + '/sites_manager/sites.js',
 	lpCoreRoot: lpCoreRoot,
 	lpVersion: lpVersion,
 });

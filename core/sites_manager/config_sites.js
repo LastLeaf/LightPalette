@@ -2,7 +2,7 @@
 'use strict';
 
 var fs = require('fs');
-var locales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/sites/locales.json').toString('utf8'));
+var locales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/locales.json').toString('utf8'));
 
 module.exports = function(){
 	// read config file

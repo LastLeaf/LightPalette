@@ -1,0 +1,9 @@
+[
+	{
+		"If posts have been updated while this plugin is disabled, you need rebuild index by pressing the button below.": "如果在此插件禁用期间有文章被更新了，您需要按下面的按钮来重建索引。",
+		"Rebuild Index": "重建索引",
+		"Rebuild request has been sent.": "重建请求已发送。"
+	},
+	{},
+	{}
+]

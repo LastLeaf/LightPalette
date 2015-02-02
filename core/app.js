@@ -54,6 +54,7 @@ var reconfig = function(app, cb){
 		var dirs = [
 			['client', '/', fw.config.lpCoreRoot + '/client'],
 			['module', '/', fw.config.lpCoreRoot + '/module'],
+			['module', '/', fw.config.lpCoreRoot + '/module_delayed'],
 			['page', '/', fw.config.lpCoreRoot + '/page'],
 			['render', '/', fw.config.lpCoreRoot + '/render'],
 			['rpc', '/', fw.config.lpCoreRoot + '/rpc'],

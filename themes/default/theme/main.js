@@ -6,7 +6,9 @@ lp.theme = function(pg){
 
 	if(!window.localStorage) window.localStorage = {};
 
-	//pg.on('wrapperLoaded', function(){});
+	pg.on('wrapperLoaded', function(){
+		document.querySelector('.search input').setAttribute('placeholder', tmpl.searchHint());
+	});
 	pg.on('contentUnloaded', function(){
 		document.getElementById('content').innerHTML = '';
 	});
