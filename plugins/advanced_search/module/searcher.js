@@ -32,7 +32,7 @@ module.exports = function(app, cb){
 					arr = arr.concat(tokenizer.tokenize(res.abstract.replace(/\<.+?\>/g, '')));
 					arr = arr.concat(tokenizer.tokenize(res.title));
 					arr = arr.concat(res.tag);
-					for(var i=0; i<arr.length; i++) arr[i] = stemmer.stem(arr[i]);
+					for(var i=0; i<arr.length; i++) arr[i] = stemmer.stem(arr[i] || '');
 					searchCol.update({_id: res._id}, {s: arr, time: res.time}, {upsert: true}).exec();
 				});
 				stream.on('error', function(err){

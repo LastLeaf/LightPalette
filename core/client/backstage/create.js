@@ -9,7 +9,7 @@ fw.main(function(pg){
 		var userInfo = lp.backstage.userInfo;
 		var drivers = lp.backstage.driverList(userInfo.type);
 		if(drivers.length) {
-			var $btns = $('#content').html(tmpl.main()).find('input');
+			var $btns = $('#content').html(tmpl.main(drivers)).find('input');
 			$btns.click(function(){
 				var $this = $(this);
 				var type = $this.attr('driverId');
