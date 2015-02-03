@@ -63,24 +63,26 @@ module.exports = function(app, cb){
 		var search = function(str, skip, limit, cb){
 			var arr = tokenizer.tokenize(str);
 			for(var i=0; i<arr.length; i++) arr[i] = stemmer.stem(arr[i]);
-			searchCol.count().where('s').all(arr).exec(function(err, count){
+			searchCol.count().where('s').all(arr).where('time').lte(Math.floor(new Date().getTime() / 1000)).exec(function(err, count){
 				if(err) return cb('system');
 				if(!count) return cb(null, { total: 0, rows: [] });
-				searchCol.find().select('_id').where('s').all(arr).sort('-time').skip(skip).limit(limit).exec(function(err, res){
-					if(err) return cb('system');
-					Post.find().or(res).select('_id path type title status author time category tag series abstract')
-						.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
-						.sort('-time').exec(function(err, r){
-							if(err) return res.err('system');
-							for(var i=0; i<r.length; i++) {
-								r[i].dateString = dateString.date(r[i].time*1000);
-								r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
-							}
-							cb(null, {
-								total: count,
-								rows: r
+				searchCol.find().select('_id').where('s').all(arr)
+					.where('time').lte(Math.floor(new Date().getTime() / 1000))
+					.sort('-time').skip(skip).limit(limit).exec(function(err, res){
+						if(err) return cb('system');
+						Post.find().or(res).select('_id path type title status author time category tag series abstract')
+							.populate('author', '_id displayName').populate('category', '_id title').populate('series', '_id title')
+							.sort('-time').exec(function(err, r){
+								if(err) return cb('system');
+								for(var i=0; i<r.length; i++) {
+									r[i].dateString = dateString.date(r[i].time*1000);
+									r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
+								}
+								cb(null, {
+									total: count,
+									rows: r
+								});
 							});
-						});
 				});
 			});
 		};

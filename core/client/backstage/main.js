@@ -71,7 +71,7 @@ fw.mainAsync(function(pg, subm, cb){
 	lp.backstage.showError = function(err, detail){
 		var hidden = false;
 		err = err || 'timeout';
-		var str = tmpl.error[err];
+		var str = tmpl.error[err] || err;
 		if(detail) str += ' ' + detail;
 		var $error = $('<div></div>').text(str).appendTo($errors).hide().fadeIn(200).click(function(){
 			if(hidden) return;
