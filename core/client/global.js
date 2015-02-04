@@ -46,21 +46,21 @@ fw.main(function(pg){
 
 	// comments helper
 	lp.comments = {
-		list: function(postId, desc, cb, errCb){
-			if(typeof(desc) === 'function') {
+		list: function(postId, options, cb, errCb){
+			if(typeof(options) === 'function') {
 				errCb = cb;
-				cb = desc;
-				desc = null;
+				cb = options;
+				options = null;
 			}
-			fw.getPage().rpc('/backstage/comment:list', {root: '', depth: 4, post: postId, desc: desc?'yes':''}, cb, errCb);
+			fw.getPage().rpc('/backstage/comment:list', {root: '', depth: 4, post: postId, desc: options.desc?'yes':''}, cb, errCb);
 		},
-		getReplies: function(commentId, desc, cb, errCb){
-			if(typeof(desc) === 'function') {
+		getReplies: function(commentId, options, cb, errCb){
+			if(typeof(options) === 'function') {
 				errCb = cb;
-				cb = desc;
-				desc = null;
+				cb = options;
+				options = null;
 			}
-			fw.getPage().rpc('/backstage/comment:list', {root: commentId, depth: 4, post: postId, desc: desc?'yes':''}, cb, errCb);
+			fw.getPage().rpc('/backstage/comment:list', {root: commentId, depth: 4, post: postId, desc: options.desc?'yes':''}, cb, errCb);
 		},
 		add: function(args, cb, errCb){
 			fw.getPage().rpc('/backstage/comment:create', args, cb, errCb);
