@@ -1,8 +1,5 @@
+/npm-debug.log
 /config.json
 /node_modules
-/cache
-/client/theme
-/static/files
-/static/avatar
-/rc/favicon.ico
-/rc/loading.gif
+/sites
+cache

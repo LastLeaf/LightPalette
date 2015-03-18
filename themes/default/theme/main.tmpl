@@ -1,0 +1,51 @@
+<tmpl id="comment" minify>
+	<div class="comment_title">`Comments`</div>
+	<div class="comment_list">`Loading...`</div>
+	<div class="comment_new">
+		<form>
+			<input type="hidden" name="post" value="{{postId}}">
+			<input type="hidden" name="responseTo">
+			{{#if userInfo._id}}
+				<label class="comment_new_title">`New Comment by {{userInfo.displayName}}`</label>
+			{{else}}
+				<label class="comment_new_title">`New Comment`</label>
+				<div><input type="text" name="displayName" value="{{displayName}}"><label>`Name`</label></div>
+				<div><input type="email" name="email" value="{{email}}"><label>`Email`</label></div>
+				<div><input type="text" name="url" value="{{url}}"><label>`Website`</label></div>
+			{{/if}}
+			<div class="comment_new_textarea"><textarea name="content"></textarea></div>
+			<div class="comment_error"></div>
+			<div class="comment_new_buttons">
+				<span class="comment_notify">
+					<input type="checkbox" name="acceptNotify" value="yes" checked id="comment_notify"> <label for="comment_notify">`Email Notify when Replied`</label>
+				</span>
+				<input type="submit" class="submit" value="`Submit`"> <input type="button" class="button comment_cancel" value="`Cancel`">
+			</div>
+		</form>
+	</div>
+</tmpl>
+
+<tmpl id="commentItem" minify>
+	<div class="comment_head"><a {{#if url}}href="{{url}}"{{/if}} class="comment_user">{{displayName}}</a> <span class="comment_time">{{dateTimeString}}</span></div>
+	<div class="comment_body">{{content}}</div>
+	{{#if depth}}<div class="comment_reply"><a href="javascript:void(0)">`Reply`</a></div>{{/if}}
+	<div class="comment_response"></div>
+</tmpl>
+
+<json id="commentError">{
+	"noPermission": "`You are not allowed to comment here.`",
+	"usernameIllegal": "`Your name should contain 4 to 32 characters, including letters, numbers, underscores and hyphens.`",
+	"emailIllegal": "`The email address is not correct.`",
+	"urlIllegal": "`The website URL is not correct.`",
+	"contentIllegal": "`The content is empty or too long.`",
+	"system": "`Sorry, an error occurred.`",
+	"": "`Timed out. Please check your network`"
+}</json>
+
+<tmpl id="notFound" minify>
+	`Sorry, no related content was found.`
+</tmpl>
+
+<tmpl id="searchHint" minify>
+	`Search...`
+</tmpl>

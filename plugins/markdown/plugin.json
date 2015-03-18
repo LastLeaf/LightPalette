@@ -1,0 +1,16 @@
+{
+	"id": "markdown",
+	"title": {
+		"": "Post Driver: Markdown Document",
+		"zh_CN": "博文驱动：Markdown文档"
+	},
+	"version": "0.0.1",
+	"author": "LastLeaf",
+	"url": "http://lastleaf.me",
+	"thumbnail": "",
+	"description": {
+		"": "Create, edit, and display markdown documents.",
+		"zh_CN": "创建、编辑、显示Markdown文档。"
+	},
+	"lightpalette": "~0.3.0"
+}

@@ -1,0 +1,6 @@
+{
+	"base": "backstage",
+	"style": "main",
+	"tmpl": "main",
+	"main": "main"
+}

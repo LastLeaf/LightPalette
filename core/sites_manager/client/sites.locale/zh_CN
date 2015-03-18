@@ -1,0 +1,41 @@
+[
+	{
+		"LightPalette Sites Manager": "LightPalette 站点管理器",
+		"Sorry, connecting...": "对不起，正在连接……",
+		"Enter manager password to continue...": "请输入站点管理器密码，以继续操作……",
+		"Login": "登录",
+		"Please set the manager password. Do NOT forget it!": "请设置站点管理器密码。不要忘记它，切记！",
+		"Old Password": "原密码",
+		"Password": "密码",
+		"Password (Re-type)": "密码（再输入一次）",
+		"Continue": "继续",
+		"Logout": "注销登录",
+		"Modify Password": "修改站点管理器密码",
+		"Restart Framework": "完全重启框架",
+		"Sorry, request timed out.": "对不起，请求超时了。",
+		"Sorry, there is an internal server error.": "不好意思，发生了一个服务器内部错误。",
+		"The password is incorrect.": "密码不正确。",
+		"The site ID can only contain letters, numbers, \\\"_\\\" and \\\"_\\\"": "站点ID仅能包含英文字母、数字、“_”、“-”",
+		"The site ID already exists.": "站点ID已存在。"
+	},
+	{
+		"Site ID": "站点ID",
+		"Site Title": "站点标题",
+		"Permission": "权限",
+		"Status": "状态",
+		"Add": "添加",
+		"Save": "保存",
+		"Cancel": "取消",
+		"Remove": "删除",
+		"No, thanks.": "不要删除，谢谢。",
+		"Yes, remove!": "确认并删除它。",
+		"None": "无",
+		"As Sites Manager": "有站点管理员权限",
+		"Disabled": "禁用",
+		"Enabled": "启用",
+		"Safe Mode": "安全模式",
+		"Safe Mode (with Theme)": "安全模式（启用主题）",
+		"Domain Names": "域名列表"
+	},
+	{}
+]

@@ -1,0 +1,9 @@
+/* Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT */
+
+a {
+	text-decoration: none;
+	color: #00a7cc;
+}
+a:hover {
+	text-decoration: underline;
+}

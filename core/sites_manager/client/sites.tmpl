@@ -1,0 +1,62 @@
+<tmpl id="init" minify>
+	<h1>`LightPalette Sites Manager`</h1>
+	<div class="content" id="content">
+		<div class="installGuide"><p>`Sorry, connecting...`</p></div>
+	</div>
+</tmpl>
+
+<tmpl id="requirePassword" minify>
+	<div class="installGuide">
+		<form fw action="manager" method="login">
+			<p>`Enter manager password to continue...`</p>
+			<div>
+				<input type="password" id="password" required>
+			</div>
+			<div class="error"></div>
+			<input type="hidden" name="password">
+			<input type="submit" class="submit" value="`Login`">
+		</form>
+	</div>
+</tmpl>
+
+<tmpl id="setPassword" minify>
+	<div class="installGuide">
+		<form fw action="manager" method="setPassword">
+			<p>`Please set the manager password. Do NOT forget it!`</p>
+			{{#if modify}}<div>
+				<label>`Old Password`</label>
+				<input type="password" id="oldPassword" required>
+			</div>{{/if}}
+			<div>
+				<label>`Password`</label>
+				<input type="password" id="password" required>
+			</div>
+			<div>
+				<label>`Password (Re-type)`</label>
+				<input type="password" id="passwordRetype" required>
+			</div>
+			<div class="error"></div>
+			<input type="hidden" name="oldPassword">
+			<input type="hidden" name="password">
+			<input type="submit" class="submit" value="`Continue`">
+		</form>
+	</div>
+</tmpl>
+
+<tmpl id="sitesTable">
+	<div class="managerOpts">
+		<a fw href="#" id="logout">`Logout`</a>
+		<a fw href="#" id="modifyPassword">`Modify Password`</a>
+		<a fw href="#" id="restart">`Restart Framework`</a>
+	</div>
+	<div class="sitesTableError" id="sitesTableError"></div>
+	<div class="sitesTable" id="sitesTable"></div>
+</tmpl>
+
+<json id="error">{
+	"": "`Sorry, request timed out.`",
+	"system": "`Sorry, there is an internal server error.`",
+	"passwordIncorrect": "`The password is incorrect.`",
+	"siteIdIllegal": "`The site ID can only contain letters, numbers, \"_\" and \"_\"`",
+	"siteExists": "`The site ID already exists.`"
+}</json>

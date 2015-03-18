@@ -1,0 +1,11 @@
+<tmpl id="main" minify>
+	<div class="addons_tabs">
+		{{#if plugin}}
+			<a fw href="/backstage/addons/plugins" class="addons_tab addons_tab_plugins">`Plugins Settings`</a>
+		{{else}}{{#if theme}}
+			<a fw href="/backstage/addons/themes" class="addons_tab addons_tab_themes">`Themes Settings`</a>
+		{{/if}}{{/if}}
+		<span class="addons_tabs_title"></span>
+	</div>
+	<div class="addons_page_settings" id="settings"></div>
+</tmpl>

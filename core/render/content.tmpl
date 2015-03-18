@@ -1,0 +1,49 @@
+<tmpl id="list" minify>
+	{{#if query}}<div class="query query-{{type}}">{{queryName}}</div>{{/if}}
+	<div id="post_list" class="post_list">{{#each posts}}
+		<div class="post_item post_{{type}}" post-id="{{_id}}" post-type="{{type}}">
+			<h3 class="post_title"><a fw href="/{{#if path}}{{path}}{{else}}post/{{_id}}{{/if}}">{{title}}</a></h3>
+			<div class="post_head">
+				{{#if series}}<div class="post_series"><a fw href="/series/{{series._id}}">{{series.title}}</a></div>{{/if}}
+				<div class="post_author">{{#if author}}<a fw href="/author/{{author._id}}">{{author.displayName}}</a>{{/if}}</div>
+				<div class="post_date">{{dateString}}</div>
+				<ul class="post_categories">{{#each category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul>
+				<ul class="post_tags">{{#each tag}}<li><a fw href="/tag/{{this}}">{{this}}</a></li>{{/each}}</ul>
+			</div>
+			<div class="post_body post_abstract">{{{abstract}}}</div>
+		</div>
+	{{/each}}</div>
+	<div class="page">
+		{{#if pagePrev}}<div class="page_prev"><a fw href="/{{type}}{{#if query}}/{{query}}{{/if}}/{{pagePrev}}">&lt;</a></div>{{/if}}
+		{{#if pageNext}}<div class="page_next"><a fw href="/{{type}}{{#if query}}/{{query}}{{/if}}/{{pageNext}}">&gt;</a></div>{{/if}}
+	</div>
+</tmpl>
+
+<tmpl id="single" minify>
+	<div id="post_single" class="post_single post_{{post.type}}" post-id="{{post._id}}" post-type="{{post.type}}">
+		<h3 class="post_title"><a fw href="/{{#if path}}{{post.path}}{{else}}post/{{post._id}}{{/if}}">{{post.title}}</a></h3>
+		<div class="post_head">
+			{{#if post.series}}<div class="post_series"><a fw href="/series/{{post.series._id}}">{{post.series.title}}</a></div>{{/if}}
+			<div class="post_author">{{#if post.author}}<a fw href="/author/{{post.author._id}}">{{post.author.displayName}}</a>{{/if}}</div>
+			<div class="post_date">{{post.dateString}}</div>
+			<ul class="post_categories">{{#each post.category}}<li><a fw href="/category/{{_id}}">{{title}}</a></li>{{/each}}</ul>
+			<ul class="post_tags">{{#each post.tag}}<li><a fw href="/tag/{{this}}">{{this}}</a></li>{{/each}}</ul>
+		</div>
+		<div class="post_body">
+			<div class="post_content">{{{post.content}}}</div>
+			<div class="post_extra">{{{post.extra}}}</div>
+		</div>
+	</div>
+</tmpl>
+
+<tmpl id="notFound" minify>
+	{{#if query}}<div class="query query-{{type}}">{{queryName}}</div>{{/if}}
+	<div id="post_not_found" class="post_not_found"></div>
+</tmpl>
+
+<tmpl id="title" minify>
+	{{#if post}}{{post.title}} | {{siteInfo.siteTitle}}{{/if}}
+	{{#if posts}}
+		{{#if query}}{{query}} | {{siteInfo.siteTitle}}{{else}}{{siteInfo.siteTitle}}{{/if}}
+	{{/if}}
+</tmpl>

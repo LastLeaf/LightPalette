@@ -1,0 +1,34 @@
+<tmpl id="main" minify>
+	<div class="addons_opt">
+		<input type="button" value="`Apply`" class="submit addons_apply">
+	</div>
+	<div class="addons_tabs">
+		<a fw href="plugins" class="addons_tab addons_tab_plugins">`Plugins`</a>
+		<a fw href="themes" class="addons_tab addons_tab_themes">`Themes`</a>
+	</div>
+	<div class="addons_list"></div>
+</tmpl>
+
+<tmpl id="list" minify>
+	{{#if blocked}}<div class="addons_blocked">`This site is in safe mode. Items below are temporarily blocked.`</div>{{/if}}
+	{{#each rows}}
+	<div class="addons_item">
+		{{#if incompatible}}
+			<div addonId="{{id}}" class="addons_status">`Incompatible`</div>
+		{{else}}{{#if enabled}}
+			<div addonId="{{id}}" class="addons_status addons_status-enabled">`Enabled`</div>
+		{{else}}
+			<div addonId="{{id}}" class="addons_status addons_status-disabled">`Disabled`</div>
+		{{/if}}{{/if}}
+		<div class="addons_content">
+			{{#unless ../blocked}}{{#if settings}}<div addonId="{{id}}" class="addons_settings">`Settings`</div>{{/if}}{{/unless}}
+			<div class="addons_head">
+				<a {{#if url}}href="{{url}}"{{/if}} class="addons_title">{{title}}</a>
+				<span class="addons_version">{{id}} {{version}}</span>
+				<span class="addons_author">`by` {{author}}</span>
+			</div>
+			<div class="addons_description">{{description}}</div>
+		</div>
+	</div>
+	{{/each}}
+</tmpl>
