@@ -12,7 +12,7 @@
 		"": "Provide post search support replacing the built-in MongoDB text search. This will support more languages and runs on MongoDB 2.4 or above.",
 		"zh_CN": "提供博文搜索支持，替代内置的MongoDB全文搜索。这可以支持更多语言（包括中文），并能够在MongoDB 2.4（或更高版本）上运行。"
 	},
-	"lightpalette": "~0.3.3",
+	"lightpalette": "~0.4.0",
 	"settings": {
 		"tmpl": "main",
 		"main": "main"

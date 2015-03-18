@@ -9,7 +9,7 @@
 		"": "Default theme for LightPalette 0.3.",
 		"zh_CN": "LightPalette 0.3 默认主题"
 	},
-	"lightpalette": "~0.3.0",
+	"lightpalette": "~0.4.0",
 	"routes": {
 		"main": "main.js",
 		"style": "main.css",

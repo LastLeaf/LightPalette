@@ -16,5 +16,5 @@
 		"tmpl": "main",
 		"main": "main"
 	},
-	"lightpalette": "~0.3.0"
+	"lightpalette": "~0.4.0"
 }
