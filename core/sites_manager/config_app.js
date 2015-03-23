@@ -37,7 +37,7 @@ module.exports = function(app, siteInfo, cb){
 				theme: siteInfo.theme,
 				host: siteInfo.hosts,
 				title: siteInfo.title || 'LightPalette',
-				version: String(Date.now()),
+				version: fw.config.lpVersion + '~' + String(Date.now()),
 				locale: locales
 			},
 			client: {

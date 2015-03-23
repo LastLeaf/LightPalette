@@ -93,6 +93,15 @@ select, .submit, .button {
     font-size: 14px;
     color: #bbb;
 }
+.header_lpinfo {
+	font-weight: normal;
+	color: #666;
+	font-size: 0.8em;
+	margin-left: 10px;
+}
+.header_lpinfo a {
+	color: #888;
+}
 
 #tabbar {
     position: fixed;

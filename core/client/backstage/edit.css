@@ -2,7 +2,7 @@
 
 .editor_header {
     height: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 .editor_save {
     float: right;
@@ -18,6 +18,26 @@
 .editor_save:disabled {
     background: #bbb;
     box-shadow: 0 0 3px #bbb;
+}
+.editor_subheader {
+	padding-left: 10px;
+	color: #888;
+	margin-bottom: 15px;
+	font-size: 0.9em;
+	line-height: 1.5em;
+}
+#content .editor_subheader a {
+	color: #666;
+}
+.editor_status {
+	font-size: 0.9em;
+	width: 130px;
+	margin: 0 10px;
+	text-align: center;
+	float: right;
+}
+.editor_save_status {
+	min-height: 1em;
 }
 
 .editor_title {
@@ -59,9 +79,6 @@
 .sidebar .button, .sidebar .checkbox, .sidebar .radio {
     width: auto;
     padding: 0.25em 0.5em;
-}
-.editor_preview {
-    float: right;
 }
 .sidebar textarea {
     width: 264px;

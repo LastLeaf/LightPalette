@@ -11,6 +11,7 @@ fw.main(function(pg, subm){
 
 			var tinymceId = 'tinymce-' + new Date().getTime();
 			var $div = null;
+			var originalData = null;
 			pg.require('/plugins/article/lib/tinymce.js', function(){
 				// init editor in div
 				if(!data.driver) data.driver = {};
@@ -39,7 +40,11 @@ fw.main(function(pg, subm){
 					content_css: '/~client/plugins/article/lib/skins/tinymce.css',
 					language: fw.language,
 					paste_as_text: true,
-					paste_word_valid_elements: ([ 'h1', 'h2', 'h3', 'img', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'pre', 'sup', 'sub', 'div', 'span' ]).join(',')
+					paste_word_valid_elements: ([ 'h1', 'h2', 'h3', 'img', 'blockquote', 'p', 'a', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'pre', 'sup', 'sub', 'div', 'span' ]).join(','),
+					init_instance_callback: function(){
+						// log original data
+						originalData = exports.get();
+					}
 				});
 				// abstract
 				$div.find('.driver_abstract_enable').change(function(){
@@ -50,7 +55,7 @@ fw.main(function(pg, subm){
 			});
 
 			// events
-			return {
+			var exports = {
 				get: function(){
 					var content = tinymce.get(tinymceId).getContent();
 					var abstractType = $div.find('.driver_abstract_enable').val();
@@ -66,9 +71,19 @@ fw.main(function(pg, subm){
 							abstractType: abstractType
 						}
 					};
+				},
+				modified: function(){
+					if(!originalData) return false;
+					var data = exports.get();
+					if(data.content !== originalData.content || data.driver.abstract !== originalData.driver.abstract)
+						return true;
+					return false;
+				},
+				saved: function(data){
+					originalData = data || exports.get();
 				}
 			};
-
+			return exports;
 		}
 	});
 });

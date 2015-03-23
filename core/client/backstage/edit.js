@@ -8,7 +8,12 @@ fw.main(function(pg){
 	var _ = tmpl.i18n;
 	var userInfo = null;
 
-	var initPage = function(post, extraData){
+	var initPage = function(post, postLocal, extraData){
+		// check local unsaved
+		if(postLocal) {
+			for(var k in postLocal)
+				post[k] = postLocal[k];
+		}
 
 		// show content
 		var $content = $('#content').html(tmpl.main(extraData));
@@ -82,14 +87,11 @@ fw.main(function(pg){
 		});
 
 		// save
-		$content.find('.editor_preview').click(function(){
-			window.open('/backstage/preview/'+post._id, 'preview');
-		});
+		var $saveStatus = $content.find('.editor_save_status');
 		var $save = $content.find('.editor_save').click(function(){
 			$form.submit();
 		});
-		$form.submit(function(e){
-			e.preventDefault();
+		var collectArgs = function(){
 			// collect args
 			var args = {
 				_id: post._id,
@@ -110,16 +112,57 @@ fw.main(function(pg){
 			}
 			for(var k in dynArgs)
 				args[k] = dynArgs[k];
+			// filter path
+			args.path = ('/' + args.path).replace(/\/+/, '/').slice(1);
+			return { args: args, dynArgs: dynArgs };
+		};
+		$form.submit(function(e){
+			e.preventDefault();
 			// rpc
 			$save.prop('disabled', true);
-			pg.rpc($form.attr('action') + ':' + $form.attr('method'), args, function(){
+			var cargs = collectArgs();
+			pg.rpc($form.attr('action') + ':' + $form.attr('method'), cargs.args, function(){
 				$save.prop('disabled', false);
+				$saveStatus.html(tmpl.saveStatus({
+					time: new Date().toLocaleTimeString(),
+					link: postLink(cargs.args)
+				}));
+				editor.saved(cargs.dynArgs);
+				localStorage.removeItem('LightPalette:/backstage/post/' + post._id);
 			}, function(err){
 				$save.prop('disabled', false);
 				lp.backstage.showError(err);
 			});
 			$save.prop('disabled', true);
 		});
+
+		// save local on unload
+		pg.on('unload', function(){
+			if(!editor.modified()) return;
+			var data = editor.get();
+			data.title = $form.find('[name=title]').val();
+			localStorage.setItem('LightPalette:/backstage/post/' + post._id, JSON.stringify(data));
+		});
+
+		// show unsaved message
+		if(postLocal) {
+			$saveStatus.html(tmpl.unsaved()).find('.editor_unsaved').click(function(e){
+				e.preventDefault();
+				localStorage.removeItem('LightPalette:/backstage/post/' + post._id);
+				fw.reload(1);
+			});
+		}
+	};
+
+	// generate post link
+	var postLink = function(args){
+		var link = '';
+		if(args.status === 'pending' || args.status === 'draft') {
+			link = '/backstage/preview/' + args._id;
+		} else {
+			link = ('/' + args.path) || ('/post/' + args._id);
+		}
+		return link;
 	};
 
 	// get post information
@@ -127,14 +170,19 @@ fw.main(function(pg){
 		userInfo = lp.backstage.userInfo;
 		var next = function(authors){
 			// get category list
-			pg.rpc('post:get', {_id: fw.getArgs()['*'], 'originalTimeFormat': 'yes'}, function(r){
-				pg.rpc('category:list', function(categories){
+			pg.rpc('category:list', function(categories){
+				var id = fw.getArgs()['*'];
+				var local = localStorage.getItem('LightPalette:/backstage/post/' + id);
+				var rl = null;
+				if(local) rl = JSON.parse(local);
+				pg.rpc('post:get', {_id: id, 'originalTimeFormat': 'yes'}, function(r){
 					// init page
-					initPage(r, {
+					initPage(r, rl, {
 						categories: categories,
 						authors: authors,
 						write: (userInfo.type !== 'contributor'),
-						edit: (userInfo.type === 'editor' || userInfo.type === 'admin')
+						edit: (userInfo.type === 'editor' || userInfo.type === 'admin'),
+						link: postLink(r)
 					});
 				}, function(err){
 					lp.backstage.showError(err);

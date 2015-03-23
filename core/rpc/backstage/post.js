@@ -67,6 +67,8 @@ exports.modify = function(conn, res, args){
 		filtered.time = new Date().getTime();
 	}
 	filtered.time = Math.floor(filtered.time / 1000);
+	filtered.path = filtered.path.replace(/\/+/, '/');
+	if(filtered.path.charAt(0) === '/') filtered.path = filtered.path.slice(1);
 	delete filtered.timeString;
 	args = filtered;
 	User.checkPermission(conn, ['contributor', 'writer', 'editor', 'admin'], function(contributor, writer, editor, admin, userType){

@@ -7,7 +7,7 @@ LightPalette runs on linux (*nix, Windows are also possible) with node.js and mo
 # Basic Installation (on localhost as example) #
 
 1. Ensure you have node.js>=0.10.0 and mongodb>=2.4.0.
-1. Clone this repo, or just download it.
+1. Download [latest version](https://github.com/LastLeaf/LightPalette/releases/latest), or clone this repo.
 1. Run `npm install` in the root directory of this project.
 1. Run `node .` in the root directory of this project. For debugging, run `FW=DEBUG node .`.
 1. Visit installation guide at [localhost:1180](http://localhost:1180/). You need to provide mongodb connection information during installation.

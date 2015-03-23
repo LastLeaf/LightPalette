@@ -44,7 +44,7 @@ fw.mainAsync(function(pg, subm, cb){
 	// create div structure
 	var lpVersion = fw.version;
 	if(lpVersion.indexOf('~') >= 0) lpVersion = lpVersion.slice(0, lpVersion.indexOf('~'));
-	var $backstage = $(tmpl.main()).appendTo(document.body);
+	var $backstage = $(tmpl.main({ lpVersion: lpVersion, lpLang: fw.language, siteTitle: document.title })).appendTo(document.body);
 	$('#content').html(tmpl.busy());
 	// define page switch method
 	var $tabbar = $backstage.find('#tabbar');

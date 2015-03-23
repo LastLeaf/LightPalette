@@ -7,6 +7,16 @@
 					<input type="text" name="title" placeholder="`Title`">
 				</div>
 			</div>
+			<div class="editor_subheader">
+				<select class="editor_status" name="status">
+					<option value="draft">`draft`</option>
+					<option value="pending">`pending`</option>
+					{{#if write}}<option value="published">`published`</option>{{/if}}
+					{{#if write}}<option value="visible">`visible via link`</option>{{/if}}
+					{{#if edit}}<option value="special">`special page`</option>{{/if}}
+				</select>
+				<div class="editor_save_status"><a target="preview" href="{{link}}">`Read in Forestage`</a></div>
+			</div>
 			<div class="sidebar">
 				<div class="sidebar_item">
 					<div class="sidebar_title">`Basic Configuration`</div>
@@ -15,16 +25,6 @@
 						{{#if edit}}`Author`&nbsp;<select name="author">{{#each authors}}
 							<option value="{{_id}}">{{displayName}}</option>
 						{{/each}}</select>{{/if}}
-					</div>
-					<div class="sidebar_row">
-						`Status`&nbsp;<select name="status">
-							<option value="draft">`draft`</option>
-							<option value="pending">`pending`</option>
-							{{#if write}}<option value="published">`published`</option>{{/if}}
-							{{#if write}}<option value="visible">`visible via link`</option>{{/if}}
-							{{#if edit}}<option value="special">`special page`</option>{{/if}}
-						</select>
-						<input type="button" class="editor_preview button" value="`Preview`">
 					</div>
 					<input type="text" name="timeString" placeholder="`Publish Time XXXX-XX-XX XX:XX:XX`">
 				</div>
@@ -56,6 +56,14 @@
 			</div>
 		</form>
 	</div>
+</tmpl>
+
+<tmpl id="saveStatus">
+	`Saved at {{time}}.` <a target="preview" href="{{link}}">`Read in Forestage`</a>
+</tmpl>
+
+<tmpl id="unsaved">
+	`The modified post is unsaved.` <a href="#" class="editor_unsaved">`Discard Changes`</a>
 </tmpl>
 
 <tmpl id="seriesSelect">
