@@ -52,6 +52,7 @@ fw.main(function(pg){
 				cb = options;
 				options = null;
 			}
+			if(!options) options = {};
 			fw.getPage().rpc('/backstage/comment:list', {root: '', depth: 4, post: postId, desc: options.desc?'yes':''}, cb, errCb);
 		},
 		getReplies: function(commentId, options, cb, errCb){
@@ -60,6 +61,7 @@ fw.main(function(pg){
 				cb = options;
 				options = null;
 			}
+			if(!options) options = {};
 			fw.getPage().rpc('/backstage/comment:list', {root: commentId, depth: 4, post: postId, desc: options.desc?'yes':''}, cb, errCb);
 		},
 		add: function(args, cb, errCb){
