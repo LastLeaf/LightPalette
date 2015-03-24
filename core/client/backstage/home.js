@@ -51,6 +51,7 @@ fw.main(function(pg){
 
 		var latestGot = function(posts, comments){
 			// common page
+			if(!unsavedPosts.length) unsavedPosts = null;
 			var $content = $('#content').html(tmpl.main({
 				username: userInfo._id,
 				displayName: userInfo.displayName,
@@ -59,6 +60,7 @@ fw.main(function(pg){
 				url: userInfo.url,
 				description: userInfo.description,
 				avatar: lp.avatarUrl(userInfo, 128),
+				unsavedPosts: unsavedPosts,
 				posts: posts,
 				comments: comments,
 			}));
@@ -109,12 +111,31 @@ fw.main(function(pg){
 		// read hot posts and resent comments
 		pg.rpc('comment:list', {depth: 1, desc: 'yes', from: 0, count: 10}, function(comments){
 			pg.rpc('post:list', {from: 0, count: 10}, function(posts){
-				latestGot(posts, comments);
+				latestGot(unsavedPosts, posts, comments);
 			}, function(err){
 				if(err) lp.backstage.showError(err);
 			});
 		}, function(err){
 			if(err) lp.backstage.showError(err);
+		});
+		
+		// read local unsaved posts
+		var unsavedPosts = [];
+		var keys = Object.keys(localStorage);
+		keys.forEach(function(key){
+			var match = key.match(/^LightPalette\:\/backstage\/post\/(.+)$/);
+			if(!match) return;
+			var id = match[1];
+			var data = JSON.parse(localStorage.getItem(key));
+			unsavedPosts.push({
+				id: id,
+				title: data.title,
+				time: data._localBackupTime,
+				dateString: new Date(data._localBackupTime).toLocaleDateString()
+			});
+		});
+		unsavedPosts.sort(function(a, b){
+			return b.time - a.time;
 		});
 	};
 

@@ -11,6 +11,8 @@
 		"Retype...": "再输入一次……",
 		"There are {{posts.total}} published posts, and {{comments.total}} comments on this blog.": "站点内共有 {{posts.total}} 篇已发布的博文，和 {{comments.total}} 条评论。",
 		"Write New Post": "写新博文",
+		"Unsaved Posts": "未保存的博文",
+		"edited on": "编辑于",
 		"Recent Posts": "最新的博文",
 		"by": "来自",
 		"on": "在",

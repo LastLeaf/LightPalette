@@ -11,6 +11,7 @@ fw.main(function(pg){
 	var initPage = function(post, postLocal, extraData){
 		// check local unsaved
 		if(postLocal) {
+			delete postLocal._localBackupTime;
 			for(var k in postLocal)
 				post[k] = postLocal[k];
 		}
@@ -155,7 +156,7 @@ fw.main(function(pg){
 		});
 
 		// save local on unload
-		var unloadFunc = function(){
+		var saveLocal = function(){
 			if(!editor.modified()) return;
 			var data = editor.get() || {};
 			var abstract = $form.find('[name=abstract]').val();
@@ -163,14 +164,17 @@ fw.main(function(pg){
 			if(abstract && typeof(data.abstract) === 'undefined') data.abstract = abstract;
 			if(content && typeof(data.content) === 'undefined') data.content = content;
 			data.title = $form.find('[name=title]').val();
+			data._localBackupTime = Date.now();
 			localStorage.setItem('LightPalette:/backstage/post/' + post._id, JSON.stringify(data));
 		};
-		pg.on('unload', unloadFunc);
-		pg.on('pageUnload', unloadFunc);
-		pg.on('pageBeforeUnload', function(e){
-			if(editor.modified()) e.message = 'hahaha';
+		// auto-save every 5 minutes
+		var autoSaveTobj = setInterval(saveLocal, 300000);
+		pg.on('unload', function(){
+			clearInterval(autoSaveTobj);
 		});
-
+		pg.on('unload', saveLocal);
+		pg.on('pageUnload', saveLocal);
+		
 		// show unsaved message
 		if(postLocal) {
 			$saveStatus.html(tmpl.unsaved()).find('.editor_unsaved').click(function(e){
@@ -213,6 +217,10 @@ fw.main(function(pg){
 					});
 				}, function(err){
 					lp.backstage.showError(err);
+					if(err === 'notFound') {
+						// remove local unsaved post
+						localStorage.removeItem('LightPalette:/backstage/post/' + id);
+					}
 				});
 			}, function(err){
 				lp.backstage.showError(err);
