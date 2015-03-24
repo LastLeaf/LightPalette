@@ -10,6 +10,7 @@ fw.main(function(pg, subm){
 		permission: 'admin',
 		editor: function(div, data){
 			var $div = $(div).html(tmpl.anyHtml(data));
+			var originalData = data;
 			return {
 				get: function(){}
 			};

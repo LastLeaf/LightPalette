@@ -4,7 +4,7 @@
 		"": "Post Driver: Any HTML",
 		"zh_CN": "博文驱动：任意HTML"
 	},
-	"version": "0.0.1",
+	"version": "0.5.0",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
 	"thumbnail": "",
@@ -12,5 +12,5 @@
 		"": "Create, edit, and display posts written in any HTML. Considering security problems, this kind of posts can only be created and edited by administrators.",
 		"zh_CN": "创建、编辑、显示用任意HTML撰写的博文。出于安全性考虑，这类博文仅允许管理员创建和编辑。"
 	},
-	"lightpalette": "~0.4.0"
+	"lightpalette": "0.5.x || 0.6.x"
 }

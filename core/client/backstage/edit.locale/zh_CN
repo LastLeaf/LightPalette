@@ -22,8 +22,5 @@
 		"Discard Changes": "丢弃未保存的更改"
 	},
 	{},
-	{
-		"Status": "状态",
-		"Preview": "预览"
-	}
+	{}
 ]

@@ -38,7 +38,25 @@ fw.main(function(pg){
 		});
 		// tags
 		$form.find('[name=tag]').val(post.tag.join('\r\n'));
+
+		// init editor
 		var editor = lp.backstage.driverEditor(post.type, $content.find('.driver')[0], post, userInfo);
+		if(!editor.get) editor.get = function(){};
+		var editorSavedData = { content: post.content, abstract: post.abstract };
+		if(!editor.modified) editor.modified = function(){
+			var abstract = $form.find('[name=abstract]').val();
+			var content = $form.find('[name=content]').val();
+			if(abstract && editorSavedData.abstract !== abstract) return true;
+			if(content && editorSavedData.content !== content) return true;
+			return false;
+		};
+		if(!editor.saved) editor.saved = function(data){
+			editorSavedData = data;
+			var abstract = $form.find('[name=abstract]').val();
+			var content = $form.find('[name=content]').val();
+			if(abstract && typeof(data.abstract) === 'undefined') data.abstract = abstract;
+			if(content && typeof(data.content) === 'undefined') data.content = content;
+		};
 
 		// series
 		var $series = $form.find('.sidebar_series');
@@ -137,11 +155,20 @@ fw.main(function(pg){
 		});
 
 		// save local on unload
-		pg.on('unload', function(){
+		var unloadFunc = function(){
 			if(!editor.modified()) return;
-			var data = editor.get();
+			var data = editor.get() || {};
+			var abstract = $form.find('[name=abstract]').val();
+			var content = $form.find('[name=content]').val();
+			if(abstract && typeof(data.abstract) === 'undefined') data.abstract = abstract;
+			if(content && typeof(data.content) === 'undefined') data.content = content;
 			data.title = $form.find('[name=title]').val();
 			localStorage.setItem('LightPalette:/backstage/post/' + post._id, JSON.stringify(data));
+		};
+		pg.on('unload', unloadFunc);
+		pg.on('pageUnload', unloadFunc);
+		pg.on('pageBeforeUnload', function(e){
+			if(editor.modified()) e.message = 'hahaha';
 		});
 
 		// show unsaved message

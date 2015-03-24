@@ -1,7 +1,7 @@
 {
 	"id": "default",
 	"title": "LightPalette's Default",
-	"version": "0.4.1",
+	"version": "0.5.0",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
 	"thumbnail": "",
@@ -9,7 +9,7 @@
 		"": "Default theme for LightPalette 0.4.",
 		"zh_CN": "LightPalette 0.4 默认主题"
 	},
-	"lightpalette": "~0.4.1",
+	"lightpalette": "0.5.x || 0.6.x",
 	"routes": {
 		"main": "main.js",
 		"style": "main.css",

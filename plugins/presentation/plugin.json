@@ -4,7 +4,7 @@
 		"": "Post Driver: Presentation",
 		"zh_CN": "博文驱动：演示"
 	},
-	"version": "0.0.1",
+	"version": "0.5.0",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
 	"thumbnail": "",
@@ -16,5 +16,5 @@
 		"tmpl": "main",
 		"main": "main"
 	},
-	"lightpalette": "~0.4.0"
+	"lightpalette": "0.5.x || 0.6.x"
 }
