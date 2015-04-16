@@ -49,7 +49,7 @@ fw.main(function(pg){
 			return;
 		}
 
-		var latestGot = function(posts, comments){
+		var latestGot = function(unsavedPosts, posts, comments){
 			// common page
 			if(!unsavedPosts.length) unsavedPosts = null;
 			var $content = $('#content').html(tmpl.main({
@@ -118,7 +118,7 @@ fw.main(function(pg){
 		}, function(err){
 			if(err) lp.backstage.showError(err);
 		});
-		
+
 		// read local unsaved posts
 		var unsavedPosts = [];
 		var keys = Object.keys(localStorage);

@@ -9,8 +9,6 @@ module.exports = function(app, model, cb){
 	var Schema = app.db.Schema;
 	var schemaObj = {
 		time: { type: Number },
-		dateString: String,
-		dateTimeString: String,
 		blocked: { type: Boolean, default: false },
 		post: { type: Schema.Types.ObjectId, ref: app.config.db.prefix + 'post' },
 		user: { type: String, default: '', ref: app.config.db.prefix + 'user' },

@@ -16,8 +16,6 @@ module.exports = function(app, model, cb){
 		] },
 		author: { type: String, ref: app.config.db.prefix + 'user' },
 		time: { type: Number },
-		dateString: String,
-		dateTimeString: String,
 		category: [{ type: String, ref: app.config.db.prefix + 'category' }],
 		tag: { type: [String], default: [] },
 		series: { type: String, ref: app.config.db.prefix + 'series' },

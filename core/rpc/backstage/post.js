@@ -181,6 +181,7 @@ exports.get = function(conn, res, args){
 				if(err || !r) return res.err('notFound');
 				if(!editor && r.author._id !== conn.session.userId)
 					return res.err('noPermission');
+				r = r.toObject();
 				if(args.originalTimeFormat) {
 					r.dateTimeString = dateString.dateTime(r.time*1000, '%F %T');
 				} else {
@@ -209,6 +210,7 @@ exports.read = function(conn, res, args){
 		.exec(function(err, r){
 			if(err || !r) return res.err('notFound');
 			if(r.status !== 'published' && r.path !== args.path) return res.err('notFound');
+			r = r.toObject();
 			r.dateString = dateString.date(r.time*1000);
 			r.dateTimeString = dateString.dateTime(r.time*1000);
 			if(!driver.get(r.type)) return res.err('system');
@@ -261,6 +263,7 @@ exports.list = function(conn, res, args){
 				.sort('-time').skip(args.from).limit(args.count).exec(function(err, r){
 					if(err) return res.err('system');
 					for(var i=0; i<r.length; i++) {
+						r[i] = r[i].toObject();
 						r[i].dateString = dateString.date(r[i].time*1000);
 						r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
 					}

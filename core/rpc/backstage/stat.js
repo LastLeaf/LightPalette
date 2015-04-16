@@ -25,8 +25,10 @@ exports.visitor = function(conn, res, args){
 			if(err) return res.err('system');
 			Stat.find({sid: args.visitor}).where('time').gt(fromTime).populate('post', '_id title').sort('-time').limit(args.count).skip(args.from).exec(function(err, r){
 				if(err) return res.err('system');
-				for(var i=0; i<r.length; i++)
+				for(var i=0; i<r.length; i++) {
+					r[i] = r[i].toObject();
 					r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
+				}
 				res({
 					total: total,
 					rows: r
@@ -65,8 +67,10 @@ exports.post = function(conn, res, args){
 					else var visitors = 0;
 					Stat.find({post: args.post}).where('time').gt(fromTime).sort('-time').limit(args.count).skip(args.from).exec(function(err, r){
 						if(err) return res.err('system');
-						for(var i=0; i<r.length; i++)
+						for(var i=0; i<r.length; i++) {
+							r[i] = r[i].toObject();
 							r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
+						}
 						res({
 							post: post,
 							visits: visits,
@@ -84,38 +88,33 @@ exports.post = function(conn, res, args){
 exports.hotPosts = function(conn, res, args){
 	args = formFilter(args, {
 		timeRange: 0,
-		from: 0,
 		count: 10
 	});
-	if(args.count > 20 || args.count < 1 || args.from < 0) return res.err('system');
+	if(args.count > 20 || args.count < 1) return res.err('system');
 	if(args.timeRange) var fromTime = Math.floor(new Date().getTime()/1000) - args.timeRange;
 	else var fromTime = 0;
 	// check permission
 	User.checkPermission(conn, 'admin', function(r){
 		if(!r) return res.err('noPermission');
-		var query = Stat.distinct('post');
-		if(fromTime) query.where('time').gt(fromTime);
-		query.count(function(err, total){
+		var query = Stat.aggregate();
+		if(fromTime) query = query.match({ time: { $gt: fromTime } });
+		query.group({ _id: '$post', visits: { $sum: 1 } })
+			.project({ post: '$_id', visits: 1 })
+			.sort('-visits')
+			.limit(args.count);
+		query.exec(function(err, r){
 			if(err) return res.err('system');
-			var query = Stat.aggregate();
-			if(fromTime) query = query.match({ time: { $gt: fromTime } });
-			query.group({ _id: '$post', visits: { $sum: 1 } })
-				.project({ post: '$_id', visits: 1 })
-				.sort('-visits')
-				.limit(args.count)
-				.skip(args.from);
-			query.exec(function(err, r){
+			Stat.populate(r, {path: 'post', select: '_id title type author time'}, function(err, r){
 				if(err) return res.err('system');
-				Stat.populate(r, {path: 'post', select: '_id title type author time'}, function(err, r){
-					if(err) return res.err('system');
-					User.populate(r, {path: 'post.author', select: '_id displayName'}, function(err, r){
-						if(err) return res.err('system', err);
-						for(var i=0; i<r.length; i++)
-							r[i].post.dateTimeString = dateString.dateTime(r[i].post.time*1000);
-						res({
-							total: total,
-							rows: r
-						});
+				User.populate(r, {path: 'post.author', select: '_id displayName'}, function(err, r){
+					if(err) return res.err('system', err);
+					for(var i=0; i<r.length; i++) {
+						r[i].post = r[i].post.toObject();
+						r[i].post.dateTimeString = dateString.dateTime(r[i].post.time*1000);
+					}
+					res({
+						total: r.length,
+						rows: r
 					});
 				});
 			});

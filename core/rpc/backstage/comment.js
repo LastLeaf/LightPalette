@@ -253,6 +253,7 @@ exports.list = function(conn, res, args){
 					Comment.populate(r, populateOpt, populateDone);
 				} else {
 					// fill date strings
+					for(var i=0; i<r.length; i++) r[i] = r[i].toObject();
 					var fillDateString = function(root){
 						for(var i=0; i<root.length; i++) {
 							root[i].dateString = dateString.date(root[i].time*1000);

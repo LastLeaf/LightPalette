@@ -10,7 +10,6 @@ module.exports = function(app, model, cb){
 	var schemaObj = {
 		post: { type: Schema.Types.ObjectId, ref: app.config.db.prefix + 'post' },
 		time: { type: Number },
-		dateTimeString: String,
 		sid: { type: String },
 		ip: { type: String }
 	};

@@ -21,7 +21,7 @@
 
 <tmpl id="single" minify>
 	<div id="post_single" class="post_single post_{{post.type}}" post-id="{{post._id}}" post-type="{{post.type}}">
-		<h3 class="post_title"><a fw href="/{{#if path}}{{post.path}}{{else}}post/{{post._id}}{{/if}}">{{post.title}}</a></h3>
+		<h3 class="post_title"><a fw href="/{{#if post.path}}{{post.path}}{{else}}post/{{post._id}}{{/if}}">{{post.title}}</a></h3>
 		<div class="post_head">
 			{{#if post.series}}<div class="post_series"><a fw href="/series/{{post.series._id}}">{{post.series.title}}</a></div>{{/if}}
 			<div class="post_author">{{#if post.author}}<a fw href="/author/{{post.author._id}}">{{post.author.displayName}}</a>{{/if}}</div>
