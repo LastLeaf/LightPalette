@@ -118,6 +118,36 @@
 			</form>
 		</div>
 
+		<div class="settings_section" section="stat">
+			<div class="settings_title">`Statistics`</div>
+			<form action="settings" method="set" class="settings_form">
+				<input type="hidden" name="_key" value="stat">
+				<div>
+					<label>`Visits Logger`</label>
+					<select name="enabled">
+						<option value="">`Disabled`</option>
+						<option value="yes">`Enabled`</option>
+					</select>
+				</div>
+				<div>
+					<label>`Clear History`</label>
+					<select class="clear_stat_time">
+						<option value="">`No`</option>
+						<option value="3600">`1 hour ago`</option>
+						<option value="86400">`24 hours ago`</option>
+						<option value="259200">`3 days ago`</option>
+						<option value="604800">`7 days ago`</option>
+						<option value="2592000">`30 days ago`</option>
+						<option value="7776000">`90 days ago`</option>
+						<option value="31536000">`365 days ago`</option>
+						<option value="0">`all`</option>
+					</select>
+				</div>
+				<input type="button" class="clear_stat button" value="`Clear History Now`">
+				<input type="submit" class="submit" value="`Save Settings`">
+			</form>
+		</div>
+
 	</div>
 	<ul class="settings_navi">
 		<li for="basic">`Basic`</li>
@@ -125,6 +155,7 @@
 		<li for="date">`Date`</li>
 		<li for="user">`User`</li>
 		<li for="email">`Email`</li>
+		<li for="stat">`Statistics`</li>
 	</ul>
 </tmpl>
 

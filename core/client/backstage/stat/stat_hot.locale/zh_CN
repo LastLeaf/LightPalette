@@ -1,6 +1,8 @@
 [
 	{
-		"Hotest Posts in": "热门博文",
+		"Hotest Posts": "热门博文",
+		"Hotest Paths": "热门路径",
+		"Hotest Referers": "热门来源",
 		"1 hour": "1小时",
 		"24 hours": "24小时",
 		"3 days": "3天",
@@ -14,7 +16,9 @@
 		"Title": "标题",
 		"Author": "作者",
 		"Publish Time": "发布时间",
-		"Visits": "访问次数"
+		"Visits": "访问次数",
+		"Path": "路径",
+		"Referer Site": "来源站点"
 	},
 	{}
 ]

@@ -38,7 +38,7 @@ fw.main(function(pg){
 		])
 		.data(function(page){
 			var q = {timeRange: lp.backstage.statRange, post: fw.getArgs().id, from: page*POST_LIST_LEN, count: POST_LIST_LEN};
-			pg.rpc('stat:post', q, function(r){
+			pg.rpc('../stat:post', q, function(r){
 				$statTitle.text(r.post.title);
 				$statMeta.html(tmpl.statMeta(r));
 				table.setTotal(Math.ceil(r.visits/POST_LIST_LEN));

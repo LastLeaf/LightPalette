@@ -191,7 +191,7 @@ fw.main(function(pg){
 		if(args.status === 'pending' || args.status === 'draft') {
 			link = '/backstage/preview/' + args._id;
 		} else {
-			link = ('/' + args.path) || ('/post/' + args._id);
+			link = ( args.path ? '/' + args.path : '/post/' + args._id );
 		}
 		return link;
 	};

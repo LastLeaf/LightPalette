@@ -73,9 +73,9 @@ select, .submit, .button {
     right: 0;
     top: 0;
     background: #444;
-    line-height: 32px;
-    height: 32px;
-    padding: 2px 20px;
+    line-height: 36px;
+    height: 36px;
+    padding: 0 0 0 20px;
     box-shadow: 0 0 5px #444;
 }
 #header img {
@@ -88,11 +88,6 @@ select, .submit, .button {
     background: url('img/logo_32.png') no-repeat;
     padding-left: 40px;
 }
-.header_right {
-    float: right;
-    font-size: 14px;
-    color: #bbb;
-}
 .header_lpinfo {
 	font-weight: normal;
 	color: #666;
@@ -101,6 +96,39 @@ select, .submit, .button {
 }
 .header_lpinfo a {
 	color: #888;
+}
+
+.header_right {
+    float: right;
+    color: #ddd;
+    height: 100%;
+}
+.header_list {
+    float: left;
+    text-align: center;
+    border-left: 1px solid #666;
+    background: #444;
+}
+.header_list_title, .header_item {
+    background: #444;
+    padding: 0 16px;
+    cursor: pointer;
+	min-width: 4em;
+}
+.header_list_title:hover, .header_item:hover {
+    background: #222;
+}
+.header_item {
+    height: 28px;
+    line-height: 28px;
+    margin: 2px 0;
+}
+.header_item_sep {
+	height: 6px;
+}
+.header_list_items {
+	box-shadow: 0 0 5px #444;
+	display: none;
 }
 
 #tabbar {
@@ -148,11 +176,11 @@ select, .submit, .button {
 }
 
 #content_wrapper {
-    position: absolute;
-    top: 36px;
+    position: relative;
+    margin-top: 36px;
     bottom: 0;
     right: 0;
-    left: 150px;
+    margin-left: 150px;
     padding: 20px;
     overflow: auto;
 }
@@ -160,7 +188,7 @@ select, .submit, .button {
     color: #00a7cc;
 }
 #backstage_busy {
-    position: absolute;
+    position: fixed;
     margin: auto;
     left: 0;
     right: 0;
@@ -281,4 +309,16 @@ select, .submit, .button {
 }
 .lp_table_edit_btn_right {
     float: right;
+}
+
+@media (max-width: 1000px) {
+	#tabbar {
+		display: none;
+	}
+	#content_wrapper {
+		margin-left: 0;
+	}
+	#errors {
+		left: 0;
+	}
 }

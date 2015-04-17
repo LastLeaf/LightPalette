@@ -16,6 +16,7 @@ fw.main(function(pg){
 		var $content = $('#content').html(tmpl.main());
 		var $table = $content.find('.table');
 		var $statTime = $content.find('.stat_time');
+		var $statMeta = $content.find('.stat_meta');
 
 		// stat range
 		if(lp.backstage.statRange)
@@ -29,15 +30,19 @@ fw.main(function(pg){
 
 		// build table
 		var table = lp.tableBuilder($table, {idCol: '_id', editMore: true, noRemove: true}, [
-			{ id: 'post.title', name: _('Title'), input: 'add' },
-			{ id: 'post.author.displayName', name: _('Author'), input: 'add' },
-			{ id: 'post.dateTimeString', name: _('Publish Time'), input: 'add' },
-			{ id: 'visits', name: _('Visits'), input: 'add' },
+			{ id: 'dateTimeString', name: _('Time'), input: 'add' },
+			{ id: 'post._id', type: 'hidden', input: 'add' },
+			{ id: 'post.title', name: _('Post'), input: 'add' },
+			{ id: 'ip', name: _('IP Address'), input: 'add' },
 			{ id: 'extra', type: 'extra', input: 'add' }
 		])
 		.data(function(page){
-			var q = {timeRange: lp.backstage.statRange, from: page*POST_LIST_LEN, count: POST_LIST_LEN};
-			pg.rpc('stat:hotPosts', q, function(r){
+			var q = {timeRange: lp.backstage.statRange, visitor: fw.getArgs().id, from: page*POST_LIST_LEN, count: POST_LIST_LEN};
+			pg.rpc('../stat:visitor', q, function(r){
+				$statMeta.html(tmpl.statMeta({
+					visits: r.total,
+					id: fw.getArgs().id
+				}));
 				table.setTotal(Math.ceil(r.total/POST_LIST_LEN));
 				var rows = r.rows;
 				for(var i=0; i<r.rows.length; i++) {
@@ -52,7 +57,10 @@ fw.main(function(pg){
 
 		// table operations
 		table.change(function(data, id){
-			fw.go('/backstage/stat/post/'+id);
+			fw.go('/backstage/stat/post/'+data.post._id);
+		});
+		$statTime.change(function(){
+			table.setPage(0, 1);
 		});
 	};
 

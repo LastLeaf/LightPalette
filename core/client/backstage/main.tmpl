@@ -5,7 +5,7 @@
 				<a fw href="/">{{siteTitle}}</a>
 				<span class="header_lpinfo"><a href="https://lightpalette.lastleaf.me">LightPalette</a> {{lpVersion}} {{lpLang}}</span>
 			</div>
-			<div class="header_right"></div>
+			<div class="header_right" id="header_list"></div>
 		</div>
 		<div id="tabbar">
 			<div class="tabs">
@@ -21,7 +21,7 @@
 	</div>
 </tmpl>
 
-<tmpl id="userTabs">
+<tmpl id="userTabs" minify>
 	<div class="tabs">
 		<div class="tab_sep"></div>
 		<a fw href="/backstage/home"><div class="tab tab_home">`Dashboard`</div></a>
@@ -51,11 +51,46 @@
 	</div>
 </tmpl>
 
-<tmpl id="userInfo">
-	`Hello {{displayName}}! You can <a fw href="/backstage/home">modify your infomation</a>, or <a fw href="#" class="logout">logout</a>.`
+<tmpl id="userInfo" minify>
+	<div class="header_list" tabindex="-1">
+		<div class="header_list_title nav_current">`Pages`</div>
+		<div class="header_list_items">
+			<div class="header_item_sep"></div>
+			<div class="header_item" href="/backstage/home">`Dashboard`</div>
+			{{#if admin}}
+				<div class="header_item" href="/backstage/stat">`Statistics`</div>
+			{{/if}}
+			{{#if contrib}}
+				<div class="header_item_sep"></div>
+				<div class="header_item" href="/backstage/post">`Writing`</div>
+				<div class="header_item" href="/backstage/posts">`Posts`</div>
+			{{/if}}
+			{{#if write}}
+				<div class="header_item" href="/backstage/files">`Files`</div>
+				<div class="header_item" href="/backstage/series">`Series`</div>
+			{{/if}}
+			{{#if edit}}
+				<div class="header_item" href="/backstage/categories">`Categories`</div>
+				<div class="header_item_sep"></div>
+				<div class="header_item" href="/backstage/comments">`Comments`</div>
+			{{/if}}
+			{{#if admin}}
+				<div class="header_item" href="/backstage/users">`Users`</div>
+				<div class="header_item" href="/backstage/addons">`Addons`</div>
+				<div class="header_item" href="/backstage/settings">`Settings`</div>
+			{{/if}}
+		</div>
+	</div>
+	<div class="header_list" tabindex="-1">
+		<div class="header_list_title">{{displayName}}</div>
+		<div class="header_list_items">
+			<div class="header_item" href="/backstage/home">`Account`</div>
+			<div class="header_item logout">`Logout`</div>
+		</div>
+	</div>
 </tmpl>
 
-<tmpl id="busy">
+<tmpl id="busy" minify>
 	<div id="backstage_busy"></div>
 </tmpl>
 

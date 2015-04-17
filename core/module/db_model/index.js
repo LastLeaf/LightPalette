@@ -10,7 +10,9 @@ var models = [
 	'category.js',
 	'post.js',
 	'comment.js',
-	'stat.js'
+	'stat.js',
+	'stat_path.js',
+	'stat_referer.js'
 ];
 
 module.exports = function(app, next){

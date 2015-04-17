@@ -5,6 +5,8 @@ var formFilter = fw.module('form_filter');
 var User = fw.module('db_model').User;
 var Post = fw.module('db_model').Post;
 var Stat = fw.module('db_model').Stat;
+var StatPath = fw.module('db_model').StatPath;
+var StatReferer = fw.module('db_model').StatReferer;
 var dateString = fw.module('date_string.js');
 
 // get visiting history of a visitor
@@ -84,7 +86,7 @@ exports.post = function(conn, res, args){
 	});
 };
 
-// get a post for reading
+// get hot posts
 exports.hotPosts = function(conn, res, args){
 	args = formFilter(args, {
 		timeRange: 0,
@@ -116,6 +118,84 @@ exports.hotPosts = function(conn, res, args){
 						total: r.length,
 						rows: r
 					});
+				});
+			});
+		});
+	});
+};
+
+// get hot paths
+exports.hotUrl = function(conn, res, args){
+	args = formFilter(args, {
+		timeRange: 0,
+		count: 10
+	});
+	if(args.count > 20 || args.count < 1) return res.err('system');
+	if(args.timeRange) var fromTime = Math.floor(new Date().getTime()/1000) - args.timeRange;
+	else var fromTime = 0;
+	// check permission
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		var query = StatPath.aggregate();
+		if(fromTime) query = query.match({ time: { $gt: fromTime } });
+		query.group({ _id: '$path', visits: { $sum: 1 } })
+			.project({ path: '$_id', visits: 1 })
+			.sort('-visits')
+			.limit(args.count);
+		query.exec(function(err, r){
+			if(err) return res.err('system');
+			res({
+				total: r.length,
+				rows: r
+			});
+		});
+	});
+};
+
+// get hot ref sites
+exports.hotRefSite = function(conn, res, args){
+	args = formFilter(args, {
+		timeRange: 0,
+		count: 10
+	});
+	if(args.count > 20 || args.count < 1) return res.err('system');
+	if(args.timeRange) var fromTime = Math.floor(new Date().getTime()/1000) - args.timeRange;
+	else var fromTime = 0;
+	// check permission
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		var query = StatReferer.aggregate();
+		if(fromTime) query = query.match({ time: { $gt: fromTime } });
+		query.group({ _id: '$refSite', visits: { $sum: 1 } })
+			.project({ refSite: '$_id', visits: 1 })
+			.sort('-visits')
+			.limit(args.count);
+		query.exec(function(err, r){
+			if(err) return res.err('system');
+			res({
+				total: r.length,
+				rows: r
+			});
+		});
+	});
+};
+
+// clear history
+exports.clear = function(conn, res, args){
+	args = formFilter(args, {
+		timeRange: 0
+	});
+	if(args.timeRange) var fromTime = Math.floor(new Date().getTime()/1000) - args.timeRange;
+	else var fromTime = 0;
+	// check permission
+	User.checkPermission(conn, 'admin', function(r){
+		if(!r) return res.err('noPermission');
+		if(fromTime) var q = { time: { $lte: fromTime } };
+		else var q = {};
+		Stat.remove(q, function(){
+			StatPath.remove(q, function(){
+				StatReferer.remove(q, function(){
+					res();
 				});
 			});
 		});

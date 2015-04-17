@@ -36,18 +36,35 @@ module.exports = {
 		redirect: './stat/hot'
 	},
 	'./stat/hot': {
+		base: 'stat',
+		parent: 'backstage',
+		main: 'stat_hot',
+		tmpl: 'stat_hot',
+		style: 'stat.css',
+	},
+	'./stat/url': {
+		base: 'stat',
+		parent: 'backstage',
+		main: 'stat_hot',
+		tmpl: 'stat_hot',
+		style: 'stat.css',
+	},
+	'./stat/referer': {
+		base: 'stat',
 		parent: 'backstage',
 		main: 'stat_hot',
 		tmpl: 'stat_hot',
 		style: 'stat.css',
 	},
 	'./stat/post/:id': {
+		base: 'stat',
 		parent: 'backstage',
 		main: 'stat_post',
 		tmpl: 'stat_post',
 		style: 'stat.css',
 	},
 	'./stat/visitor/:id': {
+		base: 'stat',
 		parent: 'backstage',
 		main: 'stat_visitor',
 		tmpl: 'stat_visitor',

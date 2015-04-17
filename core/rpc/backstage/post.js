@@ -8,6 +8,7 @@ var User = fw.module('db_model').User;
 var Series = fw.module('db_model').Series;
 var Category = fw.module('db_model').Category;
 var Comment = fw.module('db_model').Comment;
+var Settings = fw.module('db_model').Settings;
 var preservedPath = fw.module('preserved_path.js');
 var dateString = fw.module('date_string.js');
 var driver = fw.module('driver.js');
@@ -218,12 +219,15 @@ exports.read = function(conn, res, args){
 				if(err) return res.err(err);
 				res(r);
 				// add to stat
-				var time = Math.floor(new Date().getTime() / 1000);
-				new Stat({post: r._id, time: time, sid: conn.session.id, ip: conn.ips.concat(conn.ip).join(' ') }).save();
-				if(!conn.session.userAgent) {
-					conn.session.userAgent = conn.headers['user-agent'];
-					conn.session.save();
-				}
+				Settings.get('stat', function(err, statSettings){
+					if(err || !statSettings || !statSettings.enabled) return;
+					var time = Math.floor(new Date().getTime() / 1000);
+					new Stat({post: r._id, time: time, sid: conn.session.id, ip: conn.ips.concat(conn.ip).join(' ') }).save();
+					if(!conn.session.userAgent) {
+						conn.session.userAgent = conn.headers['user-agent'];
+						conn.session.save();
+					}
+				});
 			});
 		});
 };

@@ -86,21 +86,22 @@ fw.mainAsync(function(pg, subm, cb){
 	pg.rpc('user:current', function(info){
 		// show tabbar
 		if(info.type === 'admin') {
-			var html = tmpl.userTabs({ contrib: true, write: true, edit: true, admin: true });
+			var permission = { contrib: true, write: true, edit: true, admin: true };
 		} else if(info.type === 'editor') {
-			var html = tmpl.userTabs({ contrib: true, write: true, edit: true });
+			var permission = { contrib: true, write: true, edit: true };
 		} else if(info.type === 'writer') {
-			var html = tmpl.userTabs({ contrib: true, write: true });
+			var permission = { contrib: true, write: true };
 		} else if(info.type === 'contributor') {
-			var html = tmpl.userTabs({ contrib: true });
+			var permission = { contrib: true };
 		} else {
-			var html = tmpl.userTabs();
+			var permission = {};
 		}
-		$('#tabbar').html(html);
+		$('#tabbar').html(tmpl.userTabs(permission));
 		lp.backstage.updateTabStyle();
 		// show user bar
-		if(info._id)
-			$('.header_right').html(tmpl.userInfo(info))
+		if(info._id) {
+			permission.displayName = info.displayName;
+			$('.header_right').html(tmpl.userInfo(permission))
 				.find('.logout').click(function(e){
 					e.preventDefault();
 					lp.logout(function(){
@@ -108,8 +109,21 @@ fw.mainAsync(function(pg, subm, cb){
 						return false;
 					});
 				});
+		}
 		lp.backstage.userInfo = info;
 		if(info._id || fw.getPath() === '/backstage/home') cb();
 		else fw.go('/backstage/home');
 	}, lp.backstage.showError);
+
+	// header list events
+	$('#header_list').on('click', '.header_list_title', function(){
+		$('#header_list .header_list_items').hide();
+		$(this).parent().children('.header_list_items').show();
+	}).on('blur', '.header_list', function(){
+		$(this).children('.header_list_items').hide();
+	}).on('click', '.header_item', function(){
+		var $this = $(this);
+		$this.parent().hide();
+		if($this.attr('href')) fw.go($this.attr('href'));
+	});
 });

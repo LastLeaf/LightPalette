@@ -22,6 +22,8 @@ fw.main(function(pg){
 			$form.find('input,select,textarea').prop('disabled', false);
 			for(var k in res)
 				$form.find('[name='+k+']').val(res[k]);
+			// disable clear stat button
+			$clearStatBtn.attr('disabled', true);
 		}, lp.backstage.showError);
 	};
 
@@ -67,5 +69,21 @@ fw.main(function(pg){
 			$this.prop('disabled', false);
 			lp.backstage.showError(err, detail);
 		});
+	});
+
+	// clear history
+	var $clearStatBtn = $content.find('.clear_stat').click(function(){
+		if(!$clearStatTime.val()) return;
+		$clearStatBtn.attr('disabled', true);
+		$clearStatTime.attr('disabled', true);
+		pg.rpc('stat:clear', { timeRange: $clearStatTime.val() }, function(){
+			$clearStatTime.val('').removeAttr('disabled');
+		}, function(){
+			$clearStatTime.val('').removeAttr('disabled');
+		});
+	});
+	var $clearStatTime = $content.find('.clear_stat_time').change(function(){
+		if($clearStatTime.val()) $clearStatBtn.removeAttr('disabled');
+		else $clearStatBtn.attr('disabled', true);
 	});
 });
