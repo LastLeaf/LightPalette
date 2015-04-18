@@ -75,7 +75,7 @@ select, .submit, .button {
     background: #444;
     line-height: 36px;
     height: 36px;
-    padding: 0 0 0 20px;
+    padding: 0 20px;
     box-shadow: 0 0 5px #444;
 }
 #header img {
@@ -98,37 +98,48 @@ select, .submit, .button {
 	color: #888;
 }
 
-.header_right {
-    float: right;
-    color: #ddd;
-    height: 100%;
+.header_lists {
+    position: fixed;
+	top: 0;
+	right: 0;
+	color: #ddd;
+	background: #444;
+	height: 36px;
 }
 .header_list {
     float: left;
     text-align: center;
-    border-left: 1px solid #666;
-    background: #444;
+    margin-right: 16px;
+    border-bottom: 4px solid #222;
+	outline: none;
+	overflow: hidden;
+	height: 32px;
+}
+.header_list-active {
+	background: #222;
+	overflow: auto;
+	height: auto;
 }
 .header_list_title, .header_item {
-    background: #444;
     padding: 0 16px;
     cursor: pointer;
 	min-width: 4em;
 }
-.header_list_title:hover, .header_item:hover {
+.header_list_title:hover {
     background: #222;
 }
+.header_item:hover {
+	background: #444;
+}
 .header_item {
-    height: 28px;
-    line-height: 28px;
-    margin: 2px 0;
+    height: 30px;
+    line-height: 30px;
 }
 .header_item_sep {
-	height: 6px;
+	height: 10px;
 }
 .header_list_items {
-	box-shadow: 0 0 5px #444;
-	display: none;
+	background: #222;
 }
 
 #tabbar {
@@ -200,7 +211,7 @@ select, .submit, .button {
 }
 
 #errors {
-    position: absolute;
+    position: fixed;
     top: 36px;
     left: 150px;
     right: 0;

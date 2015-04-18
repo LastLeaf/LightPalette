@@ -3,9 +3,9 @@
 		<div id="header">
 			<div class="header_left">
 				<a fw href="/">{{siteTitle}}</a>
-				<span class="header_lpinfo"><a href="https://lightpalette.lastleaf.me">LightPalette</a> {{lpVersion}} {{lpLang}}</span>
+				<span class="header_lpinfo"><a href="https://github,com/LastLeaf/LightPalette">LightPalette</a> {{lpVersion}} {{lpLang}}</span>
 			</div>
-			<div class="header_right" id="header_list"></div>
+			<div class="header_lists" id="header_lists"></div>
 		</div>
 		<div id="tabbar">
 			<div class="tabs">
@@ -52,8 +52,8 @@
 </tmpl>
 
 <tmpl id="userInfo" minify>
-	<div class="header_list" tabindex="-1">
-		<div class="header_list_title nav_current">`Pages`</div>
+	<div class="header_list tab_nav" tabindex="-1">
+		<div class="header_list_title">&nbsp;</div>
 		<div class="header_list_items">
 			<div class="header_item_sep"></div>
 			<div class="header_item" href="/backstage/home">`Dashboard`</div>
@@ -79,6 +79,7 @@
 				<div class="header_item" href="/backstage/addons">`Addons`</div>
 				<div class="header_item" href="/backstage/settings">`Settings`</div>
 			{{/if}}
+			<div class="header_item_sep"></div>
 		</div>
 	</div>
 	<div class="header_list" tabindex="-1">

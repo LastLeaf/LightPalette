@@ -183,6 +183,11 @@ fw.main(function(pg){
 				fw.reload(1);
 			});
 		}
+
+		// show sidebar button
+		$content.find('.sidebar_show a').click(function(){
+			$content.find('.sidebar').toggleClass('sidebar-shown');
+		});
 	};
 
 	// generate post link

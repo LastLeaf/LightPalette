@@ -36,9 +36,6 @@
 	text-align: center;
 	float: right;
 }
-.editor_save_status {
-	min-height: 1em;
-}
 
 .editor_title {
     margin-right: 190px;
@@ -53,7 +50,11 @@
 }
 .sidebar {
     float: right;
-    width: 280px;
+    width: 300px;
+}
+.sidebar_show {
+	padding-right: 1em;
+	display: none;
 }
 .sidebar_item {
     background: #fff;
@@ -74,16 +75,33 @@
     background: #eee;
 }
 .sidebar input {
-    width: 264px;
+    width: 284px;
 }
 .sidebar .button, .sidebar .checkbox, .sidebar .radio {
     width: auto;
     padding: 0.25em 0.5em;
 }
 .sidebar textarea {
-    width: 264px;
+    width: 284px;
 }
 
 .editor_main {
-    padding-right: 300px;
+    padding-right: 320px;
+	position: relative;
+}
+
+@media (max-width: 800px) {
+	.sidebar {
+		float: none;
+		display: none;
+	}
+	.sidebar-shown {
+		display: block;
+	}
+	.sidebar_show {
+		display: inline;
+	}
+	.editor_main {
+		padding-right: 0;
+	}
 }
