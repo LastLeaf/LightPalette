@@ -86,6 +86,7 @@ module.exports = {
 		parent: 'drivers',
 		main: 'posts',
 		tmpl: 'posts',
+		style: 'posts',
 	},
 	'./categories': {
 		parent: 'backstage',

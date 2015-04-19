@@ -9,6 +9,7 @@
 		"writer": "作者",
 		"contributor": "投稿人",
 		"reader": "读者",
+		"disabled": "禁用",
 		"Email": "电子邮件",
 		"URL": "网址",
 		"Password": "密码"

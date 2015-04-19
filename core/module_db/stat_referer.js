@@ -1,10 +1,12 @@
 // Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
+var model = fw.module('db_model');
+
 var COLLECTION_NAME = 'stat_referer';
 var MODEL_NAME = 'StatReferer';
 
-module.exports = function(app, model, cb){
+module.exports = function(app, cb){
 	// define schema
 	var Schema = app.db.Schema;
 	var schemaObj = {
@@ -24,5 +26,7 @@ module.exports = function(app, model, cb){
 	// create model
 	var col = app.db.model(app.config.db.prefix + COLLECTION_NAME, schema);
 	model[MODEL_NAME] = col;
-	col.ensureIndexes(cb);
+	col.ensureIndexes(function(){
+		cb();
+	});
 };

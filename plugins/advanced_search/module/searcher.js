@@ -75,6 +75,7 @@ module.exports = function(app, cb){
 							.sort('-time').exec(function(err, r){
 								if(err) return cb('system');
 								for(var i=0; i<r.length; i++) {
+									r[i] = r[i].toObject();
 									r[i].dateString = dateString.date(r[i].time*1000);
 									r[i].dateTimeString = dateString.dateTime(r[i].time*1000);
 								}

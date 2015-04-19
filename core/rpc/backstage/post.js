@@ -236,6 +236,7 @@ exports.read = function(conn, res, args){
 exports.list = function(conn, res, args){
 	args = formFilter(args, {
 		search: '',
+		type: '',
 		title: '',
 		series: '',
 		category: '',
@@ -253,6 +254,7 @@ exports.list = function(conn, res, args){
 	} else {
 		var query = Post.find({});
 	}
+	if(args.type) query = query.where('type').equals(args.type);
 	if(args.title) query = query.where('title').equals(args.title);
 	if(args.series) query = query.where('series').equals(args.series);
 	if(args.category) query = query.find({ category: args.category });

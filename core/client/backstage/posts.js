@@ -16,6 +16,53 @@ fw.main(function(pg){
 		var $content = $('#content').html(tmpl.main());
 		var $table = $content.find('.table');
 
+		// init filter
+		var $filters = $content.find('.post_filters');
+		var filterObj = { status: 'all' };
+		var filterChanged = function(){
+			var curFilter = $filterType.val();
+			$filters.find('.post_filter').hide();
+			$filters.find('.post_filter-' + curFilter).show();
+		};
+		var $filterType = $filters.find('.post_filter_type').change(filterChanged);
+		filterChanged();
+
+		// filter events
+		$filters.find('.post_filter-search input').change(function(){
+			filterObj = { search: this.value, status: 'all' };
+			table.setPage(0, 1);
+		});
+		$filters.find('.post_filter-title input').change(function(){
+			filterObj = { title: this.value, status: 'all' };
+			table.setPage(0, 1);
+		});
+		$filters.find('.post_filter-meta select').change(function(){
+			filterObj = {
+				type: $filters.find('.post_filter_post_type').val(),
+				author: $filters.find('.post_filter_author').val(),
+				status: $filters.find('.post_filter_status').val()
+			};
+			table.setPage(0, 1);
+		});
+
+		// get type list
+		var driverList = lp.backstage.driverList(userInfo.type);
+		for(var i=0; i<driverList.length; i++) {
+			$('<option></option>').attr('value', driverList[i].id).text(driverList[i].name).appendTo( $filters.find('.post_filter_post_type') );
+		}
+
+		// get author list
+		if(userInfo.type !== 'editor' && userInfo.type !== 'admin') {
+			$filters.find('.post_filter_author option').attr('value', userInfo._id).text(userInfo.displayName);
+		} else {
+			pg.rpc('user:listAuthors', function(rows){
+				var $authors = $filters.find('.post_filter_author');
+				for(var i=0; i<rows.length; i++) {
+					$('<option></option>').attr('value', rows[i]._id).text(rows[i].displayName).appendTo( $authors );
+				}
+			});
+		}
+
 		// build table
 		var table = lp.tableBuilder($table, {idCol: '_id', editMore: true}, [
 			{ id: 'title', name: _('Title'), input: 'add' },
@@ -25,10 +72,13 @@ fw.main(function(pg){
 			{ id: 'extra', type: 'extra', input: 'add' }
 		])
 		.data(function(page){
-			var q = {status: 'all', from: page*POST_LIST_LEN, count: POST_LIST_LEN};
+			filterObj.from = page*POST_LIST_LEN;
+			filterObj.count = POST_LIST_LEN;
 			if(userInfo.type !== 'editor' && userInfo.type !== 'admin')
-				q.author = userInfo._id;
-			pg.rpc('post:list', q, function(r){
+				filterObj.author = userInfo._id;
+			$filters.find('input, select').attr('disabled', true);
+			pg.rpc('post:list', filterObj, function(r){
+				$filters.find('input, select').removeAttr('disabled');
 				table.setTotal(Math.ceil(r.total/POST_LIST_LEN));
 				var rows = r.rows;
 				for(var i=0; i<r.rows.length; i++) {
@@ -45,6 +95,7 @@ fw.main(function(pg){
 				}
 				table.set(rows);
 			}, function(err){
+				$filters.find('input, select').removeAttr('disabled');
 				lp.backstage.showError(err);
 			});
 		})

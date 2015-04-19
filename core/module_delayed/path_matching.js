@@ -85,6 +85,8 @@ var pathMatching = function(conn, path, listLen, cb){
 		var page = (Number(segs[2]) || 1) - 1;
 		if(type === 'tag') {
 			postList('tag', query, page);
+		} else if(type === 'type') {
+			postList('type', query, page);
 		} else if(type === 'category') {
 			postList('category', query, page);
 		} else if(type === 'series') {

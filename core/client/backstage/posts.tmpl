@@ -1,3 +1,28 @@
 <tmpl id="main" minify>
+	<div class="post_filters">
+		<select class="post_filter_type">
+			<option value="meta" selected>`Filters`</option>
+			<option value="title">`Title Filter`</option>
+			<option value="search">`Published Posts Search`</option>
+		</select>&nbsp;
+		<span class="post_filter post_filter-meta">
+			<select class="post_filter_post_type">
+				<option value="">`All Types`</option>
+			</select>&nbsp;
+			<select class="post_filter_author">
+				<option value="">`All Authors`</option>
+			</select>&nbsp;
+			<select class="post_filter_status">
+				<option value="all">`All Status`</option>
+				<option value="draft">`Draft`</option>
+				<option value="pending">`Pending`</option>
+				<option value="published">`Published`</option>
+				<option value="visible">`Visible via Link`</option>
+				<option value="special">`Special Page`</option>
+			</select>
+		</span>
+		<span class="post_filter post_filter-title"><input type="text" placeholder="`full title ...`"></span>
+		<span class="post_filter post_filter-search"><input type="text" placeholder="`content ...`"></span>
+	</div>
 	<div class="table"></div>
 </tmpl>
