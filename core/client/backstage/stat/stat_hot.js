@@ -30,6 +30,7 @@ fw.main(function(pg){
 		table.change(function(data, id){
 			fw.go('/backstage/stat/post/'+id);
 		});
+		return table;
 	};
 
 	var urlTable = function($table){
@@ -56,6 +57,7 @@ fw.main(function(pg){
 		table.change(function(data, id){
 			window.open(data.path);
 		});
+		return table;
 	};
 
 	var refererTable = function($table){
@@ -79,6 +81,7 @@ fw.main(function(pg){
 		table.change(function(data, id){
 			window.open('http://' + data.refSite);
 		});
+		return table;
 	};
 
 	var showPage = function(){
@@ -110,9 +113,10 @@ fw.main(function(pg){
 		});
 
 		// show table
-		if(curStatPage === 'hot') hotTable($table);
-		else if(curStatPage === 'url') urlTable($table);
-		else if(curStatPage === 'referer') refererTable($table);
+		var table = null;
+		if(curStatPage === 'hot') table = hotTable($table);
+		else if(curStatPage === 'url') table = urlTable($table);
+		else if(curStatPage === 'referer') table = refererTable($table);
 	};
 
 	showPage();

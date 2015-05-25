@@ -189,8 +189,6 @@ select, .submit, .button {
 #content_wrapper {
     position: relative;
     margin-top: 36px;
-    bottom: 0;
-    right: 0;
     margin-left: 150px;
     padding: 20px;
     overflow: auto;

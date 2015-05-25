@@ -10,8 +10,7 @@ fw.main(function(pg){
 	$content.find('.settings_navi').children().click(function(){
 		var section = $(this).attr('for');
 		var $section = $settings.children('[section='+section+']');
-		console.info($settings);
-		$settings.prop('scrollTop', $section.prop('offsetTop')-20);
+		document.documentElement.scrollTop = $section.prop('offsetTop') - 20;
 	});
 
 	// load data
