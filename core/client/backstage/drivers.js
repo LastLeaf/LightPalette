@@ -2,6 +2,6 @@
 'use strict';
 
 fw.main(function(pg){
-	pg.on('childUnload', lp.backstage.showBusy);
+	pg.on('childUnload', lp.backstage.showLoading);
 	pg.on('childLoadStart', lp.backstage.updateTabStyle);
 });

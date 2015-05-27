@@ -48,10 +48,10 @@ fw.mainAsync(function(pg, subm, cb){
 	$('#content').html(tmpl.busy());
 	// define page switch method
 	var $tabbar = $backstage.find('#tabbar');
-	lp.backstage.showBusy = function(){
+	lp.backstage.showLoading = function(){
 		$('#content').html(tmpl.busy());
 	};
-	pg.on('childUnload', lp.backstage.showBusy);
+	pg.on('childUnload', lp.backstage.showLoading);
 	lp.backstage.updateTabStyle = function(){
 		// update active tab
 		var path = fw.getPath().match(/^\/[^\/]+\/(\w+)/);
@@ -130,4 +130,45 @@ fw.mainAsync(function(pg, subm, cb){
 		$this.closest('.header_list').removeClass('header_list-active');
 		if($this.attr('href')) fw.go($this.attr('href'));
 	});
+
+	// simple popup API
+	var popupQueue = [];
+	var $popupWrapper = $('#popup_wrapper');
+	var addPopup = function($popup){
+		popupQueue.push($popup);
+		if(popupQueue.length === 1) {
+			$popupWrapper.show();
+			$popup.appendTo( $popupWrapper.html('') ).find('.popup_button').focus();
+		}
+	};
+	var removePopup = function(){
+		popupQueue.shift();
+		if(popupQueue.length) {
+			popupQueue[0].appendTo( $popupWrapper.html('') ).find('.popup_button').focus();
+		} else {
+			$popupWrapper.html('').hide();
+		}
+	};
+	lp.backstage.alert = function(message, cb){
+		var $popup = $(tmpl.alert({
+			message: message
+		}));
+		$popup.find('.popup_button').click(function(e){
+			e.preventDefault();
+			removePopup();
+			if(cb) cb();
+		});
+		addPopup($popup);
+	};
+	lp.backstage.confirm = function(message, cb){
+		var $popup = $(tmpl.confirm({
+			message: message
+		}));
+		$popup.find('.popup_button').click(function(e){
+			e.preventDefault();
+			removePopup();
+			if(cb) cb( $(this).attr('popupValue') === 'OK' );
+		});
+		addPopup($popup);
+	};
 });

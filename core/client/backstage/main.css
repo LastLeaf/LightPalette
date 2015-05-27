@@ -223,6 +223,51 @@ select, .submit, .button {
     cursor: pointer;
 }
 
+#popup_wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(64, 64, 64, 0.75);
+    display: none;
+}
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    min-width: 360px;
+    background: #444;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #444;
+}
+.popup_message {
+    margin: 30px;
+    font-size: 20px;
+    color: #fff;
+}
+.popup_buttons {
+    margin: 20px 0;
+    text-align: center;
+}
+.popup_button {
+    width: 120px;
+    height: 36px;
+    font-size: 18px;
+    line-height: 36px;
+    margin: 0 10px;
+    display: inline-block;
+    background: #aaa;
+    border-radius: 100px;
+    color: #222;
+    font-weight: bold;
+}
+.popup_button:hover {
+    text-decoration: none;
+    background: #ccc;
+}
+
 /* table */
 .lp_table {
     width: 100%;
