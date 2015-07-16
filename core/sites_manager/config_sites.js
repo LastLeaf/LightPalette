@@ -10,7 +10,9 @@ module.exports = function(){
 	try {
 		if(fs.existsSync('config.js')) var config = require(process.cwd() + '/config.js');
 		else var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
-	} catch(e) {}
+	} catch(e) {
+        console.info(e);
+    }
 
 	// generate config
 	if(config) {
@@ -54,8 +56,8 @@ module.exports = function(){
 			},
 			client: {
 				cache: 'cache/~sites',
-				favicon: fw.config.lpCoreRoot + 'images/favicon.ico',
-				loadingLogo: fw.config.lpCoreRoot + 'images/logo.gif',
+				favicon: fw.config.lpCoreRoot + '/images/favicon.ico',
+				loadingLogo: fw.config.lpCoreRoot + '/images/logo.gif',
 				loadingLogoBackground: '#fff',
 				meta: {
 					viewport: 'width=device-width, initial-scale=1'

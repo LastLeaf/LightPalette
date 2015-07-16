@@ -30,7 +30,7 @@ fw.main(function(pg){
 
 	pg.rpc('install:checkStatus', function(status){
 		if(status === 'success') {
-			fw.go('/');
+			fw.go('/backstage');
 		} else {
 			addFormEvent();
 		}

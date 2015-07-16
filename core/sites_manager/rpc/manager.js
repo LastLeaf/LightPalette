@@ -64,7 +64,11 @@ exports.setPassword = function(conn, res, args){
 exports.restart = function(conn, res, args){
 	if(loginStatus(conn) === false) return res.err('noPermission');
 	conn.app.setConfig(sitesConfig());
-	conn.app.restart();
+	try {
+		fw.restart();
+	} catch(e) {
+		conn.app.restart();
+	}
 };
 
 // restart sites manager

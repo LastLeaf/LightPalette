@@ -18,7 +18,6 @@ module.exports = {
 		style: 'main.css',
 	},
 	"*": {
-		//parent: 'global',
 		main: 'index.js',
 		render: 'index.js',
 	},

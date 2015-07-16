@@ -22,7 +22,7 @@ exports.checkSettings = function(conn, res, args){
 		if(!String(args.name) || !String(args.host) || !Number(args.port)) return res.err('dbNotConnected');
 		var db = new mongodb.Db(String(args.name), new mongodb.Server(String(args.host), Number(args.port)), {w: 1});
 		db.open(function(err, db) {
-			if(err) res.err('dbNotConnected');
+			if(err) return res.err('dbNotConnected');
 			var createCol = function(){
 				db.createCollection(String(args.prefix), {w: 1}, function(err){
 					db.close();
