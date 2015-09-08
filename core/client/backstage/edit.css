@@ -86,7 +86,7 @@
 }
 
 .editor_main {
-    padding-right: 320px;
+    margin-right: 320px;
 	position: relative;
 }
 
@@ -102,6 +102,6 @@
 		display: inline;
 	}
 	.editor_main {
-		padding-right: 0;
+		margin-right: 0;
 	}
 }

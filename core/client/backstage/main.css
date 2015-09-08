@@ -65,6 +65,7 @@ select, .submit, .button {
 #backstage {
     position: absolute;
     width: 100%;
+	min-width: 360px;
 }
 #header {
     position: fixed;
@@ -77,6 +78,7 @@ select, .submit, .button {
     height: 36px;
     padding: 0 20px;
     box-shadow: 0 0 5px #444;
+	min-width: 320px;
 }
 #header img {
     vertical-align: middle;
@@ -99,7 +101,7 @@ select, .submit, .button {
 }
 
 .header_lists {
-    position: fixed;
+    position: absolute;
 	top: 0;
 	right: 0;
 	color: #ddd;

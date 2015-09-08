@@ -57,3 +57,26 @@
     font-size: 0.9em;
     margin: 0.3em 0 0.3em 12.3em;
 }
+
+@media (max-width: 680px) {
+	.settings_navi {
+		display: none;
+	}
+	.settings_main {
+		padding-right: 20px;
+	}
+}
+
+@media (max-width: 600px) {
+	.settings_form label {
+		width: 100%;
+		text-align: left;
+	}
+	.settings_form .submit, .settings_form .button {
+		margin: 1em 0 1em 1em;
+	}
+	.settings_title {
+		margin: 0.75em;
+		margin-left: 0;
+	}
+}
