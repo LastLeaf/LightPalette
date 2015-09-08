@@ -9,7 +9,7 @@ var defaultLocales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/locales
 module.exports = function(app, siteInfo, cb){
 	var id = siteInfo._id;
 	var siteRoot = 'sites/' + id;
-	var locales = siteInfo.locales || defaultLocales;
+	var locales = defaultLocales.list;
 
 	// check favicon.ico and loading.gif
 	var favicon = '';
@@ -38,7 +38,8 @@ module.exports = function(app, siteInfo, cb){
 				host: siteInfo.hosts,
 				title: siteInfo.title || 'LightPalette',
 				version: fw.config.lpVersion + '~' + String(Date.now()),
-				locale: locales
+				locale: locales,
+				localeNames: defaultLocales.names
 			},
 			client: {
 				cache: siteRoot + '/cache',

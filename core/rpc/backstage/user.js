@@ -23,6 +23,11 @@ exports.current = function(conn, res, args){
 	});
 };
 
+// returns supported languages
+exports.locales = function(conn, res, args){
+	res(conn.app.config.app.localeNames);
+};
+
 // register an user with id, email and password provided
 exports.register = function(conn, res, args){
 	// filter data

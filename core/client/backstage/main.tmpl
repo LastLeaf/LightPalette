@@ -92,6 +92,15 @@
 	</div>
 </tmpl>
 
+<tmpl id="langSelect" minify>
+	<div class="header_list" tabindex="-1">
+		<div class="header_list_title">{{current}}</div>
+		<div class="header_list_items">
+			{{#each names}}<div class="header_item" locale="{{@key}}">{{this}}</div>{{/each}}
+		</div>
+	</div>
+</tmpl>
+
 <tmpl id="busy" minify>
 	<div id="backstage_busy"></div>
 </tmpl>

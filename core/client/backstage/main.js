@@ -114,6 +114,17 @@ fw.mainAsync(function(pg, subm, cb){
 						return false;
 					});
 				});
+		} else {
+			// show language selection instead
+			pg.rpc('user:locales', function(names){
+				$headerLists.html(tmpl.langSelect({
+					current: names[fw.language],
+					names: names
+				})).on('click', '.header_item', function(){
+					var $this = $(this);
+					fw.selectLanguage($this.attr('locale'));
+				});
+			});
 		}
 		lp.backstage.userInfo = info;
 		if(info._id || fw.getPath() === '/backstage/home') cb();
