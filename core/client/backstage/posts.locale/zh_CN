@@ -3,8 +3,6 @@
 		"Filters": "过滤器",
 		"Title Filter": "按标题过滤",
 		"Published Posts Search": "已发布博文搜索",
-		"content ...": "内容……",
-		"full title ...": "完整标题……",
 		"All Types": "全部类型",
 		"All Authors": "全部作者",
 		"All Status": "全部状态",
@@ -12,7 +10,9 @@
 		"Pending": "待审",
 		"Published": "已发布",
 		"Visible via Link": "仅链接访问",
-		"Special Page": "特殊页面"
+		"Special Page": "特殊页面",
+		"full title ...": "完整标题……",
+		"content ...": "内容……"
 	},
 	{
 		"Title": "标题",

@@ -1,7 +1,7 @@
 <tmpl id="commentNotifyEmailTitle">`Reply Notification on {{siteTitle}}`</tmpl>
 
 <tmpl id="commentNotifyEmail">
-	<p>`There is a new reply on your comment on {{siteTitle}}.`</p>
+	<p>`There is a new reply on your comment on <span style="font-style:italic;">{{postTitle}}</span>.`</p>
 	<p>`{{comment.displayName}} says,`</p>
 	<p style="white-space:pre-wrap;">{{comment.content}}</p>
 	<p>`You can visit the original post by clicking the link below.`</p>
@@ -10,6 +10,22 @@
 	<hr>
 	<p>`If you do not want to receive notification of this comment, please click the link below.`</p>
 	<p><a href="http://{{host}}{{disablePath}}">http://{{host}}{{disablePath}}</a></p>
+	<hr>
+	<p>`This email is sent automatically. Please do not reply.`</p>
+</tmpl>
+
+<tmpl id="commentNotifyAuthorEmailTitle">`Comment Notification on {{siteTitle}}`</tmpl>
+
+<tmpl id="commentNotifyAuthorEmail">
+	<p>`There is a new comment on your post <span style="font-style:italic;">{{postTitle}}</span>.`</p>
+	<p>`{{comment.displayName}} says,`</p>
+	<p style="white-space:pre-wrap;">{{comment.content}}</p>
+	<p>`You can visit the post by clicking the link below.`</p>
+	<p><a href="http://{{host}}{{postPath}}">http://{{host}}{{postPath}}</a></p>
+	<p>`Enjoy!`</p>
+	<hr>
+	<p>`If you do not want to receive notification of this post, you could change comment settings for this post in backstage.`</p>
+	<p><a href="http://{{host}}{{postEditPath}}">http://{{host}}{{postEditPath}}</a></p>
 	<hr>
 	<p>`This email is sent automatically. Please do not reply.`</p>
 </tmpl>

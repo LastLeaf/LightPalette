@@ -54,13 +54,12 @@ exports.modify = function(conn, res, args){
 		category: [String, /\S([\S ]*\S)?/g],
 		tag: [String, /\S([\S ]*\S)?/g],
 		series: '',
-		denyComment: '',
+		acceptComments: '',
 		content: '',
 		abstract: ''
 	});
 	filtered.driver = args.driver || {};
 	if(typeof(filtered.driver) !== 'object') res.err('system');
-	filtered.acceptComment = !filtered.denyComment;
 	if(filtered.timeString) {
 		filtered.time = dateString.parse(filtered.timeString);
 		if(typeof(filtered.time) !== 'number') return res.err('timeFormatIllegal');
@@ -83,6 +82,7 @@ exports.modify = function(conn, res, args){
 			return res.err('noPermission');
 		if(!editor && args.author !== conn.session.userId)
 			return res.err('noPermission');
+		if(!editor) delete filtered.time;
 		// check path
 		if(args.path.indexOf('?') >= 0) return res.err('pathUsed');
 		if(preservedPath.check(args.path)) return res.err('pathUsed');

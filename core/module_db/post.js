@@ -21,7 +21,7 @@ module.exports = function(app, cb){
 		category: [{ type: String, ref: app.config.db.prefix + 'category' }],
 		tag: { type: [String], default: [] },
 		series: { type: String, ref: app.config.db.prefix + 'series' },
-		acceptComment: { type: Boolean, default: true },
+		acceptComments: { type: String, default: 'true' },
 		content: { type: String, default: '' },
 		abstract: { type: String, default: '' },
 		extra: String,

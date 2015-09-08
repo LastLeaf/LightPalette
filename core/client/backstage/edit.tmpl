@@ -22,17 +22,18 @@
 			</div>
 			<div class="sidebar">
 				<div class="sidebar_item">
-					<div class="sidebar_title">`Basic Configuration`</div>
-					<div class="sidebar_row">
-						http://.../<input type="text" name="path" placeholder="A shortcut URL...">
-					</div>
-					<div class="sidebar_row">
-						{{#if edit}}`Author`&nbsp;<select name="author">{{#each authors}}
-							<option value="{{_id}}">{{displayName}}</option>
-						{{/each}}</select>{{/if}}
-					</div>
-					<input type="text" name="timeString" placeholder="`Publish Time XXXX-XX-XX XX:XX:XX`">
+					<div class="sidebar_title">`Custom URL`</div>
+					http://{{domain}}/<input type="text" name="path" placeholder="A shortcut URL...">
 				</div>
+				{{#if edit}}<div class="sidebar_item">
+					<div class="sidebar_title">`Author and Publish Time`</div>
+					<div class="sidebar_row">
+						`Author`&nbsp;<select name="author">{{#each authors}}
+							<option value="{{_id}}">{{displayName}}</option>
+						{{/each}}</select>
+					</div>
+					<input type="text" name="timeString" placeholder="XXXX-XX-XX XX:XX:XX">
+				</div>{{/if}}
 				{{#if write}}<div class="sidebar_item">
 					<div class="sidebar_title">`Series`</div>
 					<input type="hidden" name="series" value="">
@@ -54,6 +55,14 @@
 				<div class="sidebar_item">
 					<div class="sidebar_title">`Tags`</div>
 					<textarea name="tag" rows="5" placeholder="`(one per line)`"></textarea>
+				</div>
+				<div class="sidebar_item">
+					<div class="sidebar_title">`Comments`</div>
+					<select name="acceptComments">
+						<option value="true" selected>`Accept Comments and Mail Notify`</option>
+						<option value="noEmail">`Accept Comments but Do Not Notify`</option>
+						<option value="">`Do Not Accept Comments`</option>
+					</select>
 				</div>
 			</div>
 			<div class="editor_main">

@@ -14,8 +14,8 @@ var mail = fw.module('mail');
 
 var tmpl = fw.tmpl('comment.tmpl');
 
-var disablePath = function(id, email, cb){
-	password.hash(id+'|'+email+'|'+fw.config.secret.cookie, function(err, r){
+var disablePath = function(app, id, email, cb){
+	password.hash(id+'|'+email+'|'+app.config.secret.cookie, function(err, r){
 		cb(err, '/backstage/comment_notify/disable?i=' + id + '&e=' + encodeURIComponent(email) + '&s=' + encodeURIComponent(r));
 	});
 };
@@ -30,7 +30,7 @@ exports.disableNotify = function(conn, res, args){
 	});
 	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
-	if(!password.check(args._id+'|'+args.email+'|'+fw.config.secret.cookie, args.sign)) return res.err('system');
+	if(!password.check(args._id+'|'+args.email+'|'+conn.app.config.secret.cookie, args.sign)) return res.err('system');
 	Comment.update({_id: args._id, email: args.email}, {acceptNotify: false}, function(err){
 		if(err) return res.err('system');
 		res();
@@ -56,10 +56,41 @@ exports.create = function(conn, res, args){
 	var next = function(){
 		Post.findOne({_id: args.post}, function(err, r){
 			if(err) return res.err('system');
-			if(!r || !r.acceptComment || (r.status !== 'published' && r.status !== 'visible' && r.status !== 'special')) return res.err('noPermission');
+			if(!r || !r.acceptComments || (r.status !== 'published' && r.status !== 'visible' && r.status !== 'special')) return res.err('noPermission');
 			var postPath = '/' + (r.path || 'post/'+r._id);
+			var postEditPath = '/backstage/post/' + r._id;
 			new Comment(args).save(function(err, comment){
 				if(err) return res.err('system');
+				var postTitle = r.title;
+				var needNotifyAuthor = (r.acceptComments === 'true');
+				var notifyAuthor = function(excludeEmail){
+					if(!needNotifyAuthor || conn.session.userId === r.author) return;
+					// notify author
+					User.findById(r.author, function(err, author){
+						if(err || !author || author.email === excludeEmail) return;
+						Settings.get('basic', function(err, r){
+							if(err || !r) return;
+							var siteTitle = r.siteTitle;
+							var host = r.siteHost;
+							Settings.get('email', function(err, r){
+								if(err || !r) return;
+								var mailOptions = r;
+								var obj = {
+									siteTitle: siteTitle,
+									postTitle: postTitle,
+									host: host || conn.host,
+									comment: args,
+									postPath: postPath,
+									postEditPath: postEditPath
+								};
+								mail(mailOptions, author.displayName, author.email,
+									tmpl(conn).commentNotifyAuthorEmailTitle(obj),
+									tmpl(conn).commentNotifyAuthorEmail(obj)
+								);
+							});
+						});
+					});
+				};
 				if(args.responseTo) {
 					// update response
 					Comment.update({_id: args.responseTo, blocked: false}, { $push: {response: comment._id} }, function(err, r){
@@ -71,11 +102,14 @@ exports.create = function(conn, res, args){
 						}
 						res();
 						// send notify mail
-						if(!args.responseTo) return;
 						Comment.findOne({_id: args.responseTo}, function(err, r){
-							if(!r.acceptNotify || !r.email) return;
+							if(!r.acceptNotify || !r.email) {
+								notifyAuthor();
+								return;
+							}
 							var mailTo = r.email;
 							var mailToName = r.displayName;
+							notifyAuthor(mailTo);
 							Settings.get('basic', function(err, r){
 								if(err || !r) return;
 								var siteTitle = r.siteTitle;
@@ -83,9 +117,10 @@ exports.create = function(conn, res, args){
 								Settings.get('email', function(err, r){
 									if(err || !r) return;
 									var mailOptions = r;
-									disablePath(args.responseTo, mailTo, function(err, r){
+									disablePath(conn.app, args.responseTo, mailTo, function(err, r){
 										var obj = {
 											siteTitle: siteTitle,
+											postTitle: postTitle,
 											host: host || conn.host,
 											comment: args,
 											postPath: postPath,
@@ -99,6 +134,7 @@ exports.create = function(conn, res, args){
 					});
 					return;
 				}
+				notifyAuthor('');
 				res();
 			});
 		});

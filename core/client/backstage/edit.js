@@ -174,7 +174,7 @@ fw.main(function(pg){
 		});
 		pg.on('unload', saveLocal);
 		pg.on('pageUnload', saveLocal);
-		
+
 		// show unsaved message
 		if(postLocal) {
 			$saveStatus.html(tmpl.unsaved()).find('.editor_unsaved').click(function(e){
@@ -218,7 +218,8 @@ fw.main(function(pg){
 						authors: authors,
 						write: (userInfo.type !== 'contributor'),
 						edit: (userInfo.type === 'editor' || userInfo.type === 'admin'),
-						link: postLink(r)
+						link: postLink(r),
+						domain: location.host
 					});
 				}, function(err){
 					lp.backstage.showError(err);

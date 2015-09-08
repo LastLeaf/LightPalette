@@ -64,7 +64,7 @@ exports.register = function(conn, res, args){
 							Settings.get('email', function(err, r){
 								if(err || !r) return;
 								var mailOptions = r;
-								disablePath(id, args.email, function(err, r){
+								disablePath(conn.app, id, args.email, function(err, r){
 									var content = tmpl(conn).regEmail({
 										siteTitle: siteTitle,
 										host: host || conn.host,
@@ -215,7 +215,7 @@ exports.disable = function(conn, res, args){
 	});
 	if(!args._id.match(/^[-\w]{4,32}$/i)) return res.err('usernameIllegal');
 	if(args.email.length > 64 || !args.email.match(EMAIL_REGEXP)) return res.err('emailIllegal');
-	if(!password.check(args._id+'|'+args.email+'|'+fw.config.secret.cookie, args.sign)) return res.err('system');
+	if(!password.check(args._id+'|'+args.email+'|'+conn.app.config.secret.cookie, args.sign)) return res.err('system');
 	User.update({_id: args._id}, {type: 'disabled'}, function(err){
 		if(err) return res.err('system');
 		res();
@@ -223,8 +223,8 @@ exports.disable = function(conn, res, args){
 };
 
 // generate a disable url for email
-var disablePath = function(id, email, cb){
-	password.hash(id+'|'+email+'|'+fw.config.secret.cookie, function(err, r){
+var disablePath = function(app, id, email, cb){
+	password.hash(id+'|'+email+'|'+app.config.secret.cookie, function(err, r){
 		cb(err, '/backstage/user/disable?i=' + id + '&e=' + encodeURIComponent(email) + '&s=' + encodeURIComponent(r));
 	});
 };

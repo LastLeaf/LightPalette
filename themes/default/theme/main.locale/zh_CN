@@ -13,6 +13,7 @@
 		"Reply": "回复",
 		"You are not allowed to comment here.": "你不能在这里发表评论。",
 		"Your name should contain 4 to 32 characters, including letters, numbers, underscores and hyphens.": "名字必须由4至32个字母、数字、下划线（_）或减号（-）字符组成。",
+		"Please provide a name.": "请为自己起一个恰当的名字。",
 		"The email address is not correct.": "电子邮件地址不正确。",
 		"The website URL is not correct.": "网址不正确。",
 		"The content is empty or too long.": "内容为空，或者太长了。",

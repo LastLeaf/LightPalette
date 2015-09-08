@@ -1,12 +1,16 @@
 [
 	{
 		"Reply Notification on {{siteTitle}}": "来自 {{siteTitle}} 的评论回复提醒",
-		"There is a new reply on your comment on {{siteTitle}}.": "您在 {{siteTitle}} 上的评论有一条新的回复。",
+		"There is a new reply on your comment on <span style=\"font-style:italic;\">{{postTitle}}</span>.": "您在《{{postTitle}}》上的评论有一条新的回复。",
 		"{{comment.displayName}} says,": "{{comment.displayName}} 说：",
 		"You can visit the original post by clicking the link below.": "您可以点击下面的链接来查看原文：",
 		"Enjoy!": "谢谢！",
 		"If you do not want to receive notification of this comment, please click the link below.": "如果您不希望再次收到这条评论的邮件提醒，请点击以下链接：",
-		"This email is sent automatically. Please do not reply.": "这是系统自动发送的邮件，请不要直接回复。"
+		"This email is sent automatically. Please do not reply.": "这是系统自动发送的邮件，请不要直接回复。",
+		"Comment Notification on {{siteTitle}}": "来自 {{siteTitle}} 的新评论提醒",
+		"There is a new comment on your post <span style=\"font-style:italic;\">{{postTitle}}</span>.": "您的《{{postTitle}}》有一条新的评论。",
+		"You can visit the post by clicking the link below.": "您可以点击下面的链接来查看这篇文章：",
+		"If you do not want to receive notification of this post, you could change comment settings for this post in backstage.": "如果您不希望继续收到来自这篇文章的新评论提醒，您可以在后台更改这篇文章的评论设置。"
 	},
 	{},
 	{}

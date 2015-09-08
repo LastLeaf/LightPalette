@@ -9,7 +9,7 @@ module.exports = function(req, res){
 		email: req.query.e || '',
 		sign: req.query.s || '',
 	}, function(){
-		res.send(200, tmpl(req.conn).done());
+		res.status(200).send(tmpl(req.conn).done());
 	}, function(err){
 		res.send(403);
 	});
