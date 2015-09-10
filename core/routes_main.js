@@ -20,3 +20,7 @@ exports['*'] = {
 	parent: 'theme',
 	render: 'content',
 };
+
+exports['/feed'] = {
+	page: 'feed'
+};

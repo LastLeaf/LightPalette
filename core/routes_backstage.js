@@ -147,5 +147,14 @@ module.exports = {
 	'./preview/*': {
 		parent: 'theme',
 		render: '/backstage/preview',
+	},
+	'./comment_notify/disable': {
+		page: 'comment_notify/disable'
+	},
+	'./file/upload': {
+		page: 'file/upload'
+	},
+	'./user/disable': {
+		page: 'user/disable'
 	}
 };

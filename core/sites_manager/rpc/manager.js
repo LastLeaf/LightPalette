@@ -6,7 +6,7 @@ var dbSettings = fw.module('db_settings.js');
 var dbSites = fw.module('db_sites.js');
 var password = fw.module('password.js');
 var siteController = fw.module('site_controller.js');
-var sitesConfig = require('../config_sites.js');
+var sitesConfig = require('../config.js');
 
 // check login status
 var loginStatus = function(conn){
@@ -102,14 +102,13 @@ exports.updateSite = function(conn, res, args, add){
 	if(!loginStatus(conn)) return res.err('noPermission');
 	var id = String(args._id);
 	var title = String(args.title) || '';
-	var permission = String(args.permission) || '';
+	var type = String(args.type) || '';
 	var status = String(args.status);
 	var hosts = String(args.hosts).match(/\S+/g) || [];
 	if(!id.match(/^[-_0-9a-z]+$/i)) return res.err('siteIdIllegal');
 	var setObj = function(site){
 		site.title = title;
-		site.permission = permission;
-		var oldStatus = site.status;
+		site.type = type;
 		site.status = status;
 		site.hosts = hosts;
 		site.save(function(err){
@@ -118,7 +117,6 @@ exports.updateSite = function(conn, res, args, add){
 			site.secret = '';
 			res(site.toObject());
 			site.secret = secret;
-			if(site.status === oldStatus) return;
 			if(site.status !== 'disabled') siteController.start(site.toObject());
 			else siteController.stop(id);
 		});

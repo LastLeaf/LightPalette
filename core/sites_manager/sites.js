@@ -2,7 +2,7 @@
 'use strict';
 
 var async = require('async');
-var sitesConfig = require('./config_sites.js');
+var sitesConfig = require('./config.js');
 
 var startSites = function(app){
 	if(!app.db) return;

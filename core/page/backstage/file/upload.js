@@ -11,12 +11,12 @@ module.exports = function(req, res){
 	// get user id
 	var userId = req.conn.session.userId;
 	if(!userId) {
-		res.send(403);
+		res.sendStatus(403);
 		return;
 	}
 	// permission
 	User.checkPermission(req.conn, ['writer', 'editor'], function(writer, editor){
-		if(!writer) return res.send(403);
+		if(!writer) return res.sendStatus(403);
 		if(req.method === 'GET') {
 			// send page
 			res.send(tmpl(req.conn).main());
@@ -30,11 +30,11 @@ module.exports = function(req, res){
 			autoFiles: true,
 		});
 		form.parse(req, function(err, fields, files){
-			if(err) return res.send(500);
+			if(err) return res.sendStatus(500);
 			var user = fields.user[0] || '';
 			var path = fields.path[0] || '/';
 			var next = function(){
-				if(path.charAt(0) !== '/') return res.send(403);
+				if(path.charAt(0) !== '/') return res.sendStatus(403);
 				if(path.slice(-1) !== '/') path += '/';
 				files = files.file || [];
 				var lastErr = null;
@@ -55,11 +55,11 @@ module.exports = function(req, res){
 				finished();
 			};
 			if(user !== userId) {
-				if(!editor) return res.send(403);
+				if(!editor) return res.sendStatus(403);
 				User.findOne({_id: user}, function(err, r){
-					if(err) return res.send(500);
+					if(err) return res.sendStatus(500);
 					if(!r || User.typeLevel(r.type) < User.typeLevel('contributor'))
-						return res.send(403);
+						return res.sendStatus(403);
 					next();
 				});
 			} else {

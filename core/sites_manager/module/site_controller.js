@@ -3,7 +3,9 @@
 
 var fs = require('fs');
 
-var siteConfig = require('../config_app.js');
+var configBlog = require('../../config.js');
+var configStatic = require('../../sites_static/config.js');
+var configFwApp = require('../../sites_fwapp/config.js');
 
 var ensureSiteRoot = function(siteRoot, cb){
 	fs.exists(siteRoot, function(exists){
@@ -23,11 +25,28 @@ module.exports = function(app, cb){
 	exports.start = function(siteInfo, cb){
 		var id = siteInfo._id;
 		if(siteApp[id]) siteApp[id].destroy();
-		siteConfig(app, siteInfo, function(config){
-			ensureSiteRoot(config.app.siteRoot, function(exists){
-				siteApp[id] = fw.createApp(fw.config.lpCoreRoot + '/app.js', id, config, cb);
+		if(siteInfo.type === 'static') {
+			// static files
+			configStatic(app, siteInfo, function(config){
+				ensureSiteRoot(config.app.siteRoot, function(exists){
+					siteApp[id] = fw.createApp(fw.config.lpCoreRoot + '/sites_static/app.js', id, config, cb);
+				});
 			});
-		});
+		} else if(siteInfo.type === 'fwapp') {
+			// fw.mpa app
+			configFwApp(app, siteInfo, function(config){
+				ensureSiteRoot(config.app.siteRoot, function(exists){
+					siteApp[id] = fw.createApp(fw.config.lpCoreRoot + '/sites_fwapp/app.js', id, config, cb);
+				});
+			});
+		} else {
+			// common blog
+			configBlog(app, siteInfo, function(config){
+				ensureSiteRoot(config.app.siteRoot, function(exists){
+					siteApp[id] = fw.createApp(fw.config.lpCoreRoot + '/app.js', id, config, cb);
+				});
+			});
+		}
 	};
 	exports.stop = function(id){
 		if(!siteApp[id]) return;

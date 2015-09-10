@@ -10,7 +10,7 @@ module.exports = function(app, next){
 	var schemaObj = {
 		_id: { type: String, index: { unique: true } },
 		title: String,
-		permission: String,
+		type: { type: String, default: '' },
 		status: String,
 		secret: String,
 		hosts: [String],

@@ -2,7 +2,7 @@
 'use strict';
 
 var fs = require('fs');
-var locales = JSON.parse(fs.readFileSync(fw.config.lpCoreRoot + '/locales.json').toString('utf8'));
+var locales = require('../locales.js');
 
 module.exports = function(){
 	// read config file
@@ -21,7 +21,7 @@ module.exports = function(){
 			app: {
 				title: config.title || 'LightPalette',
 				version: String(Date.now()),
-				locale: locales,
+				locale: locales.list,
 			},
 			client: {
 				cache: 'cache',

@@ -1,4 +1,4 @@
-{
+module.exports = {
 	"list": [
 		"zh_CN"
 	],

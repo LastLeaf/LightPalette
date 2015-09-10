@@ -53,9 +53,11 @@ fw.main(function(pg){
 		var table = lp.tableBuilder($('#sitesTable'), {idCol: '_id'}, [
 			{ id: '_id', name: _('Site ID'), input: 'add' },
 			{ id: 'title', name: _('Site Title') },
-			{ id: 'permission', name: _('Permission'), input: {
-				'': _('None'),
-				all: _('As Sites Manager')
+			{ id: 'type', name: _('Type'), input: {
+				'': _('Blog'),
+				sites: _('Blog (with sites permission)'),
+				static: _('Static Files'),
+				fwapp: _('Other fw.mpa App')
 			} },
 			{ id: 'status', name: _('Status'), input: {
 				disabled: _('Disabled'),
