@@ -2,29 +2,10 @@
 'use strict';
 
 var fs = require('fs');
+var fse = require('fs-extra');
 var formFilter = fw.module('form_filter');
 var User = fw.module('db_model').User;
 var dateString = fw.module('date_string.js');
-
-// rmdirp async
-var rmdirp = function(path, cb) {
-	fs.stat(path, function(err, stat){
-		if(err) return cb(err);
-		if(!stat.isDirectory())
-			return fs.unlink(path, cb);
-		fs.readdir(path, function(err, files){
-			if(err) return cb(err);
-			var c = files.length + 1;
-			var finished = function(){
-				if(--c) return;
-				fs.rmdir(path, cb);
-			};
-			while(files.length)
-				rmdirp(path + '/' + files.shift(), finished);
-			finished();
-		});
-	});
-};
 
 // permission middleware
 exports = module.exports = function(conn, res, args){
@@ -84,7 +65,7 @@ exports.remove = function(conn, res, args){
 		serverPath: '',
 		name: ''
 	});
-	rmdirp(args.serverPath + args.name, function(err){
+	fse.remove(args.serverPath + args.name, function(err){
 		if(err) return res.err('system');
 		res();
 	});

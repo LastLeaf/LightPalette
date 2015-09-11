@@ -1,0 +1,129 @@
+<tmpl id="main" minify>
+	<div class="settings">
+
+		<div class="settings_section">
+			<div class="settings_title">`Backup Status`</div>
+			<form class="settings_form">
+				<div>
+					<pre>`Backup job is not running.`</pre>
+				</div>
+			</form>
+		</div>
+
+		<div class="settings_section">
+			<div class="settings_title">`Backup Sites and Files`</div>
+			<form class="settings_form settings_site_add" action="/plugins/xbackup/sites" method="modify">
+				<div class="settings_site_add_row">
+					<label>`Add Other Sites`</label>
+					<input type="text" placeholder="`Domain Names`" name="add">
+					<div class="settings_description">`You could receive backup files from another blog with this plugin enabled.`</div>
+				</div>
+				<input type="submit" class="submit" value="`Apply Changes`">
+			</form>
+		</div>
+
+		<div class="settings_section">
+			<div class="settings_title">`Backup Options`</div>
+			<form class="settings_form" action="/plugins/xbackup/settings" method="setConfig">
+				<div>
+					<label>`Auto Backup`</label>
+					<select name="timed">
+						<option value="">`Disabled`</option>
+						<option value="yes">`Enabled`</option>
+					</select>
+				</div>
+				<div>
+					<label>`Backup Time`</label>
+					<select name="day">
+						<option value="-1">`Everyday`</option>
+						<option value="0">`Sunday`</option>
+						<option value="1">`Monday`</option>
+						<option value="2">`Tuesday`</option>
+						<option value="3">`Wednesday`</option>
+						<option value="4">`Thursday`</option>
+						<option value="5">`Friday`</option>
+						<option value="6">`Saturday`</option>
+					</select>
+				</div>
+				<div>
+					<label>`Hour (UTC)`</label>
+					<input type="number" min="0" max="23" name="hour" value="3" placeholder="3">
+				</div>
+				<div>
+					<label>`Minute (UTC)`</label>
+					<input type="number" min="0" max="59" name="minute" value="30" placeholder="30">
+				</div>
+				<div>
+					<label>`Maximum Backup Files`</label>
+					<input type="number" min="0" max="" name="fileLimit" value="" placeholder="(unlimited)">
+				</div>
+				<div>
+					<label>`Backup File Password`</label>
+					<input type="text" name="password" placeholder="`(no encryption)`">
+				</div>
+				<div>
+					<label>`Send Backup to Site`</label>
+					<input type="text" name="sendTo" placeholder="`Domain Name`">
+					<div class="settings_description">`You could send to another blog server with this plugin enabled.`</div>
+				</div>
+				<input type="button" class="button" value="`Update Settings and Backup Now`">
+				<input type="submit" class="submit" value="`Update Settings`">
+			</form>
+		</div>
+
+		<div class="settings_section">
+			<div class="settings_title">`Database Blacklist`</div>
+			<form class="settings_form" action="/plugins/xbackup/settings" method="setDbBlacklist">
+				<div>
+					<label>`advanced_search`</label>
+					<select>
+						<option>`Backup`</option>
+						<option>`Do Not Backup`</option>
+					</select>
+				</div>
+				<input type="submit" class="submit" value="`Update Settings`">
+			</form>
+		</div>
+
+		<div class="settings_section">
+			<div class="settings_title">`Filesystem Blacklist`</div>
+			<form class="settings_form" action="/plugins/xbackup/settings" method="setFsBlacklist">
+				<div>
+					<label>`avatar`</label>
+					<select>
+						<option>`Backup`</option>
+						<option>`Do Not Backup`</option>
+					</select>
+				</div>
+				<div>
+					<label>`files`</label>
+					<select>
+						<option>`Backup`</option>
+						<option>`Do Not Backup`</option>
+					</select>
+				</div>
+				<input type="submit" class="submit" value="`Update Settings`">
+			</form>
+		</div>
+
+	</div>
+</tmpl>
+
+<tmpl id="sites" minify>
+	<input type="hidden" name="remove">
+	<div class="settings_site_row">
+		<label>`This Blog`</label>
+		<select>
+			<option value=""></option>
+			{{#each local}}<option value="">`Download` {{this}}</option>{{/each}}
+		</select>
+	</div>
+	{{#each sites}}<div class="settings_site_row">
+		<label>{{domain}}</label>
+		<select siteId="{{domain}}">
+			<option value="" selected></option>
+			{{#each files}}<option value="">`Download` {{this}}</option>{{/each}}
+			<option value="..">`Remove This Site`</option>
+		</select>
+	</div>{{/each}}
+</tmpl>

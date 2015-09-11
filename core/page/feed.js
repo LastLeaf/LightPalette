@@ -46,7 +46,7 @@ var feedGen = function(conn, cb){
 module.exports = function(req, res){
 	feedGen(req.conn, function(err, xml){
 		if(err) {
-			res.send(500);
+			res.sendStatus(500);
 			return;
 		}
 		res.type('text/xml; charset=UTF-8');
