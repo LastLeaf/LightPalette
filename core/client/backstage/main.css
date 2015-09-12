@@ -89,6 +89,8 @@ select, .submit, .button {
     font-weight: bold;
     background: url('img/logo_32.png') no-repeat;
     padding-left: 40px;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .header_lpinfo {
 	font-weight: normal;

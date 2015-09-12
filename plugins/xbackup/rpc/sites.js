@@ -4,7 +4,9 @@
 var fs = require('fs');
 var fse = require('fs-extra');
 var async = require('async');
+
 var User = fw.module('/db_model').User;
+var timeString = fw.module('/date_string.js');
 
 var exports = module.exports = function(conn, res, args){
 	User.checkPermission(conn, 'admin', function(perm){
@@ -27,10 +29,21 @@ exports.list = function(conn, res){
 			if(site !== 'local' && site.slice(-5) !== '.site') return cb();
 			fs.readdir(siteDir, function(err, files){
 				if(err) return cb('system');
-				if(site === 'local') local = files;
-				else details.push({
+				var zips = [];
+				for(var i=0; i<files.length; i++) {
+					var match = files[i].match(/^([0-9]+)\.xbackup\.zip(\.enc|)$/);
+					if(match) {
+						zips.push({
+							file: files[i],
+							timeString: timeString.dateTime(Number(match[1]))
+						});
+					}
+				}
+				if(site === 'local') {
+					local = zips;
+				} else details.push({
 					domain: site.slice(0, -5),
-					files: files
+					files: zips
 				});
 				cb();
 			});

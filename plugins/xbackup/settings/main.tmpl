@@ -5,8 +5,9 @@
 			<div class="settings_title">`Backup Status`</div>
 			<form class="settings_form">
 				<div>
-					<pre>`Backup job is not running.`</pre>
+					<pre>`No backup logs.`</pre>
 				</div>
+				<input type="button" class="button settings_backup_now" value="`Backup Now`">
 			</form>
 		</div>
 
@@ -24,11 +25,11 @@
 
 		<div class="settings_section">
 			<div class="settings_title">`Backup Options`</div>
-			<form class="settings_form" action="/plugins/xbackup/settings" method="setConfig">
+			<form class="settings_form settings_backup_config" action="/plugins/xbackup/settings" method="setConfig">
 				<div>
 					<label>`Auto Backup`</label>
 					<select name="timed">
-						<option value="">`Disabled`</option>
+						<option value="" selected>`Disabled`</option>
 						<option value="yes">`Enabled`</option>
 					</select>
 				</div>
@@ -54,54 +55,33 @@
 					<input type="number" min="0" max="59" name="minute" value="30" placeholder="30">
 				</div>
 				<div>
-					<label>`Maximum Backup Files`</label>
-					<input type="number" min="0" max="" name="fileLimit" value="" placeholder="(unlimited)">
-				</div>
-				<div>
 					<label>`Backup File Password`</label>
 					<input type="text" name="password" placeholder="`(no encryption)`">
 				</div>
 				<div>
-					<label>`Send Backup to Site`</label>
-					<input type="text" name="sendTo" placeholder="`Domain Name`">
+					<label>`Send Backup to Sites`</label>
+					<input type="text" name="sendTo" placeholder="`Domain Names`">
 					<div class="settings_description">`You could send to another blog server with this plugin enabled.`</div>
 				</div>
-				<input type="button" class="button" value="`Update Settings and Backup Now`">
+				<div>
+					<label>`Max Backup Files`</label>
+					<input type="number" min="0" max="" name="fileLimit" value="" placeholder="0">
+					<div class="settings_description">`Would auto-remove old backup files. Apply to each site. 0 to disable.`</div>
+				</div>
 				<input type="submit" class="submit" value="`Update Settings`">
 			</form>
 		</div>
 
 		<div class="settings_section">
 			<div class="settings_title">`Database Blacklist`</div>
-			<form class="settings_form" action="/plugins/xbackup/settings" method="setDbBlacklist">
-				<div>
-					<label>`advanced_search`</label>
-					<select>
-						<option>`Backup`</option>
-						<option>`Do Not Backup`</option>
-					</select>
-				</div>
+			<form class="settings_form settings_blacklist_db" action="/plugins/xbackup/settings" method="setDbBlacklist">
 				<input type="submit" class="submit" value="`Update Settings`">
 			</form>
 		</div>
 
 		<div class="settings_section">
 			<div class="settings_title">`Filesystem Blacklist`</div>
-			<form class="settings_form" action="/plugins/xbackup/settings" method="setFsBlacklist">
-				<div>
-					<label>`avatar`</label>
-					<select>
-						<option>`Backup`</option>
-						<option>`Do Not Backup`</option>
-					</select>
-				</div>
-				<div>
-					<label>`files`</label>
-					<select>
-						<option>`Backup`</option>
-						<option>`Do Not Backup`</option>
-					</select>
-				</div>
+			<form class="settings_form settings_blacklist_fs" action="/plugins/xbackup/settings" method="setFsBlacklist">
 				<input type="submit" class="submit" value="`Update Settings`">
 			</form>
 		</div>
@@ -114,16 +94,26 @@
 	<div class="settings_site_row">
 		<label>`This Blog`</label>
 		<select>
-			<option value=""></option>
+			<option value="">{{#if local}}`{{local.length}} backup files`{{else}}`No backup files`{{/if}}</option>
 			{{#each local}}<option value="">`Download` {{this}}</option>{{/each}}
 		</select>
 	</div>
 	{{#each sites}}<div class="settings_site_row">
 		<label>{{domain}}</label>
 		<select siteId="{{domain}}">
-			<option value="" selected></option>
-			{{#each files}}<option value="">`Download` {{this}}</option>{{/each}}
+			<option value="" selected>{{#if files.length}}`{{files.length}} backup files`{{else}}`No backup files`{{/if}}</option>
+			{{#each files}}<option value="{{file}}">`Download` {{timeString}}</option>{{/each}}
 			<option value="..">`Remove This Site`</option>
+		</select>
+	</div>{{/each}}
+</tmpl>
+
+<tmpl id="blacklist" minify>
+	{{#each this}}<div class="settings_blacklist_item">
+		<label>{{this}}</label>
+		<select name="{{this}}">
+			<option value="" selected>`Backup`</option>
+			<option value="yes">`Do Not Backup`</option>
 		</select>
 	</div>{{/each}}
 </tmpl>

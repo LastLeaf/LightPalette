@@ -15,6 +15,10 @@ var bindDirs = function(app, args, cb){
 		base: args.bindPath,
 		page: 'pull'
 	});
+	app.route.set(args.bindPath + '/download/*', {
+		base: args.bindPath,
+		page: 'download'
+	});
 	cb();
 };
 
