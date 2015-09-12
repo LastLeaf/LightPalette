@@ -8,6 +8,7 @@ var mongodb = require('fw.mpa/node_modules/mongoose/node_modules/mongodb');
 var formFilter = fw.module('/form_filter.js');
 var User = fw.module('/db_model').User;
 var PluginSettings = fw.module('/db_model').PluginSettings;
+var backupBackend = fw.module('/plugins/xbackup/backend');
 
 var defaultSettings = {
 	timed: false,
@@ -141,5 +142,23 @@ exports.setFsBlacklist = function(conn, res, args){
 			if(err) return res.err('system');
 			res();
 		});
+	});
+};
+
+exports.startBackup = function(conn, res){
+	PluginSettings.get('xbackup', function(err, settings){
+		if(err || !settings) settings = defaultSettings();
+		res(backupBackend.start(settings));
+	});
+};
+
+exports.abortBackup = function(conn, res){
+	res(backupBackend.abort());
+};
+
+exports.backupStatus = function(conn, res){
+	var started = backupBackend.isStarted();
+	backupBackend.log(function(err, log){
+		res(started, log);
 	});
 };

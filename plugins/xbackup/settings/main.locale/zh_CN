@@ -1,8 +1,8 @@
 [
 	{
 		"Backup Status": "备份状态",
-		"No backup logs.": "没有备份日志记录。",
 		"Backup Now": "现在备份",
+		"Abort Backup": "中断备份",
 		"Backup Sites and Files": "备份站点和文件",
 		"Add Other Sites": "添加其他站点",
 		"Domain Names": "域名",
@@ -21,8 +21,8 @@
 		"Thursday": "星期四",
 		"Friday": "星期五",
 		"Saturday": "星期六",
-		"Hour (UTC)": "时（UTC）",
-		"Minute (UTC)": "分（UTC）",
+		"Hour": "时",
+		"Minute": "分",
 		"Backup File Password": "备份文件密码",
 		"(no encryption)": "（不加密）",
 		"Send Backup to Sites": "将备份文件发送给站点",

@@ -5,9 +5,10 @@
 			<div class="settings_title">`Backup Status`</div>
 			<form class="settings_form">
 				<div>
-					<pre>`No backup logs.`</pre>
+					<pre class="settings_backup_status"></pre>
 				</div>
 				<input type="button" class="button settings_backup_now" value="`Backup Now`">
+				<input type="button" class="button settings_backup_abort" value="`Abort Backup`">
 			</form>
 		</div>
 
@@ -47,11 +48,11 @@
 					</select>
 				</div>
 				<div>
-					<label>`Hour (UTC)`</label>
+					<label>`Hour`</label>
 					<input type="number" min="0" max="23" name="hour" value="3" placeholder="3">
 				</div>
 				<div>
-					<label>`Minute (UTC)`</label>
+					<label>`Minute`</label>
 					<input type="number" min="0" max="59" name="minute" value="30" placeholder="30">
 				</div>
 				<div>
@@ -93,14 +94,14 @@
 	<input type="hidden" name="remove">
 	<div class="settings_site_row">
 		<label>`This Blog`</label>
-		<select>
+		<select siteId="local">
 			<option value="">{{#if local}}`{{local.length}} backup files`{{else}}`No backup files`{{/if}}</option>
-			{{#each local}}<option value="">`Download` {{this}}</option>{{/each}}
+			{{#each local}}<option value="{{file}}">`Download` {{timeString}}</option>{{/each}}
 		</select>
 	</div>
 	{{#each sites}}<div class="settings_site_row">
 		<label>{{domain}}</label>
-		<select siteId="{{domain}}">
+		<select siteId="{{domain}}.site">
 			<option value="" selected>{{#if files.length}}`{{files.length}} backup files`{{else}}`No backup files`{{/if}}</option>
 			{{#each files}}<option value="{{file}}">`Download` {{timeString}}</option>{{/each}}
 			<option value="..">`Remove This Site`</option>

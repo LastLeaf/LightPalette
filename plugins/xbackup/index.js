@@ -24,6 +24,8 @@ var bindDirs = function(app, args, cb){
 
 module.exports = function(app, args, cb){
 	fs.mkdir(app.config.app.siteRoot + '/xbackup', function(){
-		bindDirs(app, args, cb);
+		fs.mkdir(app.config.app.siteRoot + '/xbackup/local', function(){
+			bindDirs(app, args, cb);
+		});
 	});
 };

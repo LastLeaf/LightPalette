@@ -7,8 +7,37 @@ fw.main(function(pg){
 	$settings.find('input, select').attr('disabled', true);
 
 	// get backup status
-	// TODO
-	$settings.find('.settings_backup_now').removeAttr('disabled');
+	$settings.find('.settings_backup_abort').hide();
+	var updateStatus = function(){
+		$settings.find('.settings_backup_now').attr('disabled', true);
+		$settings.find('.settings_backup_abort').attr('disabled', true);
+		pg.rpc('/plugins/xbackup/settings:backupStatus', function(started, log){
+			$settings.find('.settings_backup_now').removeAttr('disabled');
+			$settings.find('.settings_backup_abort').removeAttr('disabled');
+			if(started) {
+				$settings.find('.settings_backup_now').hide();
+				$settings.find('.settings_backup_abort').show();
+				setTimeout(updateStatus, 5000);
+			} else {
+				$settings.find('.settings_backup_now').show();
+				$settings.find('.settings_backup_abort').hide();
+			}
+			$settings.find('.settings_backup_status').text(log);
+		}, lp.backstage.showError);
+	};
+	updateStatus();
+	$settings.find('.settings_backup_now').click(function(){
+		$(this).attr('disabled', true);
+		pg.rpc('/plugins/xbackup/settings:startBackup', function(){
+			updateStatus();
+		}, lp.backstage.showError);
+	});
+	$settings.find('.settings_backup_abort').click(function(){
+		$(this).attr('disabled', true);
+		pg.rpc('/plugins/xbackup/settings:abortBackup', function(){
+			updateStatus();
+		}, lp.backstage.showError);
+	});
 
 	// load sites
 	var $sites = $settings.find('.settings_site_add');
@@ -19,7 +48,7 @@ fw.main(function(pg){
 			var $select = $(this);
 			var val = $select.val();
 			if(val === '' || val === '..') return;
-			window.open('/plugins/xbackup/download/' + $select.attr('siteId') + '.site/' + val);
+			window.open('/plugins/xbackup/download/' + $select.attr('siteId') + '/' + val);
 		});
 	};
 	pg.rpc('/plugins/xbackup/sites:list', updateSites, lp.backstage.showError);

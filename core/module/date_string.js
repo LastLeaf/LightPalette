@@ -4,7 +4,7 @@
 module.exports = function(app, next){
 	// dateString: convert a unix timestamp or js time to date string
 	var tzZones = require('timezone/zones.js');
-	var tz = require('timezone');
+	var tz = require('timezone/loaded');
 	var tzCur = tz;
 	var conf = {
 		timezone: '',
