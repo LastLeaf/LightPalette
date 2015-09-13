@@ -2,6 +2,7 @@
 'use strict';
 
 var fs = require('fs');
+var crypto = require('crypto');
 var async = require('async');
 var zipStream = require('zip-stream');
 var mongodump = require('./mongodump.js');
@@ -18,7 +19,11 @@ module.exports = function(app, cb){
 			log(id, 'Cannot write to backup file', filename);
 			abort();
 		});
-		// TODO password
+		if(config.password) {
+			var cryptoStream = crypto.createCipher('aes192', config.password);
+			cryptoStream.pipe(file);
+			file = cryptoStream;
+		}
 		cb(null, id, config, filename, file, log);
 	};
 
