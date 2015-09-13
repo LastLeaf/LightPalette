@@ -6,7 +6,7 @@ var async = require('async');
 
 module.exports = function(app, cb){
 	// make static dirs
-	async.each([app.config.app.siteRoot + '/static/avatar', app.config.app.siteRoot + '/static/files'], function(file, cb){
+	async.each([app.config.app.siteRoot + '/static/files'], function(file, cb){
 		fs.exists(file, function(exists){
 			if(!exists) fs.mkdir(file, cb);
 			else cb();
@@ -15,7 +15,7 @@ module.exports = function(app, cb){
 		cb({
 			// preserved path checker
 			check: function(path){
-				return !!path.match(/^\/?(backstage|index|type|tag|category|series|author|search|post|avatar|files|feed|plugins|theme)[\/$]/);
+				return !!path.match(/^\/?(backstage|index|type|tag|category|series|author|search|post|files|feed|plugins|theme)[\/$]/);
 			}
 		});
 	});

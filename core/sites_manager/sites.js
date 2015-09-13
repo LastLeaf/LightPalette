@@ -27,6 +27,7 @@ module.exports = function(app){
 		['client', '/lib', fw.config.lpCoreRoot + '/client/lib'],
 		['client', '/backstage/lib', fw.config.lpCoreRoot + '/client/backstage/lib'],
 		['module', '/', fw.config.lpCoreRoot + '/sites_manager/module'],
+		['module', '/', fw.config.lpCoreRoot + '/sites_manager/module_delayed'],
 		['render', '/', fw.config.lpCoreRoot + '/sites_manager/render'],
 		['rpc', '/', fw.config.lpCoreRoot + '/sites_manager/rpc']
 	];

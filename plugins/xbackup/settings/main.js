@@ -23,7 +23,11 @@ fw.main(function(pg){
 				$settings.find('.settings_backup_abort').hide();
 			}
 			$settings.find('.settings_backup_status').text(log);
-		}, lp.backstage.showError);
+		}, function(err){
+			$settings.find('.settings_backup_now').removeAttr('disabled');
+			$settings.find('.settings_backup_abort').removeAttr('disabled');
+			lp.backstage.showError(err);
+		});
 	};
 	updateStatus();
 	$settings.find('.settings_backup_now').click(function(){

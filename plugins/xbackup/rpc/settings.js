@@ -41,16 +41,17 @@ exports.get = function(conn, res, args){
 		fs: null
 	};
 	async.parallel([function(cb){
+		// get config
 		PluginSettings.get('xbackup', function(err, settings){
 			if(err || !settings) settings = defaultSettings;
 			data.config = settings;
 			cb();
 		});
 	}, function(cb){
+		// list collections
 		var args = conn.app.config.db;
 		var db = new mongodb.Db(String(args.name), new mongodb.Server(String(args.host), Number(args.port)), {w: 1});
-		db.open(function(err, db){
-			if(err || !db) return cb('system');
+		var listCols = function(){
 			db.collectionNames(function(err, names){
 				db.close();
 				if(err) {
@@ -68,8 +69,24 @@ exports.get = function(conn, res, args){
 				data.db = cols;
 				cb();
 			});
+		};
+		db.open(function(err, db){
+			if(err || !db) return cb('system');
+			if(args.user) {
+				db.authenticate(String(args.user), String(args.password), function(err, result){
+					if(err || !result) {
+						cb('system');
+						db.close();
+						return;
+					}
+					listCols();
+				});
+			} else {
+				listCols();
+			}
 		});
 	}, function(cb){
+		// list static
 		fs.readdir(siteInfo.siteRoot + '/static', function(err, files){
 			if(err) return cb('system');
 			var dirs = [];

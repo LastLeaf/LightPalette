@@ -27,8 +27,7 @@ module.exports = function(app, cb){
 		email: String,
 		url: { type: String, default: '' },
 		description: { type: String, default: '' },
-		password: String,
-		avatar: { type: String, default: '' }
+		password: String
 	};
 	var schema = new Schema(schemaObj, {autoIndex: false});
 
