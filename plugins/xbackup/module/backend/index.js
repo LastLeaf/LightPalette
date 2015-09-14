@@ -244,6 +244,7 @@ module.exports = function(app, cb){
 		isStarted: function(){ return !!processId; },
 		start: start,
 		abort: abort,
+		restore: require('./restore.js'),
 		log: log
 	});
 };

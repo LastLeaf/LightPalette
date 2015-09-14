@@ -184,14 +184,14 @@ exports.backupStatus = function(conn, res){
 };
 
 exports.restore = function(conn, res, args){
-	var password = String(args.password);
+	var pwd = String(args.password);
 	var path = String(args.path);
 	var filePassword = String(args.filePassword);
 	var remove = String(args.remove);
-	User.findOne({_id: id}).select('type password').exec(function(err, r){
+	User.findById(conn.session.userId).select('type password').exec(function(err, r){
 		if(err) return res.err('system');
-		if(!password.check(password, r.password)) return res.err('pwd');
-		backupBackend.restore(conn.app.config.app.siteRoot + '/static/files/' + path, filePassword, remove);
+		if(!password.check(pwd, r.password)) return res.err('pwd');
+		backupBackend.restore(conn.app, conn.app.config.app.siteRoot + '/static/files/' + path, filePassword, remove);
 		res();
 	});
 };

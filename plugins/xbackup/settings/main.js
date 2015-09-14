@@ -100,6 +100,7 @@ fw.main(function(pg){
 			.find('[name]').each(function(){
 				if( data.config.fsBlacklist.indexOf($(this).attr('name')) >= 0 ) this.value = 'yes';
 			});
+		$dbBlacklist.find('[name=settings]').children().eq(1).remove();
 	}, lp.backstage.showError);
 
 	// set config
@@ -121,16 +122,27 @@ fw.main(function(pg){
 		$dbBlacklist.find('.submit').removeAttr('disabled');
 		lp.backstage.showError(err);
 	});
+	pg.form($fsBlacklist[0], function(){
+		$fsBlacklist.find('.submit').attr('disabled', true);
+	}, function(){
+		$fsBlacklist.find('.submit').removeAttr('disabled');
+	}, function(err){
+		$fsBlacklist.find('.submit').removeAttr('disabled');
+		lp.backstage.showError(err);
+	});
 
 	// restore
 	var $restore = $settings.find('.settings_restore');
 	$restore.find('input, select').removeAttr('disabled');
 	pg.form($restore[0], function(){
+		var oriPwd = $restore.find('.settings_restore_password').val();
+		var pwd = CryptoJS.SHA256($restore.find('[name=_id]').val().toLowerCase() +'|'+ oriPwd);
+		$restore.find('[name=password]').val(pwd);
 		$restore.find('.submit').attr('disabled', true);
 	}, function(){
 		document.documentElement.scrollTop = 0;
 	}, function(err){
-		$dbBlacklist.find('.submit').removeAttr('disabled');
+		$restore.find('.submit').removeAttr('disabled');
 		lp.backstage.showError(err);
 	});
 });

@@ -115,7 +115,9 @@
 				</div>
 				<div>
 					<label>`Your Password`</label>
-					<input type="password" name="password" required>
+					<input type="password" class="settings_restore_password" required>
+					<input type="hidden" name="_id" value="{{userInfo._id}}">
+					<input type="hidden" name="password">
 				</div>
 				<input type="submit" class="submit" value="`Start Restore`">
 			</form>

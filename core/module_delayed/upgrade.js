@@ -4,10 +4,10 @@
 var fs = require('fs');
 var async = require('async');
 var semver = require('semver');
-var dbSettings = fw.module('db_settings.js');
+var dbSettings = fw.module('/db_model').Settings;
 
 var upgradeVersions = function(app, fromVer, stepCb, cb){
-	var dir = fw.config.lpCoreRoot + '/sites_manager/upgrade';
+	var dir = fw.config.lpCoreRoot + '/upgrade';
 	fs.readdir(dir, function(err, files){
 		if(err) return cb(err);
 		var versions = [];
@@ -31,15 +31,11 @@ var upgradeVersions = function(app, fromVer, stepCb, cb){
 	});
 };
 
-var upgradeSitesManager = function(app, cb){
+var upgradeSite = function(app, cb){
 	var abort = function(){
-		console.log('Upgrade failed. Would try again later if possible.');
+		console.log('Upgrade site failed. Abort.');
 		setTimeout(function(){
-			try {
-				fw.restart();
-				return;
-			} catch(e) {}
-			process.exit();
+			app.stop();
 		}, 5000);
 	};
 	dbSettings.get('lightpalette', function(err, version){
@@ -70,8 +66,7 @@ var upgradeSitesManager = function(app, cb){
 };
 
 module.exports = function(app, cb){
-	if(!dbSettings) return cb();
-	upgradeSitesManager(app, function(){
+	upgradeSite(app, function(){
 		cb();
 	});
 };
