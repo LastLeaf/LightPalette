@@ -6,24 +6,27 @@ var async = require('async');
 var mongodb = require('fw.mpa/node_modules/mongoose/node_modules/mongodb');
 
 var formFilter = fw.module('/form_filter.js');
+var password = fw.module('/password.js');
 var User = fw.module('/db_model').User;
 var PluginSettings = fw.module('/db_model').PluginSettings;
 var backupBackend = fw.module('/plugins/xbackup/backend');
 
-var defaultSettings = {
-	timed: false,
-	day: -1,
-	hour: 3,
-	minute: 30,
-	fileLimit: 0,
-	password: '',
-	sendTo: [],
-	dbBlacklist: [
-		'stats',
-		'stat_referers',
-		'stat_paths'
-	],
-	fsBlacklist: []
+var defaultSettings = function(){
+	return {
+		timed: false,
+		day: -1,
+		hour: 3,
+		minute: 30,
+		fileLimit: 0,
+		password: '',
+		sendTo: [],
+		dbBlacklist: [
+			'stats',
+			'stat_referers',
+			'stat_paths'
+		],
+		fsBlacklist: []
+	};
 };
 
 var exports = module.exports = function(conn, res, args){
@@ -43,7 +46,7 @@ exports.get = function(conn, res, args){
 	async.parallel([function(cb){
 		// get config
 		PluginSettings.get('xbackup', function(err, settings){
-			if(err || !settings) settings = defaultSettings;
+			if(err || !settings) settings = defaultSettings();
 			data.config = settings;
 			cb();
 		});
@@ -121,8 +124,8 @@ exports.setConfig = function(conn, res, args){
 	args.sendTo = args.sendTo.match(/\S+/g) || [];
 	PluginSettings.get('xbackup', function(err, settings){
 		if(err || !settings) settings = {};
-		args.dbBlacklist = settings.dbBlacklist || defaultSettings.dbBlacklist;
-		args.fsBlacklist = settings.fsBlacklist || defaultSettings.fsBlacklist;
+		args.dbBlacklist = settings.dbBlacklist || defaultSettings().dbBlacklist;
+		args.fsBlacklist = settings.fsBlacklist || defaultSettings().fsBlacklist;
 		PluginSettings.set('xbackup', args, function(err){
 			if(err) return res.err('system');
 			res();
@@ -137,7 +140,7 @@ exports.setDbBlacklist = function(conn, res, args){
 		if(args[k]) blacklist.push(k);
 	}
 	PluginSettings.get('xbackup', function(err, settings){
-		if(err || !settings) settings = JSON.parse(JSON.stringify(defaultSettings));
+		if(err || !settings) settings = defaultSettings();
 		settings.dbBlacklist = blacklist;
 		PluginSettings.set('xbackup', settings, function(err){
 			if(err) return res.err('system');
@@ -153,7 +156,7 @@ exports.setFsBlacklist = function(conn, res, args){
 		if(args[k]) blacklist.push(k);
 	}
 	PluginSettings.get('xbackup', function(err, settings){
-		if(err || !settings) settings = JSON.parse(JSON.stringify(defaultSettings));
+		if(err || !settings) settings = defaultSettings();
 		settings.fsBlacklist = blacklist;
 		PluginSettings.set('xbackup', settings, function(err){
 			if(err) return res.err('system');
@@ -177,5 +180,18 @@ exports.backupStatus = function(conn, res){
 	var started = backupBackend.isStarted();
 	backupBackend.log(function(err, log){
 		res(started, log);
+	});
+};
+
+exports.restore = function(conn, res, args){
+	var password = String(args.password);
+	var path = String(args.path);
+	var filePassword = String(args.filePassword);
+	var remove = String(args.remove);
+	User.findOne({_id: id}).select('type password').exec(function(err, r){
+		if(err) return res.err('system');
+		if(!password.check(password, r.password)) return res.err('pwd');
+		backupBackend.restore(conn.app.config.app.siteRoot + '/static/files/' + path, filePassword, remove);
+		res();
 	});
 };

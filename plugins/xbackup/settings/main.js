@@ -3,7 +3,7 @@
 
 fw.main(function(pg){
 	var tmpl = pg.tmpl;
-	var $settings = $('#settings').html(tmpl.main());
+	var $settings = $('#settings').html(tmpl.main({ localDomain: location.host, userInfo: lp.backstage.userInfo }));
 	$settings.find('input, select').attr('disabled', true);
 
 	// get backup status
@@ -17,10 +17,12 @@ fw.main(function(pg){
 			if(started) {
 				$settings.find('.settings_backup_now').hide();
 				$settings.find('.settings_backup_abort').show();
+				document.documentElement.scrollTop = 0;
 				setTimeout(updateStatus, 5000);
 			} else {
 				$settings.find('.settings_backup_now').show();
 				$settings.find('.settings_backup_abort').hide();
+				updateSites();
 			}
 			$settings.find('.settings_backup_status').text(log);
 		}, function(err){
@@ -45,28 +47,33 @@ fw.main(function(pg){
 
 	// load sites
 	var $sites = $settings.find('.settings_site_add');
-	var updateSites = function(sites){
-		$(tmpl.sites(sites)).insertBefore( $sites.find('.settings_site_add_row') );
-		$sites.find('input, select').removeAttr('disabled');
-		$sites.find('select').change(function(){
-			var $select = $(this);
-			var val = $select.val();
-			if(val === '' || val === '..') return;
-			window.open('/plugins/xbackup/download/' + $select.attr('siteId') + '/' + val);
-		});
+	var updateSites = function(){
+		$sites.find('.submit, select').attr('disabled', true);
+		pg.rpc('/plugins/xbackup/sites:list', function(sites){
+			$sites.find('.settings_site_row').remove();
+			$(tmpl.sites(sites)).insertBefore( $sites.find('.settings_site_add_row') );
+			$sites.find('input, select').removeAttr('disabled');
+			$sites.find('select').change(function(){
+				var $select = $(this);
+				var val = $select.val();
+				if(val === '' || val === '..') return;
+				var siteId = $select.attr('siteId');
+				if(!siteId) siteId = 'local';
+				else siteId += '.site';
+				window.open('/plugins/xbackup/download/' + siteId + '/' + val);
+			});
+		}, lp.backstage.showError);
 	};
-	pg.rpc('/plugins/xbackup/sites:list', updateSites, lp.backstage.showError);
 	pg.form($sites[0], function(){
 		var removes = [];
 		$sites.find('.settings_site_row select').each(function(){
 			if($(this).val() === '..') removes.push($(this).attr('siteId'));
 		});
 		$sites.find('[name="remove"]').val(removes.join(' '));
-		$sites.find('.submit, .settings_sites select').attr('disabled', true);
+		$sites.find('.submit, select').attr('disabled', true);
 	}, function(sites){
-		$sites.find('.settings_site_row').remove();
 		$sites.find('[name="add"]').val('');
-		updateSites(sites);
+		updateSites();
 	}, function(err){
 		$sites.find('.submit, select').removeAttr('disabled');
 		lp.backstage.showError(err);
@@ -114,12 +121,16 @@ fw.main(function(pg){
 		$dbBlacklist.find('.submit').removeAttr('disabled');
 		lp.backstage.showError(err);
 	});
-	pg.form($fsBlacklist[0], function(){
-		$fsBlacklist.find('.submit').attr('disabled', true);
+
+	// restore
+	var $restore = $settings.find('.settings_restore');
+	$restore.find('input, select').removeAttr('disabled');
+	pg.form($restore[0], function(){
+		$restore.find('.submit').attr('disabled', true);
 	}, function(){
-		$fsBlacklist.find('.submit').removeAttr('disabled');
+		document.documentElement.scrollTop = 0;
 	}, function(err){
-		$fsBlacklist.find('.submit').removeAttr('disabled');
+		$dbBlacklist.find('.submit').removeAttr('disabled');
 		lp.backstage.showError(err);
 	});
 });

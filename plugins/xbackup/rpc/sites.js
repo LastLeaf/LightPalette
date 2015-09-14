@@ -72,7 +72,7 @@ exports.modify = function(conn, res, args){
 				cb();
 			});
 		}, function(){
-			exports.list(conn, res);
+			res();
 		});
 	});
 };

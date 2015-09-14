@@ -2,7 +2,7 @@
 'use strict';
 
 var stream = require('stream');
-var eventEmitter = require('events');
+var eventEmitter = require('events').EventEmitter;
 var mongodb = require('fw.mpa/node_modules/mongoose/node_modules/mongodb');
 
 module.exports = function(args){
@@ -17,24 +17,23 @@ module.exports = function(args){
 			}
 			cur = col.find({}, { raw: true, snapshot: true });
 		});
-		var rs = new stream.Readable({
-			read: function(n) {
-				if(!cur) return rs.push(null);
-				cur.nextObject(function(err, item){
-					if(err) {
-						ev.emit('error', new Error('Cannot read collection from database.'));
-						rs.push(null);
-						rs = null;
-						return;
-					}
-					if(!item) {
-						rs.push(null);
-						return;
-					}
-					rs.push(item);
-				});
-			}
-		});
+		var rs = new stream.Readable();
+		rs._read = function(n) {
+			if(!cur) return rs.push(null);
+			cur.nextObject(function(err, item){
+				if(err) {
+					ev.emit('error', new Error('Cannot read collection from database.'));
+					rs.push(null);
+					rs = null;
+					return;
+				}
+				if(!item) {
+					rs.push(null);
+					return;
+				}
+				rs.push(item);
+			});
+		};
 		return rs;
 	};
 

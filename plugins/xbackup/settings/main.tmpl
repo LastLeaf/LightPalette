@@ -87,6 +87,40 @@
 			</form>
 		</div>
 
+		<div class="settings_section">
+			<div class="settings_title">`Restore from Backup File`</div>
+			<form class="settings_form settings_restore" action="/plugins/xbackup/settings" method="restore">
+				<div>
+					<div class="settings_description">`To restore from backup file, please upload the backup file to "files" panel first.`</div>
+				</div>
+				<div>
+					<label>`File Path`</label>
+					<input type="text" name="path" placeholder="{{userInfo._id}}/xxx.xbackup.zip" required>
+					<div class="settings_description">http://{{localDomain}}/files/...</div>
+				</div>
+				<div>
+					<label>`File Password`</label>
+					<input type="text" name="filePassword" placeholder="`(no encryption)`">
+				</div>
+				<div>
+					<label>`Restore Mode`</label>
+					<select name="remove">
+						<option value="merge">`Merge with Current Data (may cause problems)`</option>
+						<option value="replace">`Replace Existing Databases and Filesystems`</option>
+						<option value="erase" selected>`Remove All Blog Data and then Restore`</option>
+					</select>
+				</div>
+				<div>
+					<div class="settings_description">`This operation may DESTORY BLOG DATA. Type your password to continue.`</div>
+				</div>
+				<div>
+					<label>`Your Password`</label>
+					<input type="password" name="password" required>
+				</div>
+				<input type="submit" class="submit" value="`Start Restore`">
+			</form>
+		</div>
+
 	</div>
 </tmpl>
 
@@ -94,14 +128,14 @@
 	<input type="hidden" name="remove">
 	<div class="settings_site_row">
 		<label>`This Blog`</label>
-		<select siteId="local">
+		<select siteId="">
 			<option value="">{{#if local}}`{{local.length}} backup files`{{else}}`No backup files`{{/if}}</option>
 			{{#each local}}<option value="{{file}}">`Download` {{timeString}}</option>{{/each}}
 		</select>
 	</div>
 	{{#each sites}}<div class="settings_site_row">
 		<label>{{domain}}</label>
-		<select siteId="{{domain}}.site">
+		<select siteId="{{domain}}">
 			<option value="" selected>{{#if files.length}}`{{files.length}} backup files`{{else}}`No backup files`{{/if}}</option>
 			{{#each files}}<option value="{{file}}">`Download` {{timeString}}</option>{{/each}}
 			<option value="..">`Remove This Site`</option>

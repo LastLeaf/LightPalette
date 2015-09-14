@@ -43,17 +43,28 @@ module.exports = function(app, cb){
 	var dumpDb = function(id, config, filename, zip, target, log, cb){
 		if(id !== processId) return cb('abort');
 		zip.entry(null, {name: 'db/'}, function(err, entry){
+			if(err) {
+				zip.finish();
+				log(id, 'Backup database failed', 'Failed writing target file.');
+				return;
+			}
 			var dump = mongodump(app.config.db);
 			dump.once('error', function(err){
 				zip.finish();
 				log(id, 'Backup database failed', err.message);
-				cb(err);
+				cb('abort');
 			});
 			dump.on('collection', function(name, createReadStream){
 				var prefix = app.config.db.prefix;
 				if(id === processId && name.slice(0, prefix.length) === prefix && name.charAt(prefix.length) !== '~' && config.dbBlacklist.indexOf(name.slice(prefix.length)) < 0) {
 					log(id, 'Dumping database', name.slice(prefix.length));
 					zip.entry(createReadStream(), {name: 'db/' + name.slice(prefix.length) + '.bson'}, function(err, entry){
+						if(err) {
+							zip.finish();
+							console.info(err);
+							log(id, 'Backup database failed', 'Failed writing target file.');
+							cb('abort');
+						}
 						dump.nextCollection();
 					});
 					return;
@@ -78,12 +89,12 @@ module.exports = function(app, cb){
 				fs.readdir(dir, function(err, files){
 					if(err) return cb( new Error('Failed reading directories.') );
 					async.eachSeries(files, function(file, cb){
-						if(blacklist.indexOf(file) >= 0) return cb();
-						if(blacklist.length) log(id, 'Dumping filesystem', file);
+						if(blacklist && blacklist.indexOf(file) >= 0) return cb();
+						if(blacklist) log(id, 'Dumping filesystem', file);
 						fs.stat(dir + '/' + file, function(err, stat){
 							if(err) return cb( new Error('Failed reading files.') );
 							if(stat.isDirectory()) {
-								listFiles(dir + '/' + file, rel + '/' + file, [], fileCb, cb);
+								listFiles(dir + '/' + file, rel + '/' + file, null, fileCb, cb);
 							} else if(stat.isFile()) {
 								fileCb(dir + '/' + file, rel + '/' + file, cb);
 							}
@@ -102,7 +113,8 @@ module.exports = function(app, cb){
 			if(err) {
 				zip.finish();
 				log(id, 'Backup filesystem failed', err.message);
-				cb(err);
+				cb('abort');
+				return;
 			}
 			cb(null, id, config, filename, zip, target, log);
 		});
@@ -110,22 +122,29 @@ module.exports = function(app, cb){
 
 	// waiting write
 	var waitingWriteStream = function(id, config, filename, zip, target, log, cb){
-		target.on('finish', function(){
-			fs.rename(app.config.app.siteRoot + '/xbackup/local/' + filename + '.temp', app.config.app.siteRoot + '/xbackup/local/' + filename, function(err){
-				if(err) {
-					log(id, 'Cannot find backup file', filename);
-					abort();
-					return;
-				}
-				cb(null, id, config, filename, log);
-			});
-		});
 		var metadata = {
 			xbackup: pluginVersion,
 			lightpalette: fw.config.lpVersion
 		};
-		zip.entry(JSON.stringify(metadata), {name: 'xbackup.json'}, function(err, entry){});
-		zip.finish();
+		zip.entry(JSON.stringify(metadata), {name: 'xbackup.json'}, function(err, entry){
+			if(err) {
+				zip.finish();
+				log(id, 'Failed writing metadata.', err.message);
+				cb('abort');
+				return;
+			}
+			target.on('finish', function(){
+				fs.rename(app.config.app.siteRoot + '/xbackup/local/' + filename + '.temp', app.config.app.siteRoot + '/xbackup/local/' + filename, function(err){
+					if(err) {
+						log(id, 'Cannot find backup file', filename);
+						abort();
+						return;
+					}
+					cb(null, id, config, filename, log);
+				});
+			});
+			zip.finish();
+		});
 	};
 
 	// remove old file
