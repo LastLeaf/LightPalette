@@ -2,7 +2,7 @@
 'use strict';
 
 var fs = require('fs');
-var fse = require('fse');
+var fse = require('fs-extra');
 
 module.exports = function(app, siteId, appconfig, cb){
 	app.setConfig(appconfig);

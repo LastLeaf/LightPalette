@@ -6,7 +6,6 @@ var fs = require('fs');
 module.exports = function(req, res){
 	var reqPath = req.path;
 	if(reqPath.slice(-1) === '/') reqPath = reqPath.slice(0, -1);
-	console.info(reqPath);
 	var relPath = req.app.config.app.siteRoot + '/static' + req.path;
 	fs.stat(relPath, function(err, stat){
 		if(err || !stat || !stat.isDirectory()) {
