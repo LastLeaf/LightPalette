@@ -2,13 +2,16 @@
 'use strict';
 
 var fs = require('fs');
+var fse = require('fse');
 
 module.exports = function(app, siteId, appconfig, cb){
 	app.setConfig(appconfig);
-	app.bindDir('static', appconfig.app.siteRoot);
-	app.bindDir('page', fw.config.lpCoreRoot + '/sites_static/page');
-	app.route.set('*', {
-		page: 'index'
+	fse.ensureDir(appconfig.app.siteRoot + '/static', function(){
+		app.bindDir('static', appconfig.app.siteRoot + '/static');
+		app.bindDir('page', fw.config.lpCoreRoot + '/sites_static/page');
+		app.route.set('*', {
+			page: 'index'
+		});
+		app.start(cb);
 	});
-	app.start(cb);
 };

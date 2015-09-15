@@ -7,7 +7,7 @@ module.exports = function(req, res){
 	var reqPath = req.path;
 	if(reqPath.slice(-1) === '/') reqPath = reqPath.slice(0, -1);
 	console.info(reqPath);
-	var relPath = req.app.config.app.siteRoot + req.path;
+	var relPath = req.app.config.app.siteRoot + '/static' + req.path;
 	fs.stat(relPath, function(err, stat){
 		if(err || !stat || !stat.isDirectory()) {
 			res.sendStatus(404);
@@ -20,7 +20,7 @@ module.exports = function(req, res){
 				res.sendStatus(403);
 				return;
 			}
-			res.sendFile(reqPath + '/index.html', {root: req.app.config.app.siteRoot});
+			res.sendFile(reqPath + '/index.html', {root: req.app.config.app.siteRoot + '/static'});
 		});
 	});
 };
