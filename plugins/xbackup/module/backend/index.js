@@ -50,7 +50,7 @@ module.exports = function(app, cb){
 				return;
 			}
 			var dump = mongodump(app.config.db);
-			dump.once('error', function(err){
+			dump.on('error', function(err){
 				zip.finish();
 				log(id, 'Backup database failed', err.message);
 				cb('abort');

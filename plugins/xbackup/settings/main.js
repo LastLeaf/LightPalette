@@ -22,10 +22,12 @@ fw.main(function(pg){
 				$settings.find('.settings_backup_now').hide();
 				$settings.find('.settings_backup_abort').show();
 				document.documentElement.scrollTop = 0;
+				restoring = false;
 				setTimeout(updateStatus, 3000);
 			} else {
 				$settings.find('.settings_backup_now').show();
 				$settings.find('.settings_backup_abort').hide();
+				restoring = false;
 				updateSites();
 			}
 			$settings.find('.settings_backup_status').text(log);
@@ -137,6 +139,7 @@ fw.main(function(pg){
 	});
 
 	// restore
+	var restoring = false;
 	var $restore = $settings.find('.settings_restore');
 	$restore.find('input, select').removeAttr('disabled');
 	pg.form($restore[0], function(){
@@ -146,10 +149,15 @@ fw.main(function(pg){
 		$restore.find('.submit').attr('disabled', true);
 	}, function(){
 		$restore.find('.submit').removeAttr('disabled');
+		restoring = true;
 		document.documentElement.scrollTop = 0;
 		updateStatus();
 	}, function(err){
 		$restore.find('.submit').removeAttr('disabled');
 		lp.backstage.showError(err);
+	});
+	pg.on('socketDisconnect', function(){
+		if(!restoring) return;
+		fw.reload();
 	});
 });

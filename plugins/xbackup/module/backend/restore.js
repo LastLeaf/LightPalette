@@ -6,7 +6,7 @@ var crypto = require('crypto');
 var async = require('async');
 var semver = require('semver');
 var fse = require('fs-extra');
-var unzip = require('unzip');
+var unzip = require('unzip2');
 var mongorestore = require('./mongorestore.js');
 
 module.exports = function(app, file, password, removeMode, pluginVersion, abortCb){
@@ -25,7 +25,7 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 	var openFile = function(cb){
 		log('Extracting backup file.');
 		var rs = fs.createReadStream(file);
-		rs.once('error', function(err){
+		rs.on('error', function(err){
 			log('Failed reading backup file.');
 			abort();
 			cb(err);
@@ -33,13 +33,13 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 		rs.once('open', function(){
 			if(!password) return cb(null, rs);
 			var cryptoStream = crypto.createDecipher('aes192', password);
-			cryptoStream.once('error', function(err){
+			cryptoStream.on('error', function(err){
 				log('Password is not correct.');
 				abort();
 				cb(err);
 			});
 			rs.pipe(cryptoStream);
-			return cb(null, cryptoStream);
+			cb(null, cryptoStream);
 		});
 	};
 
@@ -47,7 +47,7 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 	var unzipFile = function(rs, cb){
 		fse.remove(extractDir, function(){
 			var ws = unzip.Extract({ path: extractDir });
-			ws.once('error', function(err){
+			ws.on('error', function(err){
 				log('Failed extracting backup file.');
 				abort();
 				cb(err);
@@ -84,11 +84,11 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 		log('Restoring filesystem.');
 		// move single dir to dest
 		var moveDir = function(name, cb){
-			fse.move(extractDir + '/fs/' + name, app.config.app.siteRoot + '/static/' + name, {clobber: true, limit: 1}, function(err){
+			fse.move(extractDir + '/fs/' + name, app.config.app.siteRoot + '/static/' + name, {limit: 1}, function(err){
 				if(err) {
 					log('Failed copying files.');
 					abort();
-					cb('err');
+					cb(err);
 					return;
 				}
 				cb();
@@ -100,7 +100,7 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 				if(err) {
 					log('Failed copying files.');
 					abort();
-					cb('err');
+					cb(err);
 					return;
 				}
 				async.eachSeries(files, moveDir, cb);
@@ -111,7 +111,7 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 			fse.emptyDir(app.config.app.siteRoot + '/static', function(){
 				moveDirs(cb);
 			});
-		} else if(removeMode === 'replace') {
+		} else {
 			fs.readdir(extractDir + '/fs', function(err, files){
 				async.eachSeries(files || [], function(file, cb){
 					fse.remove(app.config.app.siteRoot + '/static/' + file, function(){
@@ -121,8 +121,6 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 					moveDirs(cb);
 				});
 			});
-		} else {
-			moveDirs(cb);
 		}
 	};
 
@@ -130,35 +128,56 @@ module.exports = function(app, file, password, removeMode, pluginVersion, abortC
 	var restoreDb = function(cb){
 		log('Restoring database.');
 		var restore = mongorestore(app.config.db);
-		// TODO handling remove mode
-		restore.once('error', function(err){
+		restore.on('error', function(err){
 			log('Failed writing database.');
 			abort();
 			cb(err);
 		});
-		restore.once('connect', function(err){
-			fs.readdir(extractDir + '/db', function(err, files){
-				if(err) {
-					log('Failed listing database.');
-					abort();
-					cb(err);
-					return;
-				}
-				async.eachSeries(files, function(file, cb){
-					var rs = fs.createReadStream(extractDir + '/db/' + file);
-					var ws = restore.collection(file.slice(0, -5));
-					ws.on('error', function(err){
-						log('Failed copying some docuemnts.');
+		restore.once('connect', function(cols){
+			var replaceCols = function(){
+				fs.readdir(extractDir + '/db', function(err, files){
+					if(err) {
+						log('Failed listing database.');
+						abort();
+						cb(err);
+						return;
+					}
+					async.eachSeries(files, function(file, cb){
+						var rs = fs.createReadStream(extractDir + '/db/' + file);
+						var ws = restore.collection(app.config.db.prefix + file.slice(0, -5));
+						ws.on('error', function(err){
+							log('Failed copying some docuemnts.');
+						});
+						ws.once('finish', function(){
+							cb();
+						});
+						rs.pipe(ws);
+					}, function(err){
+						restore.close();
+						cb(err);
 					});
-					ws.once('finish', function(){
-						cb();
-					});
-					rs.pipe(ws);
-				}, function(err){
-					restore.close();
-					cb(err);
 				});
-			});
+			};
+			if(removeMode === 'erase') {
+				async.eachSeries(cols, function(name, cb){
+					var prefix = app.config.db.prefix;
+					if(name.slice(0, prefix.length) === prefix) {
+						restore.dropCollection(name, cb);
+					} else {
+						cb();
+					}
+				}, function(err){
+					if(err) {
+						log('Failed writing database.');
+						abort();
+						cb(err);
+					} else {
+						replaceCols();
+					}
+				});
+			} else {
+				replaceCols();
+			}
 		});
 	};
 

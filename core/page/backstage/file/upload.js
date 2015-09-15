@@ -3,7 +3,7 @@
 
 var tmpl = fw.tmpl('upload.tmpl');
 
-var mv = require('mv');
+var fse = require('fs-extra');
 var multiparty = require('multiparty');
 var User = fw.module('db_model').User;
 
@@ -47,7 +47,7 @@ module.exports = function(req, res){
 				};
 				while(files.length) {
 					var file = files.shift();
-					mv(file.path, req.app.config.app.siteRoot + '/static/files/'+user+path+file.originalFilename, function(err){
+					fse.move(file.path, req.app.config.app.siteRoot + '/static/files/'+user+path+file.originalFilename, function(err){
 						if(err) lastErr = err;
 						finished();
 					});

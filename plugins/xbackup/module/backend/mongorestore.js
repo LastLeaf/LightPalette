@@ -13,16 +13,18 @@ module.exports = function(args){
 	var createWriteStream = function(colName){
 		var col = null;
 		var waitWrite = null;
-		db.createCollection(colName, {w: 1}, function(err, c){
-			if(err) {
-				ev.emit('error', new Error('Cannot create collection in database.'));
-				return;
-			}
-			col = c;
-			if(waitWrite) {
-				waitWrite();
-				waitWrite = null;
-			}
+		db.dropCollection(colName, function(err){
+			db.createCollection(colName, {w: 1, strict: true}, function(err, c){
+				if(err) {
+					ev.emit('error', new Error('Cannot create collection in database.'));
+					return;
+				}
+				col = c;
+				if(waitWrite) {
+					waitWrite();
+					waitWrite = null;
+				}
+			});
 		});
 		var ws = new stream.Writable();
 		var bufsLen = 0;
@@ -69,7 +71,7 @@ module.exports = function(args){
 						continue;
 					}
 					pending++;
-					col.update({_id: obj._id}, obj, {upsert: true}, function(err){
+					col.insert(obj, {w: 1}, function(err){
 						if(err) ws.emit('error', new Error('Cannot insert documents to database.'));
 						pendingEnd();
 					});
@@ -119,7 +121,7 @@ module.exports = function(args){
 					});
 				});
 			} else {
-				getCollections(cols, function(){
+				getCollections(function(cols){
 					ev.emit('connect', cols);
 				});
 			}

@@ -37,7 +37,6 @@
 		"File Path": "文件路径",
 		"File Password": "文件密码",
 		"Restore Mode": "还原模式",
-		"Merge with Current Data (may cause problems)": "与当前数据合并（可能发生问题）",
 		"Replace Existing Databases and Filesystems": "替换已存在的数据库和文件系统",
 		"Remove All Blog Data and then Restore": "清除全部博客数据再还原",
 		"This operation may DESTORY BLOG DATA. Type your password to continue.": "还原操作可能会破坏博客数据！请确认这些风险并输入用户密码。",
