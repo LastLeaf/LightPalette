@@ -14,11 +14,15 @@ fw.main(function(pg){
 		pg.rpc('/plugins/xbackup/settings:backupStatus', function(started, log){
 			$settings.find('.settings_backup_now').removeAttr('disabled');
 			$settings.find('.settings_backup_abort').removeAttr('disabled');
-			if(started) {
+			if(started === null) {
+				$settings.find('.settings_backup_now').hide();
+				$settings.find('.settings_backup_abort').hide();
+				setTimeout(updateStatus, 3000);
+			} else if(started) {
 				$settings.find('.settings_backup_now').hide();
 				$settings.find('.settings_backup_abort').show();
 				document.documentElement.scrollTop = 0;
-				setTimeout(updateStatus, 5000);
+				setTimeout(updateStatus, 3000);
 			} else {
 				$settings.find('.settings_backup_now').show();
 				$settings.find('.settings_backup_abort').hide();
@@ -78,6 +82,7 @@ fw.main(function(pg){
 		$sites.find('.submit, select').removeAttr('disabled');
 		lp.backstage.showError(err);
 	});
+	updateSites();
 
 	// load settings
 	var $config = $('.settings_backup_config');
@@ -140,7 +145,9 @@ fw.main(function(pg){
 		$restore.find('[name=password]').val(pwd);
 		$restore.find('.submit').attr('disabled', true);
 	}, function(){
+		$restore.find('.submit').removeAttr('disabled');
 		document.documentElement.scrollTop = 0;
+		updateStatus();
 	}, function(err){
 		$restore.find('.submit').removeAttr('disabled');
 		lp.backstage.showError(err);

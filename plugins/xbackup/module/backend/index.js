@@ -6,6 +6,7 @@ var crypto = require('crypto');
 var async = require('async');
 var zipStream = require('zip-stream');
 var mongodump = require('./mongodump.js');
+var restoreProcess = require('./restore.js');
 
 var dateString = fw.module('/date_string.js');
 var pluginVersion = JSON.parse(fs.readFileSync(__dirname + '/../../plugin.json').toString('utf8')).version;
@@ -61,7 +62,6 @@ module.exports = function(app, cb){
 					zip.entry(createReadStream(), {name: 'db/' + name.slice(prefix.length) + '.bson'}, function(err, entry){
 						if(err) {
 							zip.finish();
-							console.info(err);
 							log(id, 'Backup database failed', 'Failed writing target file.');
 							cb('abort');
 						}
@@ -87,11 +87,13 @@ module.exports = function(app, cb){
 			fileCb(dir + '/', rel + '/', function(err){
 				if(err) return cb( new Error('Failed reading directories.') );
 				fs.readdir(dir, function(err, files){
+					if(id !== processId) return cb('abort');
 					if(err) return cb( new Error('Failed reading directories.') );
 					async.eachSeries(files, function(file, cb){
 						if(blacklist && blacklist.indexOf(file) >= 0) return cb();
 						if(blacklist) log(id, 'Dumping filesystem', file);
 						fs.stat(dir + '/' + file, function(err, stat){
+							if(id !== processId) return cb('abort');
 							if(err) return cb( new Error('Failed reading files.') );
 							if(stat.isDirectory()) {
 								listFiles(dir + '/' + file, rel + '/' + file, null, fileCb, cb);
@@ -190,6 +192,7 @@ module.exports = function(app, cb){
 	// backup process
 	var steps = [createStream, createZip, dumpDb, copyFiles, waitingWriteStream, removeOldFiles, sendToSites];
 	var processId = 0;
+	var restoring = false;
 	var process = function(id, config){
 		// logger
 		var zipFile = Date.now() + '.xbackup.zip' + (config.password ? '.enc' : '');
@@ -225,7 +228,7 @@ module.exports = function(app, cb){
 
 	// API
 	var start = function(config){
-		if(processId) return false;
+		if(processId || restoring) return false;
 		processId = Date.now() + Math.random();
 		setTimeout(function(){
 			process(processId, config);
@@ -233,18 +236,25 @@ module.exports = function(app, cb){
 		return true;
 	};
 	var abort = function(){
-		if(!processId) return false;
+		if(!processId && !restoring) return false;
 		processId = 0;
 		return true;
+	};
+	var restore = function(app, file, password, remove){
+		if(processId || restoring) return false;
+		restoring = true;
+		restoreProcess(app, file, password, remove, pluginVersion, function(){
+			restoring = false;
+		});
 	};
 	var log = function(cb){
 		fs.readFile(app.config.app.siteRoot + '/xbackup/backup.log', {encoding: 'utf8'}, cb);
 	};
 	cb({
-		isStarted: function(){ return !!processId; },
+		isStarted: function(){ if(restoring) return null; return !!processId; },
 		start: start,
 		abort: abort,
-		restore: require('./restore.js'),
+		restore: restore,
 		log: log
 	});
 };

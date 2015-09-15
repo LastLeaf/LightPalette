@@ -24,6 +24,7 @@
 		"sanitize-html": "~1.1.7",
 		"semver": "^4.1.0",
 		"timezone": "0.0.41",
+		"unzip": "0.1.11",
 		"zip-stream": "~0.5.2"
 	},
 	"author": "LastLeaf <bqfu@163.com> http://lastleaf.me",
