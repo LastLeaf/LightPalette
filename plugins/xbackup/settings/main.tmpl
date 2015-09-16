@@ -5,7 +5,7 @@
 			<div class="settings_title">`Backup Status`</div>
 			<form class="settings_form">
 				<div>
-					<pre class="settings_backup_status"></pre>
+					<pre class="settings_backup_status" style="white-space: pre-line"></pre>
 				</div>
 				<input type="button" class="button settings_backup_now" value="`Backup Now`">
 				<input type="button" class="button settings_backup_abort" value="`Abort Backup`">
@@ -27,6 +27,20 @@
 		<div class="settings_section">
 			<div class="settings_title">`Backup Options`</div>
 			<form class="settings_form settings_backup_config" action="/plugins/xbackup/settings" method="setConfig">
+				<div>
+					<label>`Backup File Password`</label>
+					<input type="text" name="password" placeholder="`(no encryption)`">
+				</div>
+				<div>
+					<label>`Send Backup to Sites`</label>
+					<input type="text" name="sendTo" placeholder="`Domain Names`">
+					<div class="settings_description">`You could send to another blog server with this plugin enabled.`</div>
+				</div>
+				<div>
+					<label>`Max Backup Files`</label>
+					<input type="number" min="0" max="" name="fileLimit" value="" placeholder="0">
+					<div class="settings_description">`Would auto-remove old backup files. Apply to each site. 0 to disable.`</div>
+				</div>
 				<div>
 					<label>`Auto Backup`</label>
 					<select name="timed">
@@ -54,20 +68,6 @@
 				<div>
 					<label>`Minute`</label>
 					<input type="number" min="0" max="59" name="minute" value="30" placeholder="30">
-				</div>
-				<div>
-					<label>`Backup File Password`</label>
-					<input type="text" name="password" placeholder="`(no encryption)`">
-				</div>
-				<div>
-					<label>`Send Backup to Sites`</label>
-					<input type="text" name="sendTo" placeholder="`Domain Names`">
-					<div class="settings_description">`You could send to another blog server with this plugin enabled.`</div>
-				</div>
-				<div>
-					<label>`Max Backup Files`</label>
-					<input type="number" min="0" max="" name="fileLimit" value="" placeholder="0">
-					<div class="settings_description">`Would auto-remove old backup files. Apply to each site. 0 to disable.`</div>
 				</div>
 				<input type="submit" class="submit" value="`Update Settings`">
 			</form>

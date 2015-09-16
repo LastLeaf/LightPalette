@@ -168,12 +168,14 @@ exports.setFsBlacklist = function(conn, res, args){
 exports.startBackup = function(conn, res){
 	PluginSettings.get('xbackup', function(err, settings){
 		if(err || !settings) settings = defaultSettings();
-		res(backupBackend.start(settings));
+		backupBackend.start(settings);
+		res();
 	});
 };
 
 exports.abortBackup = function(conn, res){
-	res(backupBackend.abort());
+	backupBackend.abort();
+	res();
 };
 
 exports.backupStatus = function(conn, res){

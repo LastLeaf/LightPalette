@@ -59,7 +59,7 @@ var reconfig = function(app, cb){
 			['page', '/', fw.config.lpCoreRoot + '/page'],
 			['render', '/', fw.config.lpCoreRoot + '/render'],
 			['rpc', '/', fw.config.lpCoreRoot + '/rpc'],
-			['static', '/', app.config.app.siteRoot + '/static']
+			['static', '/files', app.config.app.siteRoot + '/static/files']
 		];
 		dirs.forEach(function(dir, cb){
 			app.bindDir.apply(app, dir.concat(cb));

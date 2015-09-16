@@ -5,6 +5,7 @@ var fs = require('fs');
 
 var bindDirs = function(app, args, cb){
 	app.bindDir('module', args.bindPath, args.pluginPath + '/module');
+	app.bindDir('module', args.bindPath, args.pluginPath + '/module_delayed');
 	app.bindDir('rpc', args.bindPath, args.pluginPath + '/rpc');
 	app.bindDir('page', args.bindPath, args.pluginPath + '/page');
 	app.route.set(args.bindPath + '/push', {
