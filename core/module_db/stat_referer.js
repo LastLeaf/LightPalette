@@ -3,7 +3,7 @@
 
 var model = fw.module('db_model');
 
-var COLLECTION_NAME = 'stat_referer';
+var COLLECTION_NAME = 'stats.referer';
 var MODEL_NAME = 'StatReferer';
 
 module.exports = function(app, cb){

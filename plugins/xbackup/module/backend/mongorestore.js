@@ -1,7 +1,7 @@
 // Copyright 2015 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-var Buffer = require('buffer');
+var Buffer = require('buffer').Buffer;
 var stream = require('stream');
 var eventEmitter = require('events').EventEmitter;
 var mongodb = require('fw.mpa/node_modules/mongoose/node_modules/mongodb');

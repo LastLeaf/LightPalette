@@ -22,8 +22,8 @@ var defaultSettings = function(){
 		sendTo: [],
 		dbBlacklist: [
 			'stats',
-			'stat_referers',
-			'stat_paths'
+			'stat.referers',
+			'stat.paths'
 		],
 		fsBlacklist: []
 	};

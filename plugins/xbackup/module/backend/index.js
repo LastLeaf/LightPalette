@@ -2,14 +2,21 @@
 'use strict';
 
 var fs = require('fs');
+var http = require('http');
+var url = require('url');
 var crypto = require('crypto');
 var async = require('async');
 var zipStream = require('zip-stream');
 var mongodump = require('./mongodump.js');
 var restoreProcess = require('./restore.js');
 
+var password = fw.module('/password.js');
 var dateString = fw.module('/date_string.js');
-var PluginSettings = fw.module('/db_model').PluginSettings;
+var Settings = fw.module('/db_model').Settings;
+
+var pullAuth = function(app, site, file, expires, cb){
+	password.hash(site+'|'+file+'|'+expires+'|'+app.config.secret.cookie, cb);
+};
 
 module.exports = function(app, cb){
 	// set cross process id
@@ -199,6 +206,7 @@ module.exports = function(app, cb){
 				});
 				while(config.fileLimit && list.length > config.fileLimit) {
 					var oldFile = list.shift().file;
+					if(oldFile === filename) continue;
 					fs.unlink(app.config.app.siteRoot + '/xbackup/local/' + oldFile);
 					log(id, 'Removed old backup file', oldFile);
 				}
@@ -214,8 +222,46 @@ module.exports = function(app, cb){
 	// send to other sites
 	var sendToSites = function(id, config, filename, log, cb){
 		if(id !== processId) return cb('done');
-		// TODO
-		cb(null, id, config, filename, log);
+		Settings.get('basic', function(err, info){
+			if(err || !info || !info.siteHost) {
+				log(id, 'Send to site cancelled', 'Host of this site must be specified in settings.');
+				return;
+			}
+			var localHost = info.siteHost;
+			var expires = Date.now() + 60 * 60 * 1000;
+			async.each(config.sendTo, function(site, cb){
+				pullAuth(app, localHost, filename, expires, function(err, auth){
+					if(err) auth = '';
+					var urlObj = url.parse('http://' + site + '/plugins/xbackup/push');
+					urlObj.method = 'post';
+					urlObj.agent = false;
+					var req = http.request(urlObj, function(res){
+						if(res.statusCode !== 200) {
+							log(id, 'Target site server rejected request', site);
+						} else {
+							log(id, 'Push request accepted', site);
+						}
+						cb();
+					});
+					req.on('error', function(){
+						log(id, 'Cannot connect to target site server', site, function(){
+							req.abort();
+							setTimeout(cb, 0);
+						});
+					});
+					req.write(JSON.stringify({
+						xbackup: pluginVersion,
+						site: localHost,
+						file: filename,
+						expires: expires,
+						auth: auth
+					}));
+					req.end();
+				});
+			}, function(){
+				cb(null, id, config, filename, log);
+			});
+		});
 	};
 
 	// backup process

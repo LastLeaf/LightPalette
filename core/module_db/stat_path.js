@@ -3,7 +3,7 @@
 
 var model = fw.module('db_model');
 
-var COLLECTION_NAME = 'stat_path';
+var COLLECTION_NAME = 'stats.path';
 var MODEL_NAME = 'StatPath';
 
 module.exports = function(app, cb){
