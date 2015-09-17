@@ -77,7 +77,6 @@ exports.register = function(conn, res, args){
 										email: args.email,
 										disablePath: r
 									});
-									console.info(content);
 									mail(mailOptions, args.displayName, args.email, tmpl(conn).regEmailTitle({ siteTitle: siteTitle }), content);
 								});
 							});

@@ -10,9 +10,7 @@ module.exports = function(){
 	try {
 		if(fs.existsSync('config.js')) var config = require(process.cwd() + '/config.js');
 		else var config = JSON.parse(fs.readFileSync('config.json').toString('utf8'));
-	} catch(e) {
-        console.info(e);
-    }
+	} catch(e) {}
 
 	// generate config
 	if(config) {

@@ -1,7 +1,7 @@
 {
 	"id": "gravatar",
 	"title": "Gravatar",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"author": "LastLeaf",
 	"url": "http://lastleaf.me",
 	"lightpalette": "0.5.x || 0.6.x",
