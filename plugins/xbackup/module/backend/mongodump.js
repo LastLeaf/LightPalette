@@ -37,28 +37,28 @@ module.exports = function(args){
 		return rs;
 	};
 
-	var getCollections = function(){
-		var cur = db.listCollections();
-		ev.nextCollection = function(){
-			cur.nextObject(function(err, item){
-				if(err) {
-					ev.emit('error', new Error('Cannot list collections from database.'));
-					db.close();
-					db = cur = null;
-					return;
-				}
-				if(!item) {
+	var getCollections = function(cb){
+		db.collectionNames(function(err, names){
+			if(err) {
+				ev.emit('error', new Error('Cannot list collections from database.'));
+				db.close();
+				db = null;
+				return;
+			}
+			ev.nextCollection = function(){
+				if(!names.length) {
 					ev.emit('finish');
 					db.close();
-					db = cur = null;
+					db = null;
 					return;
 				}
-				var handled = false;
-				ev.emit('collection', item.name, function(){
-					return createReadStream(item.name);
+				var name = names.shift().name;
+				ev.emit('collection', name, function(){
+					return createReadStream(name);
 				});
-			});
-		};
+			};
+			cb();
+		});
 	};
 
 	var connect = function(){
@@ -73,10 +73,14 @@ module.exports = function(args){
 						db = null;
 						return;
 					}
-					ev.emit('connect', getCollections());
+					getCollections(function(){
+						ev.emit('connect');
+					});
 				});
 			} else {
-				ev.emit('connect', getCollections());
+				getCollections(function(){
+					ev.emit('connect');
+				});
 			}
 		});
 	};
