@@ -1,0 +1,5 @@
+{
+	"lib": "table_builder",
+	"tmpl": "main",
+	"main": "main"
+}

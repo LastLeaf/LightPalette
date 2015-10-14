@@ -1,7 +1,7 @@
-// Copyright 2014 LastLeaf, LICENSE: github.lastleaf.me/MIT
+// Copyright 2015 LastLeaf, LICENSE: github.lastleaf.me/MIT
 'use strict';
 
-lp.tableBuilder = function($div, options, colDefine, addDef){
+fw.exports = function(_, $div, options, colDefine, addDef){
 	var idCol = options.idCol || '_id';
 	var editMore = !!options.editMore;
 	var allowAdd = !!addDef;
@@ -24,7 +24,6 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 	};
 
 	// build dom structure
-	var _ = lp.tableBuilder.i18n;
 	var $wrapper = $('<div><div class="errors"></div><table cellpadding="0" cellspacing="0" border="0" class="lp_table"><thead></thead><tbody></tbody><tfoot></tfoot></table></div>').appendTo($div);
 	var $table = $wrapper.children('table');
 	var $thead = $table.children('thead');
@@ -144,64 +143,64 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 		if($tr.hasClass('lp_table_add_row')) {
 			$('<input type="button" value="'+_('Add')+'">')
 				.click(function(){
-					if(loading) return;
-					disableInputs();
-					trigger('add', getValue());
-				})
+				if(loading) return;
+				disableInputs();
+				trigger('add', getValue());
+			})
 				.appendTo($btns);
 			$('<input type="button" value="'+_('Cancel')+'">')
 				.click(function(){
-					if(loading) return;
-					$tr.fadeOut(200, function(){
-						$tr.remove();
-					});
-				})
+				if(loading) return;
+				$tr.fadeOut(200, function(){
+					$tr.remove();
+				});
+			})
 				.appendTo($btns);
 		} else {
 			if(editMore) var t = _('Details');
 			else var t = _('Save');
 			$('<input type="button" value="'+t+'">')
 				.click(function(){
-					if(loading) return;
-					disableInputs();
-					trigger('change', getValue(), rowId);
-				})
+				if(loading) return;
+				disableInputs();
+				trigger('change', getValue(), rowId);
+			})
 				.appendTo($btns);
 			$('<input type="button" value="'+_('Cancel')+'">')
 				.click(function(){
-					if(loading) return;
-					disableInputs(function(){
-						exitEditMode.call(row);
-					});
-				})
+				if(loading) return;
+				disableInputs(function(){
+					exitEditMode.call(row);
+				});
+			})
 				.appendTo($btns);
 			// remove buttons
 			if(allowRemove) {
 				var $removeCancel = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('No, thanks.')+'">')
-					.click(function(){
-						if(loading) return;
-						$removeConfirm.hide();
-						$removeCancel.hide();
-						$remove.fadeIn(200);
-					})
-					.hide()
-					.appendTo($btns);
+				.click(function(){
+					if(loading) return;
+					$removeConfirm.hide();
+					$removeCancel.hide();
+					$remove.fadeIn(200);
+				})
+				.hide()
+				.appendTo($btns);
 				var $removeConfirm = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('Yes, remove!')+'">')
-					.click(function(){
-						if(loading) return;
-						disableInputs();
-						trigger('remove', rowId);
-					})
-					.hide()
-					.appendTo($btns);
+				.click(function(){
+					if(loading) return;
+					disableInputs();
+					trigger('remove', rowId);
+				})
+				.hide()
+				.appendTo($btns);
 				var $remove = $('<input type="button" class="lp_table_edit_btn_right" value="'+_('Remove')+'">')
-					.click(function(){
-						if(loading) return;
-						$remove.hide();
-						$removeCancel.fadeIn(200);
-						$removeConfirm.fadeIn(200);
-					})
-					.appendTo($btns);
+				.click(function(){
+					if(loading) return;
+					$remove.hide();
+					$removeCancel.fadeIn(200);
+					$removeConfirm.fadeIn(200);
+				})
+				.appendTo($btns);
 			}
 		}
 	};
@@ -368,4 +367,3 @@ lp.tableBuilder = function($div, options, colDefine, addDef){
 	};
 	return that;
 };
-lp.tableBuilder.i18n = function(str){ return str; };

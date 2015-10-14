@@ -11,7 +11,7 @@ module.exports = {
 			}, {
 				src: '/lib/jquery-2.1.1',
 				userAgentNot: 'MSIE (6|7|8)\\\.'
-			}, 'lib/table_builder'],
+			}, 'table_builder', 'backstage'],
 		main: 'main',
 		tmpl: 'main',
 		style: 'main.css',
@@ -28,9 +28,9 @@ module.exports = {
 	},
 	'./home': {
 		parent: 'backstage',
-		main: 'home',
-		tmpl: 'home',
-		style: 'home.css',
+		main: 'home/home',
+		tmpl: 'home/home',
+		style: 'home/home',
 	},
 	'./stat': {
 		redirect: './stat/hot'
@@ -129,8 +129,9 @@ module.exports = {
 	},
 	'./users': {
 		parent: 'backstage',
-		main: 'users',
-		tmpl: 'users',
+		subm: 'table_builder',
+		main: 'users/users',
+		tmpl: 'users/users',
 	},
 	'./settings': {
 		parent: 'backstage',

@@ -4,10 +4,12 @@
 fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
+	var lp = pg.importAncestor('global');
+	var backstage = pg.importAncestor('backstage');
 
 	var showPage = function(){
 		if(pg.destroyed) return;
-		var userInfo = lp.backstage.userInfo;
+		var userInfo = backstage.userInfo;
 		if(!userInfo._id) {
 
 			// login page
@@ -42,7 +44,7 @@ fw.main(function(pg){
 					location.pathname = '/backstage/home';
 				}, function(err){
 					$form.find('[type=submit]').prop('disabled', false);
-					lp.backstage.showError(err);
+					backstage.showError(err);
 				});
 			});
 
@@ -81,7 +83,7 @@ fw.main(function(pg){
 				location.reload();
 			}, function(err){
 				$form.find('.submit').attr('disabled', false);
-				lp.backstage.showError(err);
+				backstage.showError(err);
 			});
 			var $pwdForm = $user.find('.user_password');
 			$user.find('.modify_password').click(function(e){
@@ -104,7 +106,7 @@ fw.main(function(pg){
 				$user.find('.modify_password').fadeIn(200);
 			}, function(err){
 				$pwdForm.find('.submit').attr('disabled', false);
-				lp.backstage.showError(err);
+				backstage.showError(err);
 			});
 		};
 
@@ -113,10 +115,10 @@ fw.main(function(pg){
 			pg.rpc('post:list', {from: 0, count: 10}, function(posts){
 				latestGot(unsavedPosts, posts, comments);
 			}, function(err){
-				if(err) lp.backstage.showError(err);
+				if(err) backstage.showError(err);
 			});
 		}, function(err){
-			if(err) lp.backstage.showError(err);
+			if(err) backstage.showError(err);
 		});
 
 		// read local unsaved posts

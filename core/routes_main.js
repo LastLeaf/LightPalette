@@ -2,7 +2,7 @@
 'use strict';
 
 exports.global = {
-	lib: '/lib/crypto.min',
+	lib: ['/lib/crypto.min', 'lightpalette'],
 	main: 'global',
 };
 

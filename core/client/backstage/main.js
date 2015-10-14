@@ -3,16 +3,16 @@
 
 fw.mainAsync(function(pg, subm, cb){
 	var tmpl = pg.tmpl;
-	lp.tableBuilder.i18n = tmpl.i18n;
-	lp.backstage = {};
+	var exports = {};
 
 	// driver manager
-	(function(){
-		var drivers = {};
-		lp.backstage.driver = function(id, options){
+	var drivers = {};
+	exports.driver = (function(){
+		var exports = {};
+		exports.define = function(id, options){
 			drivers[id] = options;
 		};
-		lp.backstage.driverList = function(userType){
+		exports.list = function(userType){
 			var r = [];
 			for(var k in drivers) {
 				if(drivers[k].permission) {
@@ -31,14 +31,15 @@ fw.mainAsync(function(pg, subm, cb){
 			}
 			return r;
 		};
-		lp.backstage.driverName = function(id){
+		exports.getName = function(id){
 			if(drivers[id]) return drivers[id].name;
 			return '';
 		};
-		lp.backstage.driverEditor = function(id, div, data, userInfo){
+		exports.editor = function(id, div, data, userInfo){
 			if(drivers[id] && drivers[id].editor)
 				return drivers[id].editor(div, data, userInfo);
 		};
+		return exports;
 	})();
 
 	// create div structure
@@ -48,11 +49,11 @@ fw.mainAsync(function(pg, subm, cb){
 	$('#content').html(tmpl.busy());
 	// define page switch method
 	var $tabbar = $backstage.find('#tabbar');
-	lp.backstage.showLoading = function(){
+	var showLoading = function(){
 		$('#content').html(tmpl.busy());
 	};
-	pg.on('childUnload', lp.backstage.showLoading);
-	lp.backstage.updateTabStyle = function(){
+	pg.on('childUnload', showLoading);
+	var updateTabStyle = function(){
 		// update active tab
 		var path = fw.getPath().match(/^\/[^\/]+\/(\w+)/);
 		var tabId = path[1];
@@ -62,8 +63,8 @@ fw.mainAsync(function(pg, subm, cb){
 		var $nav = $headerLists.find('.tab_nav');
 		if(!$nav) return;
 		$nav.children('.header_list_title').html( $nav.children('.header_list_items').children('[href="/backstage/' + tabId + '"]').html() );
-	};
-	pg.on('childLoadStart', lp.backstage.updateTabStyle);
+	}
+	pg.on('childLoadStart', updateTabStyle);
 
 	// capture the height of page
 	$(window).resize(function(){
@@ -73,7 +74,7 @@ fw.mainAsync(function(pg, subm, cb){
 
 	// show error
 	var $errors = $('#errors');
-	lp.backstage.showError = function(err, detail){
+	exports.showError = function(err, detail){
 		var hidden = false;
 		err = err || 'timeout';
 		var str = tmpl.error[err] || err;
@@ -102,7 +103,7 @@ fw.mainAsync(function(pg, subm, cb){
 			var permission = {};
 		}
 		$('#tabbar').html(tmpl.userTabs(permission));
-		lp.backstage.updateTabStyle();
+		updateTabStyle();
 		// show user bar
 		if(info._id) {
 			permission.displayName = info.displayName;
@@ -126,10 +127,10 @@ fw.mainAsync(function(pg, subm, cb){
 				});
 			});
 		}
-		lp.backstage.userInfo = info;
-		if(info._id || fw.getPath() === '/backstage/home') cb();
+		exports.userInfo = info;
+		if(info._id || fw.getPath() === '/backstage/home') cb(exports);
 		else fw.go('/backstage/home');
-	}, lp.backstage.showError);
+	}, exports.showError);
 
 	// header list events
 	var $headerLists = $('#header_lists').on('click', '.header_list_title', function(){
@@ -160,7 +161,7 @@ fw.mainAsync(function(pg, subm, cb){
 			$popupWrapper.html('').hide();
 		}
 	};
-	lp.backstage.alert = function(message, cb){
+	exports.alert = function(message, cb){
 		var $popup = $(tmpl.alert({
 			message: message
 		}));
@@ -171,7 +172,7 @@ fw.mainAsync(function(pg, subm, cb){
 		});
 		addPopup($popup);
 	};
-	lp.backstage.confirm = function(message, cb){
+	exports.confirm = function(message, cb){
 		var $popup = $(tmpl.confirm({
 			message: message
 		}));

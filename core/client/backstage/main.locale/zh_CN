@@ -41,14 +41,6 @@
 		"Failed sending mail.": "发送邮件失败。",
 		"No suitable drivers. If you are admin, please check the addons settings.": "没有适合的博文驱动。如果您是管理员，请检查组件设置。"
 	},
-	{
-		"Add": "添加",
-		"Details": "详情",
-		"Save": "保存",
-		"Cancel": "取消",
-		"Remove": "删除",
-		"No, thanks.": "不要删除，谢谢。",
-		"Yes, remove!": "确认并删除它。"
-	},
+	{},
 	{}
 ]

@@ -6,13 +6,15 @@ var USER_LIST_LEN = 20;
 fw.main(function(pg){
 	var tmpl = pg.tmpl;
 	var _ = tmpl.i18n;
+	var tableBuilder = pg.import('table_builder.subm');
+	var backstage = pg.importAncestor('backstage');
 
 	// init page structure
 	var $content = $('#content').html(tmpl.main());
 	var $table = $content.find('.table');
 
 	// build table
-	var table = lp.tableBuilder($table, {idCol: '_id'}, [
+	var table = tableBuilder($table, {idCol: '_id'}, [
 		{ id: '_id', name: _('Username'), input: 'add' },
 		{ id: 'displayName', name: _('Display Name') },
 		{ id: 'type', name: _('Type'), input: {
@@ -39,7 +41,7 @@ fw.main(function(pg){
 			}
 			table.set(rows);
 		}, function(err){
-			lp.backstage.showError(err);
+			backstage.showError(err);
 		});
 	})
 	.setPage(0, 1);
@@ -52,7 +54,7 @@ fw.main(function(pg){
 			data.password = '******';
 			table.addRow(data._id, data);
 		}, function(err){
-			lp.backstage.showError(err);
+			backstage.showError(err);
 			table.enableAdd();
 		});
 	});
@@ -63,7 +65,7 @@ fw.main(function(pg){
 			data.password = '******';
 			table.setRow(data._id, data);
 		}, function(err){
-			lp.backstage.showError(err);
+			backstage.showError(err);
 			table.enableModify(data._id);
 		});
 	});
@@ -71,7 +73,7 @@ fw.main(function(pg){
 		pg.rpc('user:remove', {_id: _id}, function(){
 			table.removeRow(_id);
 		}, function(err){
-			lp.backstage.showError(err);
+			backstage.showError(err);
 			table.enableModify(_id);
 		});
 	});
